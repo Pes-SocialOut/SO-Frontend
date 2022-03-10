@@ -1,16 +1,17 @@
-# so_frontend
+# SO-Frontend
 
-A new Flutter project.
+A new Flutter project to build the mobile app.
 
 ## Getting Started
+Algunos links interesantes para entender el proyecto:
 
-This project is a starting point for a Flutter application.
+- [🖥️  Flutter installation on Windows 10](https://www.youtube.com/watch?v=fDnqXmLSqtg&t=709s)
+- [📁  Flutter Directory Structure:](https://medium.com/flutter-community/scalable-folder-structure-for-flutter-applications-183746bdc320)
+- [⏳ Gitflow Tutorial](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+- [👁️ Flutter Tutorial and Guide](https://www.youtube.com/watch?v=P2IGQT3BZQo)
 
-A few resources to get you started if this is your first Flutter project:
+## Miembros actuales de Front End
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Weijie Liu
+* Laura Álvarez
+* Guillem García
