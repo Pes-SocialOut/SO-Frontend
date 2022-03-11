@@ -1,4 +1,4 @@
-name: Develop Testing - Flutter
+name: CI
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    name: Build, Analyze & Test
+    name: flutter build
     runs-on: ubuntu-latest
     env:
       JAVA_VERSION: "11.0"
