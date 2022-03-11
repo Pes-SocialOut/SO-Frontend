@@ -12,7 +12,13 @@ class MapScreen extends StatelessWidget {
         foregroundColor: Colors.black,
       ),
       backgroundColor: Colors.white,
-      body: Container()
+      body: Container(
+        width: MediaQuery.of(context).size.width/2,
+        decoration: BoxDecoration(
+          color: Colors.lightBlueAccent
+        ),
+        child: Center(child: Text('Longbo Rocks!'),)
+      )
     );
   }
 }
