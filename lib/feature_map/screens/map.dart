@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_map/widgets/map_widget.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Map'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
+    return const Scaffold(
+      
       backgroundColor: Colors.white,
-      body: Container(
-        width: MediaQuery.of(context).size.width/2,
-        decoration: BoxDecoration(
-          color: Colors.lightBlueAccent
-        ),
-        child: Center(child: Text('Longbo Rocks!'),)
-      )
+      body: MapWidget()
     );
   }
 }
