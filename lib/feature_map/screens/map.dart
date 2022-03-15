@@ -7,39 +7,31 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           const MapWidget(),
-          Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 30,
-                  right: 8,
-                  left: 8,
-                  bottom: 8
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 40,
+              left: 16
+            ),
+            child: CircleAvatar(
+              radius: 22,
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 22,
+                  color: Colors.black
                 ),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                  color: Colors.white,
-                ),
-                alignment: Alignment.center,
-                width: 44,
-                height: 44,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_left_outlined,
-                    size: 33
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }
-                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-            ],
+            ),
           )
+          
         ]
       )
     );
