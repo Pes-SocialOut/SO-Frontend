@@ -7,24 +7,33 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:so_frontend/feature_home/screens/home.dart';
+import 'package:so_frontend/feature_map/screens/map.dart';
+import 'package:flutter_map/plugin_api.dart';
+import 'package:mockito/mockito.dart';
 
-import 'package:so_frontend/main.dart';
+class MockNavigatorObserver extends Mock implements NavigatorObserver {}
+
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Encontrar botón del mapa y navegar hacia el mapa', (WidgetTester tester) async {
+    
+    final mockObserver = MockNavigatorObserver();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: const HomeScreen(),
+        routes: {
+          '/map_screen': (_) => const MapScreen(),
+        },
+        navigatorObservers: [mockObserver]
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    expect(find.byType(InkWell), findsOneWidget);
+    await tester.tap(find.byType(InkWell));
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(FlutterMap), findsOneWidget);
   });
 }
