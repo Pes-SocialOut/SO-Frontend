@@ -19,7 +19,7 @@ class _MapWidgetState extends State<MapWidget> {
     return FlutterMap(
       options: MapOptions(
         center: LatLng(lat, long),
-        zoom: 10,
+        zoom: 13,
       ),
       layers: [
         TileLayerOptions(
@@ -32,10 +32,10 @@ class _MapWidgetState extends State<MapWidget> {
             width: 40.0,
             height: 40.0,
             point: LatLng(lat, long),
-            builder: (ctx) =>  Icon(
-              Icons.location_pin,
-              color: Colors.green[800],
-              size: 40
+            builder: (ctx) =>  const Icon(
+              Icons.circle_outlined,
+              color: Colors.lightBlue,
+              size: 40,
             )
           ),
         ],

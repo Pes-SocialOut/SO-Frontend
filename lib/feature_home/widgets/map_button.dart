@@ -13,10 +13,7 @@ class MapButton extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MapScreen())
-            );
+            Navigator.of(context).pushNamed('/map_screen');
           },
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
