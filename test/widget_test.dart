@@ -17,7 +17,7 @@ class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
 
-  testWidgets('test', (WidgetTester tester) async {
+  testWidgets('Encontrar botón del mapa y navegar hacia el mapa', (WidgetTester tester) async {
     
     final mockObserver = MockNavigatorObserver();
     await tester.pumpWidget(
