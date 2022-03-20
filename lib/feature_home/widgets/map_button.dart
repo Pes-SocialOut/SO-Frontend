@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_map/screens/map.dart';
 
 class MapButton extends StatelessWidget {
   const MapButton({ Key? key }) : super(key: key);
