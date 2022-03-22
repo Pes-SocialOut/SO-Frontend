@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/screens/home.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,19 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme:ColorScheme(
+          brightness:Brightness.light,
+          primary: HexColor('22577A'),
+          onPrimary: Colors.white,
+          secondary: HexColor('38A3A5'),
+          onSecondary: Colors.white,
+          error: HexColor('ED4337'),
+          onError: Colors.white,
+          background: Colors.white,
+          onBackground: Colors.black,
+          surface: Colors.black,
+          onSurface: Colors.white,
+        )
       ),
       initialRoute: '/home',
       home: const HomeScreen(),
