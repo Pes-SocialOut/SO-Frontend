@@ -32,9 +32,9 @@ class _MapWidgetState extends State<MapWidget> {
             width: 40.0,
             height: 40.0,
             point: LatLng(lat, long),
-            builder: (ctx) =>  const Icon(
+            builder: (context) =>  Icon(
               Icons.circle_outlined,
-              color: Colors.lightBlue,
+              color: Theme.of(context).colorScheme.primary,
               size: 40,
             )
           ),

@@ -7,7 +7,7 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [
           const MapWidget(),
@@ -18,12 +18,12 @@ class MapScreen extends StatelessWidget {
             ),
             child: CircleAvatar(
               radius: 22,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.background,
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back_ios_new_rounded,
                   size: 22,
-                  color: Colors.black
+                  color: Theme.of(context).colorScheme.onBackground
                 ),
                 onPressed: () {
                   Navigator.pop(context);
