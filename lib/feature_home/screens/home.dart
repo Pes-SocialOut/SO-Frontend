@@ -8,15 +8,15 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SocialOut', style: TextStyle(
+        title: Text('SocialOut', style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.lightBlueAccent,
-          backgroundColor: Colors.white,
+          color: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Theme.of(context).colorScheme.background,
         )),
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Container(
         margin: const EdgeInsets.all(16),
         child: Column(
