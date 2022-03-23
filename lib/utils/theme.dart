@@ -14,15 +14,14 @@ class SocialOutTheme {
   static double sm = 16;
   static double xs = 14;
   static double xxs = 12;
-  static FontWeight thin = FontWeight.w100;
-  static FontWeight light = FontWeight.w300;
-  static FontWeight regular = FontWeight.w400;
-  static FontWeight medium = FontWeight.w500;
-  static FontWeight bold = FontWeight.w700;
-  static FontWeight extrabold = FontWeight.w900;  
+  static const FontWeight thin = FontWeight.w100;
+  static const FontWeight light = FontWeight.w300;
+  static const FontWeight regular = FontWeight.w400;
+  static const FontWeight medium = FontWeight.w500;
+  static const FontWeight bold = FontWeight.w700;
+  static const FontWeight extrabold = FontWeight.w900;  
 
   /* COLOR SCHEME */
-  static Brightness = Brightness.light;
   static Color primary = HexColor('22577A');
   static Color onPrimary = Colors.white;
   static Color secondary = HexColor('38A3A5');
@@ -34,7 +33,7 @@ class SocialOutTheme {
   static Color surface = Colors.black;
   static Color onSurface = Colors.white;
 
-  factory SocialOutTheme {
+  factory SocialOutTheme() {
     return _instance;
   }
 
