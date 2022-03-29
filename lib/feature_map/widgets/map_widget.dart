@@ -53,7 +53,7 @@ class _MapWidgetState extends State<MapWidget> {
                 point: LatLng(lat + 0.1, long + 0.1),
                 builder: (context) => IconButton(
                     icon: const Icon(Icons.location_on_sharp, size: 40),
-                    color: Color.fromARGB(255, 205, 193, 93),
+                    color: const Color.fromARGB(255, 205, 193, 93),
                     onPressed: showEvent))
           ],
         ),
