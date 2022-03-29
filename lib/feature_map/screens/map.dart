@@ -1,46 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_map/widgets/map_widget.dart';
-
+import 'package:so_frontend/feature_map/services/geolocation.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({ Key? key }) : super(key: key);
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<MapScreen> createState() => MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
-  Position? _position;
-  LocationPermission? _permission;
-  bool _isLocationServiceEnabled = false;
+class MapScreenState extends State<MapScreen> {
+  
   double lat = 0;
   double long = 0;
-
-  Future<List> getLocation() async {
-    _permission = await Geolocator.checkPermission();
-    if (_permission == LocationPermission.denied)
-      {
-        _permission = await Geolocator.requestPermission();
-      }
-    else
-      {
-        _isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-        if (_isLocationServiceEnabled)
-          {
-            _position = await Geolocator.getCurrentPosition(
-                desiredAccuracy: LocationAccuracy.high);
-            //placemarks = await placemarkFromCoordinates(position!.latitude, position!.longitude);
-            //place = placemarks![0];
-            //address = '${place?.street}, ${place?.postalCode}, ${place?.country}';
-            return [_position!.latitude, _position!.longitude];
-          }
-      }
-      return [15.0, 15.0];
-  }
+  GeolocationService gs = GeolocationService();
 
   assignLocation () async {
-    List coords = await getLocation(); 
+    List coords = await gs.getLocation(); 
     setState(() {
       lat = coords[0];
       long = coords[1];
@@ -62,11 +39,7 @@ class _MapScreenState extends State<MapScreen> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [
-          lat == 0 && long == 0 ? Container(
-            decoration: const BoxDecoration(
-              color: Colors.grey
-            )
-          ) : MapWidget(lat: lat, long: long),
+          MapWidget(lat: lat, long: long),
           Padding(
             padding: const EdgeInsets.only(
               top: 40,

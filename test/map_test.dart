@@ -11,6 +11,7 @@ import 'package:so_frontend/feature_home/screens/home.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:mockito/mockito.dart';
+import 'package:so_frontend/feature_map/services/geolocation.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
@@ -36,4 +37,19 @@ void main() {
 
     expect(find.byType(FlutterMap), findsOneWidget);
   });
+
+  // testWidgets('Testear respuesta ubicación geolocator ',(WidgetTester tester) async {
+  //   // await tester.pumpWidget(
+  //   //   MaterialApp(
+  //   //     home: const MapScreen(),
+  //   //   ),
+  //   // );
+
+  //   GeolocationService test = GeolocationService();
+  //   List tmp = await test.getLocation();
+  //   expect(tmp[0] != 0, true);
+  //   expect(tmp[1] != 0,true);
+
+  // });
 }
+
