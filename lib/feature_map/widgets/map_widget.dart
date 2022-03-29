@@ -17,13 +17,12 @@ class _MapWidgetState extends State<MapWidget> {
  
   showEvent() {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0)
-        ),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         context: context,
         builder: (BuildContext context) {
           return const EventWidget();
-    });
+        });
   }
 
   @override

@@ -26,6 +26,17 @@ class _EventWidgetState extends State<EventWidget> {
       const TextStyle(color: Color.fromARGB(255, 17, 92, 153), fontSize: 20);
   bool isFavourite = false;
 
+  //Temporalmente hardcoded
+  String eventPhoto = 'assets/cat.jpg';
+  String eventDate = 'FRI, 4 MAR · 16:00';
+  String eventTitle = 'Chess Competition at Tetuan';
+  String eventContamination = 'MODERATE';
+  String eventAssitants = '17/20';
+  String creatorPhoto = 'assets/dog.jpg';
+  String creatorName = 'Mark';
+  String eventDescription =
+      'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Dont miss this opportunity and sign up now!';
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,12 +45,11 @@ class _EventWidgetState extends State<EventWidget> {
         Row(children: [
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.3,
-            child: Column(
-              children: const [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage("assets/cat.jpg"),
-                ),
+            child: Column(children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: AssetImage(eventPhoto),
+              ),
             ]),
           ),
           SizedBox(
@@ -48,12 +58,12 @@ class _EventWidgetState extends State<EventWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(
-                  child: Text('FRI, 4 MAR · 16:00', style: dateStyle),
+                  child: Text(eventDate, style: dateStyle),
                 ),
               ]),
               Row(children: [
                 Expanded(
-                  child: Text('Chess Competition at Tetuan',
+                  child: Text(eventTitle,
                       style: eventStyle, textAlign: TextAlign.left),
                 ),
               ]),
@@ -61,18 +71,31 @@ class _EventWidgetState extends State<EventWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     ElevatedButton(
-                      child: const Text('MODERATE'),
+                      child: Text(eventContamination),
                       style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: const Color.fromARGB(255, 230, 217, 106),
-                      ),
+                          primary: Colors.white,
+                          backgroundColor: (eventContamination == 'MODERATE')
+                              ? const Color.fromARGB(255, 230, 217, 106)
+                              : (eventContamination == 'LOW')
+                                  ? Colors.green
+                                  : Colors.red),
                       onPressed: () {
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                                    title: const Text('Contaminación moderada'),
-                                    content: const Text(
-                                        'Se espera que para la fecha y hora indicados en el evento la polución sea moderada.'),
+                                    title: (eventContamination == 'MODERATE')
+                                        ? const Text('Contaminación moderada')
+                                        : (eventContamination == 'LOW')
+                                            ? const Text('Contaminación baja')
+                                            : const Text('Contaminación alta'),
+                                    content: (eventContamination == 'MODERATE')
+                                        ? const Text(
+                                            'Se espera que para la fecha y hora indicados en el evento la polución sea moderada. Los contaminantes predominantes son los siguientes:')
+                                        : (eventContamination == 'LOW')
+                                            ? const Text(
+                                                'Se espera que para la fecha y hora indicados en el evento la polución sea baja. Los contaminantes predominantes son los siguientes:')
+                                            : const Text(
+                                                'Se espera que para la fecha y hora indicados en el evento la polución sea alta. Los contaminantes predominantes son los siguientes:'),
                                     actions: [
                                       TextButton(
                                         child: const Text('Aceptar'),
@@ -81,7 +104,6 @@ class _EventWidgetState extends State<EventWidget> {
                                     ]));
                       },
                     ),
-                    // ignore: prefer_const_literals_to_create_immutables
                     Row(children: <Widget>[
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -91,7 +113,7 @@ class _EventWidgetState extends State<EventWidget> {
                             color: Colors.green,
                             size: 30.0,
                           ),
-                          Text('17/20', style: participantsStyle)
+                          Text(eventAssitants, style: participantsStyle)
                         ]),
                       ),
                     ]),
@@ -101,12 +123,12 @@ class _EventWidgetState extends State<EventWidget> {
         ]),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            'Created by: Mark     ',
+            'Created by: ' + creatorName + '  ',
             style: creatorStyle,
             textAlign: TextAlign.center,
           ),
-          const CircleAvatar(
-            backgroundImage: AssetImage("assets/dog.jpg"),
+          CircleAvatar(
+            backgroundImage: AssetImage(creatorPhoto),
           )
         ]),
         const Divider(
@@ -116,58 +138,55 @@ class _EventWidgetState extends State<EventWidget> {
             endIndent: 30),
         Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 20), //apply padding horizontal or vertical only
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Dont miss this opportunity and sign up now!',
+              eventDescription,
               style: explainStyle,
               textAlign: TextAlign.center,
             ),
           ),
         ]),
         const Divider(indent: 50, endIndent: 50),
-        Row(mainAxisAlignment: MainAxisAlignment.center,
-            // ignore: prefer_const_literals_to_create_immutables
-            children: <Widget>[
-              IconButton(
-                  icon: const Icon(Icons.share,
-                      size: 30.0, color: Color.fromARGB(255, 110, 108, 108)),
-                  onPressed: () {}),
-              const Divider(endIndent: 30),
-              ElevatedButton(
-                child: const Text('    JOIN NOW    '),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.green,
-                ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                              title: const Text('Joined!'),
-                              content: const Text(
-                                  'You have joined the event! Now you will recieve notifications about it.\nYou can change this on settings.'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('Aceptar'),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ]));
-                },
-              ),
-              const Divider(indent: 30),
-              IconButton(
-                  icon: Icon(Icons.favorite,
-                      size: 30.0,
-                      color: (isFavourite == true)
-                          ? Colors.red
-                          : const Color.fromARGB(255, 114, 113, 113)),
-                  onPressed: () {
-                    setState(() {
-                      isFavourite = !isFavourite;
-                    });
-                  })
-            ]),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          IconButton(
+              icon: const Icon(Icons.share,
+                  size: 30.0, color: Color.fromARGB(255, 110, 108, 108)),
+              onPressed: () {}),
+          const Divider(endIndent: 30),
+          ElevatedButton(
+            child: const Text('    JOIN NOW    '),
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+              backgroundColor: Colors.green,
+            ),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                          title: const Text('Joined!'),
+                          content: const Text(
+                              'You have joined the event! Now you will recieve notifications about it.\nYou can change this on settings.'),
+                          actions: [
+                            TextButton(
+                              child: const Text('Aceptar'),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ]));
+            },
+          ),
+          const Divider(indent: 30),
+          IconButton(
+              icon: Icon(Icons.favorite,
+                  size: 30.0,
+                  color: (isFavourite == true)
+                      ? Colors.red
+                      : const Color.fromARGB(255, 114, 113, 113)),
+              onPressed: () {
+                setState(() {
+                  isFavourite = !isFavourite;
+                });
+              })
+        ]),
       ]),
     );
   }
