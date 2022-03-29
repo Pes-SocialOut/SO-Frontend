@@ -1,20 +1,20 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:so_frontend/feature_map/widgets/map_event.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({ Key? key }) : super(key: key);
+  double lat,long;
+  MapWidget({ Key? key, required this.lat, required this.long }) : super(key: key);
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
 }
 
 class _MapWidgetState extends State<MapWidget> {
-
-  final double lat = 41.3879;
-  final double long = 2.16992;
-  
+ 
   showEvent() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -30,8 +30,8 @@ class _MapWidgetState extends State<MapWidget> {
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        center: LatLng(lat, long),
-        zoom: 10,
+        center: LatLng(widget.lat, widget.long),
+        zoom: 3,
       ),
       layers: [
         TileLayerOptions(
@@ -43,7 +43,7 @@ class _MapWidgetState extends State<MapWidget> {
           Marker(
             width: 40.0,
             height: 40.0,
-            point: LatLng(lat, long),
+            point: LatLng(widget.lat, widget.long),
             builder: (context) =>  Icon(
               Icons.circle,
               color: Theme.of(context).colorScheme.primary,
@@ -53,10 +53,10 @@ class _MapWidgetState extends State<MapWidget> {
           Marker(
             width: 40.0,
             height: 40.0,
-            point: LatLng(lat + 0.1, long + 0.1),
+            point: LatLng(widget.lat + 0.1, widget.long + 0.1),
             builder: (context) =>  IconButton(
               icon: const Icon(Icons.location_on_sharp, size: 40),
-              color:Color.fromARGB(255, 205, 193, 93),
+              color:const Color.fromARGB(255, 205, 193, 93),
               onPressed: showEvent
             )
           )

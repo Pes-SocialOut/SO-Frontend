@@ -8,22 +8,22 @@ class EventWidget extends StatefulWidget {
 }
 
 class _EventWidgetState extends State<EventWidget> {
-  var dateStyle = TextStyle(
+  var dateStyle = const TextStyle(
       color: Color.fromARGB(255, 18, 111, 187),
       decorationStyle: TextDecorationStyle.wavy,
       fontWeight: FontWeight.bold,
       fontSize: 20,
       height: 1.4);
-  var eventStyle = TextStyle(
+  var eventStyle = const TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.bold,
       fontSize: 22,
       height: 1.4);
-  var participantsStyle = TextStyle(color: Colors.green, fontSize: 18);
+  var participantsStyle = const TextStyle(color: Colors.green, fontSize: 18);
   var explainStyle =
-      TextStyle(color: Color.fromARGB(255, 61, 60, 60), fontSize: 18);
+      const TextStyle(color: Color.fromARGB(255, 61, 60, 60), fontSize: 18);
   var creatorStyle =
-      TextStyle(color: Color.fromARGB(255, 17, 92, 153), fontSize: 20);
+      const TextStyle(color: Color.fromARGB(255, 17, 92, 153), fontSize: 20);
   bool isFavourite = false;
 
   @override
@@ -34,11 +34,12 @@ class _EventWidgetState extends State<EventWidget> {
         Row(children: [
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.3,
-            child: Column(children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage("assets/cat.jpg"),
-              ),
+            child: Column(
+              children: const [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage("assets/cat.jpg"),
+                ),
             ]),
           ),
           SizedBox(
@@ -60,7 +61,7 @@ class _EventWidgetState extends State<EventWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     ElevatedButton(
-                      child: Text('MODERATE'),
+                      child: const Text('MODERATE'),
                       style: TextButton.styleFrom(
                         primary: Colors.white,
                         backgroundColor: Color.fromARGB(255, 230, 217, 106),
