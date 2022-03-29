@@ -1,16 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_map/widgets/map_widget.dart';
+import 'package:so_frontend/feature_map/services/geolocation.dart';
+import 'package:geolocator/geolocator.dart';
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
   const MapScreen({ Key? key }) : super(key: key);
 
   @override
+  State<MapScreen> createState() => MapScreenState();
+}
+
+class MapScreenState extends State<MapScreen> {
+  
+  double lat = 0;
+  double long = 0;
+  GeolocationService gs = GeolocationService();
+
+  assignLocation () async {
+    List coords = await gs.getLocation(); 
+    setState(() {
+      lat = coords[0];
+      long = coords[1];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    assignLocation();
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
+    
+
     return  Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [
-          const MapWidget(),
+          MapWidget(lat: lat, long: long),
           Padding(
             padding: const EdgeInsets.only(
               top: 40,
