@@ -17,20 +17,19 @@ class MyApp extends StatelessWidget {
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme:ColorScheme(
-          brightness:Brightness.light,
-          primary: HexColor('22577A'),
-          onPrimary: Colors.white,
-          secondary: HexColor('38A3A5'),
-          onSecondary: Colors.white,
-          error: HexColor('ED4337'),
-          onError: Colors.white,
-          background: Colors.white,
-          onBackground: Colors.black,
-          surface: Colors.black,
-          onSurface: Colors.white,
-        )
-      ),
+          colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        primary: HexColor('22577A'),
+        onPrimary: Colors.white,
+        secondary: HexColor('38A3A5'),
+        onSecondary: Colors.white,
+        error: HexColor('ED4337'),
+        onError: Colors.white,
+        background: Colors.white,
+        onBackground: Colors.black,
+        surface: Colors.black,
+        onSurface: Colors.white,
+      )),
       initialRoute: '/home',
       home: const HomeScreen(),
       routes: {
@@ -40,4 +39,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
