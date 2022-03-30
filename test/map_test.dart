@@ -6,16 +6,11 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:so_frontend/feature_home/screens/home.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 
 import 'package:mockito/mockito.dart';
-import 'dart:io';
-
-import 'package:so_frontend/feature_map/widgets/map_widget.dart';
-
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 
@@ -42,6 +37,6 @@ void main() {
     expect(find.byType(MapScreen), findsOneWidget);
   });
 
-  
+
 }
 
