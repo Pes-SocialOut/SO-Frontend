@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_map/widgets/map_widget.dart';
 import 'package:so_frontend/feature_map/services/geolocation.dart';
-import 'package:geolocator/geolocator.dart';
+
 
 class MapScreen extends StatefulWidget {
   const MapScreen({ Key? key }) : super(key: key);
@@ -39,7 +39,9 @@ class MapScreenState extends State<MapScreen> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [
-          MapWidget(lat: lat, long: long),
+          lat == 0 && long == 0 ? Container(
+            decoration: const BoxDecoration(color: Colors.grey)
+          ) :MapWidget(lat: lat, long: long),
           Padding(
             padding: const EdgeInsets.only(
               top: 40,

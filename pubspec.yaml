@@ -39,6 +39,7 @@ dependencies:
   hexcolor: ^2.0.6
   geolocator: ^8.2.0
   geocoding: ^2.0.4
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:
