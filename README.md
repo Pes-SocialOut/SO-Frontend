@@ -1,16 +1,47 @@
-# so_frontend
+# SO-Frontend
 
-A new Flutter project.
+A new Flutter project to build the mobile app.
 
 ## Getting Started
+Algunos links interesantes para entender el proyecto:
 
-This project is a starting point for a Flutter application.
+- [🖥️  Flutter installation on Windows 10](https://www.youtube.com/watch?v=fDnqXmLSqtg&t=709s)
+- [📁  Flutter Directory Structure:](https://medium.com/flutter-community/scalable-folder-structure-for-flutter-applications-183746bdc320)
+- [⏳ Gitflow Tutorial](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+- [👁️ Flutter Tutorial and Guide](https://www.youtube.com/watch?v=P2IGQT3BZQo)
 
-A few resources to get you started if this is your first Flutter project:
+## Testing
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- [🧪 Testing Guide](https://docs.flutter.dev/testing)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Miembros actuales de Front End
+
+* Weijie Liu
+* Laura Álvarez
+* Guillem García
+
+## ✅ Definition of Done (DoD) 
+
+⚠️ Es muy importante seguir estos pasos para no arrastrar errores en producción y asegurar una buena calidad de código.
+
+Cuando acabemos una *feature* es **necesario** verificar que no existen problemas en el código (que cumple con la metodología de Flutter) y que los tests han pasado correctamente.
+
+Para ello, es necesario ejecutar:
+
+```bash
+flutter analyze
+```
+
+Si el resultado del comando es que no encuentra problemas podemos ejecutar:
+
+```bash
+flutter test
+```
+
+Si los dos comandos no dan error podemos proceder a realizar merge con la rama **develop** y subir el contenido al repositorio mediante:
+
+```bash
+git push origin develop # Alternativamente git push si ya tenéis configuradas las ramas
+```
+
+Y eso es todo por ahora! ⭐️
