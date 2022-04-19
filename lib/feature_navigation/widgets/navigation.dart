@@ -41,17 +41,17 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem> [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: const Icon(Icons.home),
             label: 'Home',
             backgroundColor: Theme.of(context).colorScheme.primary
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search_rounded),
+            icon: const Icon(Icons.search_rounded),
             label: 'Explore',
             backgroundColor: Theme.of(context).colorScheme.primary
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             label: 'Create',
             backgroundColor: Theme.of(context).colorScheme.primary
           ),
