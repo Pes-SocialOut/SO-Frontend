@@ -11,13 +11,13 @@ class WelcomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Welcome'),
+            const Text('Welcome'),
             const SizedBox(height:20),
             InkWell(
               onTap: () {
                 Navigator.of(context).pushNamed('/login');
               },
-              child: Container(
+              child: const SizedBox(
                 width: 400,
                 height: 100,
                 child: Icon(Icons.login),
@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed('/signup');
               },
-              child: Container(
+              child: const SizedBox(
                 width: 400,
                 height: 100,
                 child: Icon(Icons.add),

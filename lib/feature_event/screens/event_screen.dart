@@ -8,10 +8,10 @@ class EventScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event')
+        title: const Text('Event')
       ),
       body: Center(
-        child: Text('Event aquí ' + this.id)
+        child: Text('Event aquí ' + id)
       )
     );
   }

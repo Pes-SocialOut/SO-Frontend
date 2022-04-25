@@ -15,12 +15,12 @@ class MainHomeScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EventScreen(id: 'Guillem'))
+                  MaterialPageRoute(builder: (context) => const EventScreen(id: 'Guillem'))
                 );
               },
               child: Container(
-                decoration: BoxDecoration(color: Colors.grey),
-                child: Center(child: Text('Esto es un evento')),
+                decoration: const BoxDecoration(color: Colors.grey),
+                child: const Center(child: Text('Esto es un evento')),
                 width: 200,
                 height: 80,
               )

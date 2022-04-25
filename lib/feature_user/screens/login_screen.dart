@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: IconButton(
-          icon: Icon(Icons.login),
+          icon: const Icon(Icons.login),
           onPressed: () {
             Navigator.of(context).pushNamed('/home');
           }
