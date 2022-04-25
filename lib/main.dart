@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:so_frontend/feature_navigation/widgets/navigation.dart';
+import 'package:so_frontend/feature_navigation/screens/navigation.dart';
+import 'package:so_frontend/feature_navigation/screens/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (_) => const NavigationBottomBar(),
         '/map_screen': (_) =>  const MapScreen(),
+        '/profile': (_) => const ProfileScreen()
       },
     );
   }

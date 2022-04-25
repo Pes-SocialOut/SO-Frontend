@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_home/widgets/map_button.dart';
+import 'package:so_frontend/feature_event/screens/event_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({ Key? key }) : super(key: key);
+class MainHomeScreen extends StatelessWidget {
+  const MainHomeScreen({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,11 +10,21 @@ class HomeScreen extends StatelessWidget {
         margin: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('Search your near events',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            MapButton()
+          children:  [
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EventScreen(id: 'Guillem'))
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(color: Colors.grey),
+                child: Center(child: Text('Esto es un evento')),
+                width: 200,
+                height: 80,
+              )
+            )
           ],
         ),
     );

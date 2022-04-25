@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:so_frontend/feature_home/screens/home.dart';
+import 'package:so_frontend/feature_explore/screens/home.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 
 import 'package:mockito/mockito.dart';
