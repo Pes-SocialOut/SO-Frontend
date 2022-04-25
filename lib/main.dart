@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/screens/home.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
+import 'package:so_frontend/feature_UserSoci/screens/welcome.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 void main() {
@@ -32,9 +33,10 @@ class MyApp extends StatelessWidget {
         )
       ),
       initialRoute: '/home',
-      home: const HomeScreen(),
+      home: const UserSociScreen(),
       routes: {
-        '/home': (_) => const HomeScreen(),
+        '/home': (_) => const UserSociScreen(),
+        '/homeEvent': (_) => const HomeScreen(),
         '/map_screen': (_) =>  const MapScreen(),
       },
     );
