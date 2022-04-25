@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:so_frontend/feature_event/screens/creation_sucess.dart';
 
 class CreateEventForm extends StatefulWidget {
   const CreateEventForm({ Key? key }) : super(key: key);
@@ -111,7 +112,12 @@ class _CreateEventFormState extends State<CreateEventForm> {
             backgroundColor: HexColor('57CC99'),
             textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreationSucess())
+            );
+          },
           child: const Text('Create'),
         ),
         const SizedBox(height: 50),
