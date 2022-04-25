@@ -36,6 +36,7 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
           color: Theme.of(context).colorScheme.secondary,
           backgroundColor: Theme.of(context).colorScheme.background,
         )),
+        leading: SizedBox(),
         elevation: 1,
         backgroundColor: Theme.of(context).colorScheme.background,
         actions: <Widget>[

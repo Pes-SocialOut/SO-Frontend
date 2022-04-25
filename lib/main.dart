@@ -3,6 +3,9 @@ import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/feature_user/screens/login_screen.dart';
+import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
+import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,9 +35,12 @@ class MyApp extends StatelessWidget {
           onSurface: HexColor('767676'),
         )
       ),
-      initialRoute: '/home',
-      home: const NavigationBottomBar(),
+      initialRoute: '/welcome',
+      home: const WelcomeScreen(),
       routes: {
+        '/welcome': (_) => const WelcomeScreen(),
+        '/login': (_) => const LoginScreen(),
+        '/signup': (_) => const SignUpScreen(),
         '/home': (_) => const NavigationBottomBar(),
         '/map_screen': (_) =>  const MapScreen(),
         '/profile': (_) => const ProfileScreen()
