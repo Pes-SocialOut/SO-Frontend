@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           background: Colors.white,
           onBackground: Colors.black,
           surface: Colors.black,
-          onSurface: Colors.white,
+          onSurface: HexColor('767676'),
         )
       ),
       initialRoute: '/home',

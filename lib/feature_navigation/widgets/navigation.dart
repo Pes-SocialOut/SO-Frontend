@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_event/screens/create_event.dart';
 import 'package:so_frontend/feature_home/screens/home.dart';
 
 class NavigationBottomBar extends StatefulWidget {
@@ -15,7 +16,7 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
   static const List<Widget> _widgetOptions = <Widget>[
     Text('Home'),
     HomeScreen(),
-    Text('Create an event')
+    CreateEventScreen()
   ];
 
   void _onItemTapped(int index) {
