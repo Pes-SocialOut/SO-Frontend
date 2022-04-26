@@ -7,12 +7,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:so_frontend/feature_home/screens/home.dart';
+import 'package:so_frontend/feature_explore/screens/home.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
-import 'package:flutter_map/plugin_api.dart';
-import 'package:mockito/mockito.dart';
-import 'package:so_frontend/feature_map/services/geolocation.dart';
 
+import 'package:mockito/mockito.dart';
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 
@@ -31,25 +29,14 @@ void main() {
       ),
     );
 
+    
+
     expect(find.byType(InkWell), findsOneWidget);
     await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
-
-    expect(find.byType(FlutterMap), findsOneWidget);
+    expect(find.byType(MapScreen), findsOneWidget);
   });
 
-  // testWidgets('Testear respuesta ubicación geolocator ',(WidgetTester tester) async {
-  //   // await tester.pumpWidget(
-  //   //   MaterialApp(
-  //   //     home: const MapScreen(),
-  //   //   ),
-  //   // );
 
-  //   GeolocationService test = GeolocationService();
-  //   List tmp = await test.getLocation();
-  //   expect(tmp[0] != 0, true);
-  //   expect(tmp[1] != 0,true);
-
-  // });
 }
 

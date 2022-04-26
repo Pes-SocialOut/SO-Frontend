@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:so_frontend/feature_map/widgets/map_event.dart';
+import 'package:so_frontend/feature_map/services/events.dart';
 
 class MapWidget extends StatefulWidget {
   double lat,long;
@@ -15,6 +16,10 @@ class MapWidget extends StatefulWidget {
 
 class _MapWidgetState extends State<MapWidget> {
  
+  EventsAPI ej = EventsAPI();
+  List events = [];
+
+
   showEvent() {
     showModalBottomSheet(
         shape:
@@ -23,6 +28,22 @@ class _MapWidgetState extends State<MapWidget> {
         builder: (BuildContext context) {
           return const EventWidget();
         });
+  }
+
+  void getAllEvents() async {
+    List tmp = await ej.getAllEvents();
+    if (mounted) {
+      setState(() {
+        events = tmp;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllEvents();
+    
   }
 
   @override
@@ -49,14 +70,14 @@ class _MapWidgetState extends State<MapWidget> {
               size: 40,
             )
           ),
-          Marker(
+          for (var i = 0; i < events.length; i++) Marker(
             width: 40.0,
             height: 40.0,
-            point: LatLng(widget.lat + 0.1, widget.long + 0.1),
-            builder: (context) =>  IconButton(
+            point: LatLng(events[i]["latitude"], events[i]["longitud"]),
+            builder : (context) => IconButton(
               icon: const Icon(Icons.location_on_sharp, size: 40),
+              onPressed: showEvent,
               color:const Color.fromARGB(255, 205, 193, 93),
-              onPressed: showEvent
             )
           )
         ],
