@@ -21,7 +21,7 @@ class WelcomeWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(20)),
               child: FittedBox(
-                child: Image.asset('assets/frontpage/frontpage_1.png'), 
+                child: Image.asset('assets/frontpage/frontpage_1_small.png'), 
                 fit: BoxFit.fill
               ),
               
