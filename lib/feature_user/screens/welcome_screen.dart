@@ -7,6 +7,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double borderradius = 10.0;
+    double widthButton = 300.0;
+    double heightButton = 40.0;
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -29,7 +32,7 @@ class WelcomeScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width/1.5,
                   
                 ),
-                const SizedBox(height:50),
+                const SizedBox(height:20),
                 const Text(
                   'Enjoy the day outside',
                   style: TextStyle(height: 1.0, fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
@@ -39,7 +42,8 @@ class WelcomeScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).colorScheme.secondary,
                     onPrimary: Colors.white,
-
+                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(borderradius)),
+                    minimumSize: Size(widthButton, heightButton)
                   ),
                   onPressed: () {
                     Navigator.of(context).pushNamed('/signup');
@@ -48,7 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: const Text(
                     
                     'Sign Up',
-                    style: TextStyle(height: 1.0, fontSize: 30, fontWeight: FontWeight.bold),
+                    style: TextStyle(height: 1.0, fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height:20),
@@ -56,14 +60,15 @@ class WelcomeScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).colorScheme.onSecondary,
                     onPrimary: Colors.black,
-
+                    shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(borderradius)),
+                    minimumSize: Size(widthButton, heightButton)
                   ),
                   onPressed: () {
                     Navigator.of(context).pushNamed('/login');
                   },
                   child: const Text(
                     'Log In',
-                    style: TextStyle(height: 1.0, fontSize: 30,  fontWeight: FontWeight.bold),
+                    style: TextStyle(height: 1.0, fontSize: 20,  fontWeight: FontWeight.bold),
                   ),
                 )
               ]
