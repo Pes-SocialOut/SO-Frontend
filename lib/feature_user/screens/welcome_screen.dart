@@ -42,7 +42,7 @@ class WelcomeScreen extends StatelessWidget {
 
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/login');
+                    Navigator.of(context).pushNamed('/signup');
                   },
                   
                   child: const Text(
@@ -59,7 +59,7 @@ class WelcomeScreen extends StatelessWidget {
 
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/signup');
+                    Navigator.of(context).pushNamed('/login');
                   },
                   child: const Text(
                     'Log In',
