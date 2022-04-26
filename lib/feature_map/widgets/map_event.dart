@@ -27,7 +27,7 @@ class _EventWidgetState extends State<EventWidget> {
   bool isFavourite = false;
 
   //Temporalmente hardcoded
-  String eventPhoto = 'assets/cat.jpg';
+  String eventPhoto = 'assets/gato.jpg';
   String eventDate = 'FRI, 4 MAR · 16:00';
   String eventTitle = 'Chess Competition at Tetuan';
   String eventContamination = 'MODERATE';
