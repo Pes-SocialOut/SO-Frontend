@@ -34,10 +34,10 @@ class WelcomeScreen extends StatelessWidget {
                   'Enjoy the day outside',
                   style: TextStyle(height: 1.0, fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height:200),
+                const SizedBox(height:300),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: const Color(0x0038a3a5),//const Color(0x0038a3a5),
+                    primary: Theme.of(context).colorScheme.secondary,
                     onPrimary: Colors.white,
 
                   ),
@@ -54,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height:20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: const Color(0x0022577a),
+                    primary: Theme.of(context).colorScheme.onSecondary,
                     onPrimary: Colors.black,
 
                   ),
