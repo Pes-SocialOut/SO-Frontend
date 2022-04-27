@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           secondary: HexColor('38A3A5'),
           onSecondary: Colors.white,
           error: HexColor('ED4337'),
-          onError: Colors.white,
+          onError: HexColor('D4AC2B'),
           background: Colors.white,
           onBackground: Colors.black,
           surface: Colors.black,
