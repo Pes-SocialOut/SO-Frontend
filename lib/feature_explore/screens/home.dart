@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_explore/widgets/map_button.dart';
 import 'package:so_frontend/feature_explore/widgets/recommended_list.dart';
+import 'package:so_frontend/feature_explore/widgets/recently_added.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({ Key? key }) : super(key: key);
@@ -22,7 +23,13 @@ class HomeScreen extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize:18, color: Theme.of(context).colorScheme.surface)
               ),
               const SizedBox(height:10),
-              const RecommendedList()
+              const RecommendedList(),
+              const SizedBox(height: 30),
+              Text('Recently created by other users',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize:18, color: Theme.of(context).colorScheme.surface)
+              ),
+              const SizedBox(height:10),
+              const RecentlyAdded()
             ],
           ),
       ),

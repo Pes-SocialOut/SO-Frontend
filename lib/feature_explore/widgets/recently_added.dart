@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class RecommendedList extends StatefulWidget {
-  const RecommendedList({ Key? key }) : super(key: key);
+class RecentlyAdded extends StatefulWidget {
+  const RecentlyAdded({ Key? key }) : super(key: key);
 
   @override
-  State<RecommendedList> createState() => _RecommendedListState();
+  State<RecentlyAdded> createState() => _RecentlyAddedState();
 }
 
-class _RecommendedListState extends State<RecommendedList> {
+class _RecentlyAddedState extends State<RecentlyAdded> {
 
-  List recommendations = [{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"}, ];
+  List recommendations = [{"name": "Running training in Collserola", "date":"THU, 3 MAR · 17:00", "air":"GOOD", "image":"assets/event2-preview.png"}, {"name": "Running training in Collserola", "date":"THU, 3 MAR · 17:00", "air":"GOOD", "image":"assets/event2-preview.png"}, {"name": "Running training in Collserola", "date":"THU, 3 MAR · 17:00", "air":"GOOD", "image":"assets/event2-preview.png"}, {"name": "Running training in Collserola", "date":"THU, 3 MAR · 17:00", "air":"GOOD", "image":"assets/event2-preview.png"}, {"name": "Running training in Collserola", "date":"THU, 3 MAR · 17:00", "air":"GOOD", "image":"assets/event2-preview.png"}, {"name": "Running training in Collserola", "date":"THU, 3 MAR · 17:00", "air":"GOOD", "image":"assets/event2-preview.png"}];
 
   @override
   void initState() {
@@ -57,10 +57,10 @@ class _RecommendedListState extends State<RecommendedList> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                            left: 8,
+                            left: 12,
                             top: 8,
                             bottom: 8,
-                            right:8
+                            right:12
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +73,7 @@ class _RecommendedListState extends State<RecommendedList> {
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.onError,
+                                      color: Theme.of(context).colorScheme.secondary,
                                       borderRadius: const BorderRadius.all(Radius.circular(25))
                                     ),
                                     child: Padding(
