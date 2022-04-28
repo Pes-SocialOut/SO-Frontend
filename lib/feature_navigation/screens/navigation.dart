@@ -46,9 +46,16 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
               onTap: () {
                 Navigator.of(context).pushNamed('/profile');
               },
-              child: ClipRRect(
-                child: Image.asset('assets/dog.jpg'),
-                borderRadius: BorderRadius.circular(100)
+              child: SizedBox(
+                width: 36,
+                height: 36,
+                child: ClipRRect(
+                  child: FittedBox(
+                    child: Image.asset('assets/dog.jpg'),
+                    fit: BoxFit.fitHeight
+                  ),
+                  borderRadius: BorderRadius.circular(100)
+                ),
               ),
             ),
           )

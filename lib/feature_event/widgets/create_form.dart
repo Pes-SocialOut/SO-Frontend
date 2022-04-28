@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:so_frontend/feature_event/screens/creation_sucess.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class CreateEventForm extends StatefulWidget {
   const CreateEventForm({ Key? key }) : super(key: key);
@@ -12,31 +14,46 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  DateTime _selectedTime = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: MediaQuery.of(context).size.height/8),
-        RichText(
-          text: TextSpan(
-            text: 'Start creating your ',
-            style:  TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).colorScheme.surface),
-            children:  <TextSpan> [
-              TextSpan(
-                text: 'dream ',
-                style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary,  fontSize: 24)
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 16.0
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: 'Start creating your ',
+                  style:  TextStyle(fontWeight: FontWeight.bold, fontSize: 28, color: Theme.of(context).colorScheme.surface),
+                  children:  <TextSpan> [
+                    TextSpan(
+                      text: 'dream ',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary,  fontSize: 28)
+                    ),
+                    TextSpan(
+                      text: 'event!',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28, color: Theme.of(context).colorScheme.surface)
+                    )
+                  ]
+                )
               ),
-              TextSpan(
-                text: 'event!',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).colorScheme.surface)
-              )
-            ]
-          )
+              const SizedBox(height: 20),
+              Text('Fill all the information required to create a new event',textAlign: TextAlign.center,  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
+              SizedBox(height: MediaQuery.of(context).size.height/8),
+            ],
+          ),
         ),
-        const SizedBox(height: 20),
-        Text('Fill all the information required to create a new event', style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
-        SizedBox(height: MediaQuery.of(context).size.height/8),
         Form(
           key: _formKey,
           child: Padding(
@@ -52,11 +69,27 @@ class _CreateEventFormState extends State<CreateEventForm> {
                 ),
                 const SizedBox(height: 20),
                 Text('Date and time', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'When will it start?'
-                  ),
-                ),
+                TextButton(
+                  
+                  onPressed: () {
+                    DatePicker.showDatePicker(context,
+                      showTitleActions: true,
+                      minTime: DateTime(2018, 3, 5),
+                      maxTime: DateTime.now(),
+                      onChanged: (date) {
+                        
+                      }, 
+                      onConfirm: (date) {
+                        setState((){
+                          _selectedTime = date;
+                        });
+                      }, 
+                      currentTime: DateTime.now(), locale: LocaleType.en);
+                  },
+                  child: Text(
+                      ('' + _selectedTime.year.toString() + '/' + _selectedTime.month.toString() + '/' + _selectedTime.day.toString()),
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  )),
                 const SizedBox(height: 20),
                 Text('Duration', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
                 TextFormField(
@@ -111,7 +144,12 @@ class _CreateEventFormState extends State<CreateEventForm> {
             backgroundColor: HexColor('57CC99'),
             textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreationSucess())
+            );
+          },
           child: const Text('Create'),
         ),
         const SizedBox(height: 50),

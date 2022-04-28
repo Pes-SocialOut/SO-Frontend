@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:so_frontend/feature_home/widgets/user_events.dart';
 
 class MainHomeScreen extends StatelessWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -11,20 +11,13 @@ class MainHomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const EventScreen(id: 'Guillem')));
-              },
-              child: Container(
-                decoration: const BoxDecoration(color: Colors.grey),
-                child: const Center(child: Text('Esto es un evento')),
-                width: 200,
-                height: 80,
-              ))
+          Text('My events',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.surface,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18)),
+          const SizedBox(height: 20),
+          const UserEventsList()
         ],
       ),
     );
