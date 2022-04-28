@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         '/signup': (_) => const SignUpScreen(),
         '/home': (_) => const NavigationBottomBar(),
         '/map_screen': (_) => const MapScreen(),
-        '/profile': (_) => const ProfileScreen()
+        '/profile': (_) => const ProfileScreen(id: "0")
       },
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String id;
+  const ProfileScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -13,9 +14,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var explainStyle =
       const TextStyle(color: Color.fromARGB(255, 61, 60, 60), fontSize: 18);
   var titleStyle = const TextStyle(color: Colors.black, fontSize: 18);
-  bool cat = true;
-  bool spa = true;
-  bool eng = false;
 
   List user = [
     {
@@ -249,7 +247,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(
                       height: MediaQuery.of(context).size.height * 0.42,
                       width: MediaQuery.of(context).size.width * 0.42,
-                      child: ListView(children: const <Widget>[])),
+                      child: ListView(children: <Widget>[
+                        for (var i = 0; i < user[0]["friend_list"].length; i++)
+                          ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  user[0]["friend_list"][i]["profile_img_uri"]),
+                            ),
+                            title: Text(user[0]["friend_list"][i]["username"]),
+                          )
+                      ])),
                 ],
               )
             ],
