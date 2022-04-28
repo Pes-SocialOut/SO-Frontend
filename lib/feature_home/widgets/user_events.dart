@@ -48,8 +48,26 @@ class _UserEventsListState extends State<UserEventsList> {
                       child: Image.asset(_events[index]["image"]),
                       fit: BoxFit.fitHeight
                     ),
+                  ),
+                  Container(
+                    width: 100,
+                    height: 115,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        stops: [
+                          0.1,
+                          0.4,
+                          0.6,
+                          0.9,
+                        ],
+                        colors: [
+                          Theme.of(context).colorScheme.surface
+                        ],
+                      )
+                    )
                   )
-                  
                 ]
               )
             ),
