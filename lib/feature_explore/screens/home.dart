@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
               const Text('Search your near events',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
+              const SizedBox(height:10),
               const MapButton(),
               const SizedBox(height: 30),
               Text('Recommended for you',

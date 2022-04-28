@@ -14,7 +14,17 @@ class MapButton extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed('/map_screen');
           },
-          child: SizedBox(
+          child: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/4,
             child: ClipRRect(

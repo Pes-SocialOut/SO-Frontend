@@ -34,7 +34,7 @@ class EventScreen extends StatelessWidget {
           },
         )
       ),
-      body: Center(
+      body: const Center(
         child: Event()
       )
     );
