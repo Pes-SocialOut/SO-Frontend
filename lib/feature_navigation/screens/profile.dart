@@ -17,6 +17,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool spa = true;
   bool eng = false;
 
+  List user = [
+    {
+      "id": "1234",
+      "username": "Marta Díaz",
+      "profile_img_uri": "assets/gato.jpg",
+      "languages": ["catalan", "english"],
+      "description": "I really like chess and camping. Take me home.",
+      "email": "martadiaz@gmail.com",
+      "friend_list": [
+        {
+          "id": "2345",
+          "username": "Miguel de Cervantes",
+          "profile_img_uri": "assets/dog.jpg"
+        },
+        {
+          "id": "3456",
+          "username": "Garcilaso de la Vega",
+          "profile_img_uri": "assets/dog.jpg"
+        },
+        {
+          "id": "4567",
+          "username": "Miguel de Unamuno",
+          "profile_img_uri": "assets/dog.jpg"
+        }
+      ]
+    }
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,22 +58,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.14,
               width: MediaQuery.of(context).size.width * 0.3,
-              child: Column(children: const [
+              child: Column(children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage("assets/dog.jpg"),
+                  backgroundImage: AssetImage(user[0]["profile_img_uri"]),
                 ),
               ]),
             ),
             SizedBox(
                 height: MediaQuery.of(context).size.height * 0.14,
-                width: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(children: [
                         Expanded(
-                          child: Text('Sergi Gómez', style: creatorStyle),
+                          child: Text(user[0]["username"], style: creatorStyle),
                         ),
                       ]),
                       const Divider(indent: 50, endIndent: 50),
@@ -54,17 +82,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 23.0,
                           width: 30.0,
                           decoration: BoxDecoration(
-                            image: (cat == false)
+                            image: (user[0]["languages"].contains("catalan"))
                                 ? const DecorationImage(
+                                    image: AssetImage('assets/cat.png'),
+                                    fit: BoxFit.fill,
+                                  )
+                                : const DecorationImage(
                                     image: AssetImage('assets/cat.png'),
                                     fit: BoxFit.fill,
                                     colorFilter: ColorFilter.mode(
                                         Color.fromARGB(255, 143, 141, 141),
-                                        BlendMode.color))
-                                : const DecorationImage(
-                                    image: AssetImage('assets/cat.png'),
-                                    fit: BoxFit.fill,
-                                  ),
+                                        BlendMode.color)),
                           ),
                         ),
                         const Divider(indent: 5, endIndent: 5),
@@ -72,87 +100,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 23.0,
                           width: 30.0,
                           decoration: BoxDecoration(
-                            image: (spa == false)
-                                ? const DecorationImage(
-                                    image: AssetImage('assets/esp.jpg'),
-                                    fit: BoxFit.fill,
-                                    colorFilter: ColorFilter.mode(
-                                        Color.fromARGB(255, 143, 141, 141),
-                                        BlendMode.color))
-                                : const DecorationImage(
-                                    image: AssetImage('assets/esp.jpg'),
-                                    fit: BoxFit.fill,
-                                  ),
-                          ),
+                              image: (user[0]["languages"].contains("spanish"))
+                                  ? const DecorationImage(
+                                      image: AssetImage('assets/esp.jpg'),
+                                      fit: BoxFit.fill,
+                                    )
+                                  : const DecorationImage(
+                                      image: AssetImage('assets/esp.jpg'),
+                                      fit: BoxFit.fill,
+                                      colorFilter: ColorFilter.mode(
+                                          Color.fromARGB(255, 143, 141, 141),
+                                          BlendMode.color))),
                         ),
                         const Divider(indent: 5, endIndent: 5),
                         Container(
                           height: 23.0,
                           width: 30.0,
                           decoration: BoxDecoration(
-                            image: (eng == false)
+                            image: (user[0]["languages"].contains("english"))
                                 ? const DecorationImage(
+                                    image: AssetImage('assets/ing.jpg'),
+                                    fit: BoxFit.fill,
+                                  )
+                                : const DecorationImage(
                                     image: AssetImage('assets/ing.jpg'),
                                     fit: BoxFit.fill,
                                     colorFilter: ColorFilter.mode(
                                         Color.fromARGB(255, 143, 141, 141),
-                                        BlendMode.color))
-                                : const DecorationImage(
-                                    image: AssetImage('assets/ing.jpg'),
-                                    fit: BoxFit.fill,
-                                  ),
+                                        BlendMode.color)),
                           ),
                         ),
                       ])
                     ])),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.14,
+              width: MediaQuery.of(context).size.width * 0.1,
+              child: IconButton(
+                icon: const Icon(Icons.edit),
+                color: const Color.fromARGB(255, 42, 115, 45),
+                onPressed: () {},
+              ),
+            ),
           ]),
-          const Divider(indent: 5, endIndent: 5),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-            child:
-                ListView(scrollDirection: Axis.horizontal, children: <Widget>[
-              ElevatedButton(
-                  child: const Text('Ajedrez'),
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: const Color.fromARGB(255, 224, 111, 164),
-                  ),
-                  onPressed: () {}),
-              const Divider(indent: 4, endIndent: 4),
-              ElevatedButton(
-                  child: const Text('Ajedrez'),
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: const Color.fromARGB(255, 224, 111, 164),
-                  ),
-                  onPressed: () {}),
-              const Divider(indent: 4, endIndent: 4),
-              ElevatedButton(
-                  child: const Text('Ajedrez'),
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: const Color.fromARGB(255, 224, 111, 164),
-                  ),
-                  onPressed: () {}),
-              const Divider(indent: 4, endIndent: 4),
-              ElevatedButton(
-                  child: const Text('Ajedrez'),
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: const Color.fromARGB(255, 224, 111, 164),
-                  ),
-                  onPressed: () {}),
-              const Divider(indent: 4, endIndent: 4),
-              ElevatedButton(
-                  child: const Text('Ajedrez'),
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: const Color.fromARGB(255, 224, 111, 164),
-                  ),
-                  onPressed: () {}),
-              const Divider(indent: 4, endIndent: 4),
-            ]),
-          ),
           const Divider(indent: 5, endIndent: 5),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.17,
@@ -160,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(
                   horizontal: 20), //apply padding horizontal or vertical only
               child: Text(
-                'Buenas! Me gustan los torenos de ajedrez y ganar, sobre todo ganar, vamos, que si no gano os pego porque soy el mejor y aquí hay que escribir mucho texto que yo que sé uwuwu.',
+                user[0]["description"],
                 style: explainStyle,
                 textAlign: TextAlign.center,
               ),
@@ -260,62 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(
                       height: MediaQuery.of(context).size.height * 0.42,
                       width: MediaQuery.of(context).size.width * 0.42,
-                      child: ListView(children: const <Widget>[
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage('assets/dog.jpg'),
-                          ),
-                          title: Text('Gabriel Martinez'),
-                        ),
-                      ])),
+                      child: ListView(children: const <Widget>[])),
                 ],
               )
             ],
