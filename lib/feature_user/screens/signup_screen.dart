@@ -1,14 +1,9 @@
-
-import 'dart:js';
-import 'package:path/path.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/screens/loggedIn_screen.dart';
 import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:path/path.dart' as Path;
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({ Key? key }) : super(key: key);
@@ -38,7 +33,7 @@ class SignUpScreen extends StatelessWidget {
                   Buttons.Google,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderradius)),
                   text: "Continue with Google",
-                  onPressed: signIn,
+                  onPressed: () =>signIn(context),
                 ),
               ),
               Container(
@@ -124,17 +119,18 @@ class SignUpScreen extends StatelessWidget {
     
   }
   
-  Future signIn() async{
+  Future signIn( BuildContext context) async{
       final user = await GoogleSignInApi.login();
 
       if(user == null){
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: 
             Text('Sign in Failed')
             )
           );
       }else{
+        
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context)=> LoggedInPage(user: user,),
           ));

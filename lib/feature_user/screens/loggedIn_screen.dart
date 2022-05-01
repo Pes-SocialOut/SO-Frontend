@@ -32,7 +32,7 @@ class LoggedInPage extends StatelessWidget{
         color: Colors.blueGrey.shade900,
         child: Column(
           mainAxisAlignment:  MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               'Profile',
               style: TextStyle(fontSize: 24),
@@ -40,12 +40,12 @@ class LoggedInPage extends StatelessWidget{
             SizedBox(height: 32),
             CircleAvatar(
               radius: 40,
-              backgroundImage:  NetworkImage(user!.photoUrl),
+              backgroundImage:  NetworkImage(user.photoUrl!),
             ),
             SizedBox(height: 8),
 
             Text(
-              'Name: '+user.displayName,
+              'Name: '+user.displayName!,
               style: TextStyle(color: Colors.white,fontSize: 20),
             ),
             SizedBox(height: 8),
