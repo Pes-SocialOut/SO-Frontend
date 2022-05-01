@@ -1,11 +1,13 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,55 +17,56 @@ class SignUpScreen extends StatelessWidget {
     double policyTextSize = 14;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Color(0xC8C8C8), title: const Text('Sign Up')),
+            backgroundColor: Color(0xC8C8C8), title: const Text('Register!')),
         body: Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
               child: ListView(children: <Widget>[
-                const SizedBox(height: 60),
+                const SizedBox(height: 80),
+                Image.asset(
+                  "assets/Banner.png",
+                  height: MediaQuery.of(context).size.height / 10,
+                  width: MediaQuery.of(context).size.width / 1.5,
+                ),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: SignInButton(
-                    Buttons.Google,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Continue with Google",
-                    onPressed: () {},
+                  child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                        hintText: "Enter email", labelText: "Email"),
                   ),
                 ),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: SignInButton(
-                    Buttons.Facebook,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Continue with Facebook",
-                    onPressed: () {},
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                        hintText: "Enter password", labelText: "Password"),
                   ),
                 ),
-                const SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    "OR",
-                    style: TextStyle(color: Colors.black45, fontSize: 16),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
-                  child: SignInButton(
-                    Buttons.Email,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Continue with Email",
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).colorScheme.secondary,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderradius)),
+                        minimumSize: Size(widthButton, heightButton)),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/register');
+                      // llamar a funcion checkUserEmail https
                     },
+                    child: const Text(
+                      'Register',
+                      style: TextStyle(
+                          height: 1.0,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Container(
@@ -75,29 +78,20 @@ class SignUpScreen extends StatelessWidget {
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.surface,
                               fontSize: policyTextSize),
-                          text: "Already have an account? "),
+                          text: "Do you already have an account? "),
                       TextSpan(
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: policyTextSize),
-                          text: "Log In",
+                          text: "Login",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.of(context).pushNamed('/login');
-                              //cant launch at the moment, because emualtor has no internet
-                              /*
-                          if(await canLaunchUrl(url)){
-                            await launchUrl(url);
-                          }
-                          else{
-                            throw "cannot load Url";
-                          }
-                          */
                             }),
                     ]),
                   ),
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 50),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),

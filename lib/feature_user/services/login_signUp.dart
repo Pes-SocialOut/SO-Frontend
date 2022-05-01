@@ -1,46 +1,46 @@
+// ignore_for_file: camel_case_types
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class EventsAPI {
-  final String urlToken = "https://socialout-develop.herokuapp.com/v1/user/";
+class userAPI {
+  final String urlToken = "https://socialout-develop.herokuapp.com/v1/users/";
   String token = '';
   String refreshToken = '';
 
-  Future checkUserEmail(email) async {
-    String _path = 'register/check?type=';
-    String type = 'socialout&email=';
+  /* Comprobar que un email socialout existe o no en la BD */
+  Future<List> checkUserEmail(email) async {
+    String _path = 'register/check?type=socialout&email=';
 
-    final response =
-        await http.get(Uri.parse(urlToken + _path + type + email));
+    final response = await http.get(Uri.parse(urlToken + _path + email));
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
+    if (response.statusCode != 200) {
+      // return error
     }
+    return json.decode(response.body);
   }
 
-  Future userRegistrer(String email, String passw, String codiVeri) async {
+  /*ultimo paso de registro*/
+  Future<int> finalRegistrer(
+      email, passw, username, description, languages, hobbies, codiVeri) async {
+    String _path = 'register/socialout';
 
-    String _path = 'auth_method';
-    String type = 'socialout';
-
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    
-    data['Type'] = {type};
-    data['Credentials'] = [
-      {
-        "Email": email,
-        "Password": passw,
-        'Verification': codiVeri,
-      }
-    ];
-
-    return http.post(
+    final response = await http.post(
       Uri.parse(urlToken + _path),
-      body: jsonEncode(data)
+      body: {
+        "email": email,
+        "password": passw,
+        "username": username,
+        "description": description,
+        "languages": languages,
+        "hobbies": hobbies,
+        "verification": codiVeri
+      },
     );
+
+    if (response.statusCode == 200) {
+      token = response.body;
+    }
+    return response.statusCode;
+  }
 }
-
-
-
-
-
