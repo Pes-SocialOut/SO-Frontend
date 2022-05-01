@@ -120,10 +120,12 @@ class SignUpScreen extends StatelessWidget {
   }
   
   Future signIn( BuildContext context) async{
-      final user = await GoogleSignInApi.login();
-
+      final user = await GoogleSignInApi.signin();
+      
       if(user == null){
+        Navigator.of(context).pushNamed('/login');
         ScaffoldMessenger.of(context).showSnackBar(
+          
           const SnackBar(
             content: 
             Text('Sign in Failed')

@@ -54,6 +54,19 @@ class LoggedInPage extends StatelessWidget{
               'Email: '+user.email,
               style: TextStyle(color: Colors.white,fontSize: 20),
             ),
+            SizedBox(height: 8),
+
+            Text(
+              'Auth: '+user.authHeaders.toString(),
+              style: TextStyle(color: Colors.white,fontSize: 20),
+            ),
+            ElevatedButton(
+              child: const Text('SIGN OUT'),
+              onPressed: () async{
+                GoogleSignInApi.logout();
+                Navigator.of(context).pushNamed('/welcome');
+              } 
+            ),
           ]
           ),
       ),
