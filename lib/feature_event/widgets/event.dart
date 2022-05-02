@@ -11,7 +11,16 @@ class _EventState extends State<Event> {
 
   List attendees = [{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"}];
 
+  List _event = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20"}];
 
+  @override
+  void initState() {
+    super.initState();
+    List tmp = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20"}];
+    setState(() {
+      _event = tmp;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +66,13 @@ class _EventState extends State<Event> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Gastronomic Route through El Born', style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 20, fontWeight: FontWeight.bold)),
+                              Text(_event[0]["title"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 20, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 30),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text('Created by: Mark', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
+                                  Text('Created by: ' + _event[0]["creator"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
                                   const SizedBox(width: 10),
                                   InkWell(
                                     onTap: () {
@@ -91,7 +100,7 @@ class _EventState extends State<Event> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(height: 20),
-                                      Text('THURSDAY, 3 MAR · 17:00', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
+                                      Text(_event[0]["date"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
                                       const SizedBox(height: 15),
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,7 +116,7 @@ class _EventState extends State<Event> {
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.all(4.0),
-                                              child: Text('MODERATE', style: TextStyle(color: Theme.of(context).colorScheme.background, fontSize: 14, fontWeight: FontWeight.bold)),
+                                              child: Text(_event[0]["air_quality"], style: TextStyle(color: Theme.of(context).colorScheme.background, fontSize: 14, fontWeight: FontWeight.bold)),
                                             )
                                           )
                                         ]
@@ -117,7 +126,7 @@ class _EventState extends State<Event> {
                                       const SizedBox(height:20),
                                       Text('Description', style: TextStyle(color: Theme.of(context).colorScheme.surface, fontWeight: FontWeight.bold, fontSize: 18)),
                                       const SizedBox(height: 10),
-                                      Text('Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!',
+                                      Text(_event[0]["description"],
                                         style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface)
                                       ),
                                       const SizedBox(height: 20),
@@ -179,7 +188,7 @@ class _EventState extends State<Event> {
                   icon: const Icon(Icons.people),
                   onPressed: () {}
                 ),
-                Text('plazas', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16)),
+                Text(_event[0]["numAttendees"], style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16)),
                 const SizedBox(width: 30),
                 Container(
                   decoration: BoxDecoration(

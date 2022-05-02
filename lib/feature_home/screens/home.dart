@@ -10,14 +10,25 @@ class MainHomeScreen extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text('My events',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18)),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.surface,
+              fontWeight: FontWeight.bold,
+              fontSize: 18
+            )
+          ),
           const SizedBox(height: 20),
-          const UserEventsList()
+          const UserEventsList(),
+          const SizedBox(height: 20),
+          Text('Your calendar',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.surface,
+              fontWeight: FontWeight.bold,
+              fontSize: 18
+            )
+          )
         ],
       ),
     );
