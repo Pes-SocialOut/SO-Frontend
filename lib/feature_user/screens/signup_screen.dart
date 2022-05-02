@@ -33,7 +33,7 @@ class SignUpScreen extends StatelessWidget {
                   Buttons.Google,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderradius)),
                   text: "Continue with Google",
-                  onPressed: () =>signIn(context),
+                  onPressed: () =>_handleSignIn(context),
                 ),
               ),
               Container(
@@ -118,9 +118,36 @@ class SignUpScreen extends StatelessWidget {
     );
     
   }
+
+  Future<void> _handleSignIn(BuildContext context) async {
+    try {
+      final user = await GoogleSignInApi.login();
+      
+      if(user == null){
+        Navigator.of(context).pushNamed('/welcome');
+        ScaffoldMessenger.of(context).showSnackBar(
+          
+          const SnackBar(
+            content: 
+            Text('Sign in Failed, please try again')
+            )
+          );
+      }else{
+        
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context)=> LoggedInPage(user: user,),
+          ));
+      }
+    }
+     catch ( error) {
+      
+      print(error);
+    }
+  }
+
   
   Future signIn( BuildContext context) async{
-      final user = await GoogleSignInApi.signin();
+      final user = await GoogleSignInApi.login();
       
       if(user == null){
         Navigator.of(context).pushNamed('/login');

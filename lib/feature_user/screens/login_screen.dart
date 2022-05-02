@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
                 child: SignInButton(
                   Buttons.Google,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderradius)),
-                  text: "Sign up with Google",
+                  text: "Log in with Google",
                   onPressed: () {},
                 ),
               ),
@@ -40,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                 child: SignInButton(
                   Buttons.Facebook,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderradius)),
-                  text: "Sign up with Facebook",
+                  text: "Log in with Facebook",
                   onPressed: () {},
                 ),
               ),
