@@ -8,6 +8,8 @@ import 'package:so_frontend/feature_user/screens/register_socialOut.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 
+import 'feature_user/screens/form_register.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -44,7 +46,8 @@ class MyApp extends StatelessWidget {
         '/register': (_) => const RegisterScreen(),
         '/home': (_) => const NavigationBottomBar(),
         '/map_screen': (_) => const MapScreen(),
-        '/profile': (_) => const ProfileScreen()
+        '/profile': (_) => const ProfileScreen(),
+        '/form_register': (_) => const FormRegister()
       },
     );
   }

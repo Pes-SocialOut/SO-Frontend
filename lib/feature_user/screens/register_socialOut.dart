@@ -3,8 +3,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -58,6 +56,8 @@ class RegisterScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(borderradius)),
                         minimumSize: Size(widthButton, heightButton)),
                     onPressed: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/form_register', (Route<dynamic> route) => false);
                       // llamar a funcion checkUserEmail https
                     },
                     child: const Text(

@@ -39,7 +39,7 @@ class userAPI {
     );
 
     if (response.statusCode == 200) {
-      token = response.body;
+      //access-tokken + id + refresh-token
     }
     return response.statusCode;
   }
