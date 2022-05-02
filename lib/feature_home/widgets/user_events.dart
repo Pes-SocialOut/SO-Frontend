@@ -77,11 +77,7 @@ class _UserEventsListState extends State<UserEventsList> {
                             ),
                             alignment: Alignment.bottomLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: 4.0,
-                                left: 2.0,
-                                right: 2.0
-                              ),
+                              padding: const EdgeInsets.all(4.0),
                               child: Text(_events[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))
                             )
                           )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_event/services/edit.dart';
 
 class EditEventForm extends StatefulWidget {
   final String id;
@@ -9,6 +10,8 @@ class EditEventForm extends StatefulWidget {
 }
 
 class EditEventFormState extends State<EditEventForm> {
+
+  EditEventsAPI api = EditEventsAPI();
 
   TextEditingController _name =  TextEditingController(text: '');
   TextEditingController _description =  TextEditingController(text: '');
@@ -106,9 +109,10 @@ class EditEventFormState extends State<EditEventForm> {
                 const SizedBox(height: 40),
                 Center(
                   child: InkWell(
-                    onTap:() {
+                    onTap:() async {
                       // SAVE
-                      Navigator.pop(context);
+                      final response = await api.updateEvent(widget.id, _event);
+                      if (response) Navigator.pop(context);
                     },
                     child: Container(
                       alignment: Alignment.center,
