@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_event/screens/creation_sucess.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:so_frontend/feature_event/services/create.dart';
 
 class CreateEventForm extends StatefulWidget {
   const CreateEventForm({ Key? key }) : super(key: key);
@@ -12,9 +13,13 @@ class CreateEventForm extends StatefulWidget {
 
 class _CreateEventFormState extends State<CreateEventForm> {
 
+  CreateEventsAPI api = CreateEventsAPI();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   DateTime _selectedTime = DateTime.now();
+
+  List event = [];
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +149,8 @@ class _CreateEventFormState extends State<CreateEventForm> {
             backgroundColor: HexColor('57CC99'),
             textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {
+          onPressed: () async {
+            await api.postEvent(event);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CreationSucess())
