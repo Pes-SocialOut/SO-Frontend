@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:so_frontend/feature_event/screens/user_event_screen.dart';
 
 class UserEventsList extends StatefulWidget {
   const UserEventsList({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _UserEventsListState extends State<UserEventsList> {
                 onTap: () {
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) =>  EventScreen(id: _events[index]["id"]))
+                    MaterialPageRoute(builder: (context) =>  UserEventScreen(id: _events[index]["id"]))
                     );
                 },
                 child: Center(
