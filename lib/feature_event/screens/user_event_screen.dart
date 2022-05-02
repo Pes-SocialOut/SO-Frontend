@@ -38,7 +38,7 @@ class UserEventScreen extends StatelessWidget {
           },
         )
       ),
-      body: const Center(child: UserEvent())
+      body:  Center(child: UserEvent(id: id))
     );
   }
 }
