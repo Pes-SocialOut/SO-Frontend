@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/user_event.dart';
+import 'package:so_frontend/feature_event/screens/edit_event_screen.dart';
 
 class UserEventScreen extends StatelessWidget {
   final String id; 
@@ -20,7 +21,12 @@ class UserEventScreen extends StatelessWidget {
               iconSize: 24,
               color: Theme.of(context).colorScheme.onSurface,
               icon: const Icon(Icons.create_sharp),
-              onPressed: () {}),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  EditEventScreen(id: id))
+                );
+              }),
           
         ],
         leading: IconButton(
