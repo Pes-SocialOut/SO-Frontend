@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:so_frontend/feature_user/screens/loggedIn_screen.dart';
 import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
@@ -133,7 +134,10 @@ class SignUpScreen extends StatelessWidget {
             )
           );
       }else{
-        
+        GoogleSignInAuthentication googleSignInAuthentication = await user.authentication;
+        print(googleSignInAuthentication.accessToken);
+        print(" ");
+        print(googleSignInAuthentication.idToken);
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context)=> LoggedInPage(user: user,),
           ));

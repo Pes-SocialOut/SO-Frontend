@@ -61,3 +61,39 @@ class loggedInWidget extends StatelessWidget {
   
 }
 */
+import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_user/services/signIn_google.dart';
+class loggedInWidget extends StatelessWidget {
+  const loggedInWidget({ Key? key }) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Log Out'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Are you sure?"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            GoogleSignInApi.logout();
+            Navigator.of(context).pushNamed('/welcome');
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Yes'),
+        ),
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('No'),
+        ),
+      ],
+    );
+  }
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:so_frontend/feature_user/services/signIn_google.dart';
-
+import 'package:so_frontend/feature_user/widgets/loggedIn_widget.dart';
 import 'signup_screen.dart';
 
 class LoggedInPage extends StatelessWidget{
@@ -19,12 +19,12 @@ class LoggedInPage extends StatelessWidget{
         actions: [
           TextButton(
             onPressed: () async{
-              await GoogleSignInApi.logout();
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => SignUpScreen()
-                ));
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => loggedInWidget(),
+                );
             }, 
-            child: Text('Logout'))
+            child: Text('Logout',style: TextStyle(color: Colors.white,fontSize: 20),))
         ],
       ),
       body: Container(
@@ -57,14 +57,18 @@ class LoggedInPage extends StatelessWidget{
             SizedBox(height: 8),
 
             Text(
-              'Auth: '+user.authHeaders.toString(),
+              'Auth: '+user.authentication.toString(),
               style: TextStyle(color: Colors.white,fontSize: 20),
             ),
             ElevatedButton(
               child: const Text('SIGN OUT'),
               onPressed: () async{
-                GoogleSignInApi.logout();
-                Navigator.of(context).pushNamed('/welcome');
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => loggedInWidget(),
+                );
+                //GoogleSignInApi.logout();
+                //Navigator.of(context).pushNamed('/welcome');
               } 
             ),
           ]
