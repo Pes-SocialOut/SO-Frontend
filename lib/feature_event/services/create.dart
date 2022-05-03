@@ -1,39 +1,27 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class EventsAPI {
+class CreateEventsAPI {
 
-  final String url = '';
+  final String url = 'https://socialout-develop.herokuapp.com/v2/events/';
 
 
-  Future<List> getEvent(String id) async {
+  Future<bool> postEvent(List event) async {
 
-    final response = await http.get(Uri.parse(url + '/$id'));
+    final newEvent = jsonEncode(event[0]);
 
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
+    final response = await http.post(
+      Uri.parse(url),
+      body: newEvent,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    );
+
+    if (response.statusCode == 201) {
+      return true;
     }
 
-    return [];
-  }
-
-  Future<List> deleteEvent(String id) async {
-
-    final response = await http.get(Uri.parse(url + '/$id'));
-
-    if (response.statusCode == 202) {
-      return json.decode(response.body);
-    }
-    return [];
-  }
-
-  Future<List> getAllEvents() async {
-
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    }
-    return [];
+    return false;
   }
 }

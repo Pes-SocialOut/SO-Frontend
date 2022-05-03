@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_event/services/delete.dart';
 
-class Event extends StatefulWidget {
-  const Event({ Key? key }) : super(key: key);
+class UserEvent extends StatefulWidget {
+  final String id;
+  const UserEvent({ Key? key, required this.id}) : super(key: key);
 
   @override
-  State<Event> createState() => _EventState();
+  State<UserEvent> createState() => _UserEventState();
 }
 
-class _EventState extends State<Event> {
+class _UserEventState extends State<UserEvent> {
 
   List attendees = [{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"}];
 
   List _event = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20"}];
+
+  DeleteEventAPI api = DeleteEventAPI();
 
   @override
   void initState() {
@@ -182,31 +186,29 @@ class _EventState extends State<Event> {
               mainAxisAlignment: MainAxisAlignment.center, 
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  iconSize: 27,
-                  color: Theme.of(context).colorScheme.secondary,
-                  icon: const Icon(Icons.people),
-                  onPressed: () {}
-                ),
-                Text(_event[0]["numAttendees"], style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16)),
-                const SizedBox(width: 30),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Theme.of(context).colorScheme.secondary,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
+                InkWell(
+                  onTap: () async {
+                    final response = await api.deleteEventById(widget.id);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Theme.of(context).colorScheme.error,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.error.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    width: 150,
+                    height: 40,
+                    child: Center(child: Text('DELETE', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                    
                   ),
-                  width: 150,
-                  height: 40,
-                  child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
-                  
                 )
               ],
             )

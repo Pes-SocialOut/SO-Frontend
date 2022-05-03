@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_event/screens/user_event_screen.dart';
 
 class UserEventsList extends StatefulWidget {
   const UserEventsList({Key? key}) : super(key: key);
@@ -9,10 +10,11 @@ class UserEventsList extends StatefulWidget {
 
 class _UserEventsListState extends State<UserEventsList> {
   final List _events = [
-    {"name": "Padel 2x2 Tournament", "image": "assets/dog.jpg"},
-    {"name": "Padel 2x2 Tournament", "image": "assets/dog.jpg"},
-    {"name": "Padel 2x2 Tournament", "image": "assets/dog.jpg"},
-    {"name": "Padel 2x2 Tournament", "image": "assets/dog.jpg"}
+    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
+    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
+    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
+    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
+    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
   ];
 
   @override
@@ -23,36 +25,69 @@ class _UserEventsListState extends State<UserEventsList> {
         child: ListView.separated(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            separatorBuilder: (context, index) => const SizedBox(width: 20),
             itemCount: _events.length,
             itemBuilder: (BuildContext context, int index) {
-              return Center(
-                child: Container(
-                    margin: const EdgeInsets.only(right: 8.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) =>  UserEventScreen(id: _events[index]["id"]))
+                    );
+                },
+                child: Center(
+                  child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset:
+                                const Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      width: 100,
+                      height: 115,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: 115,
+                            width: 100,
+                            child: ClipRRect(
+                              child: FittedBox(child: Image.asset(_events[index]["image"]), fit: BoxFit.fill),
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                          ),
+                          Container(
+                            height: 115,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter
+                              )
+                            ),
+                            alignment: Alignment.bottomLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(_events[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))
+                            )
+                          )
+                        ],
+                      ),
                     ),
-                    width: 100,
-                    height: 115,
-                    child: Stack(children: [
-                      SizedBox(
-                        width: 100,
-                        height: 115,
-                        child: FittedBox(
-                            child: Image.asset(_events[index]["image"]),
-                            fit: BoxFit.fill),
-                      )
-                    ])),
+                ),
               );
-            }));
+            }
+        ),
+    );
   }
 }

@@ -31,11 +31,25 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('SocialOut', style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.secondary,
-          backgroundColor: Theme.of(context).colorScheme.background,
-        )),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 35,
+              height: 35,
+              child: FittedBox(
+                child: Image.asset('assets/logo.png'),
+                fit: BoxFit.fill
+              ),
+            ),
+            const SizedBox(width:5),
+            Text('SocialOut', style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.secondary,
+              backgroundColor: Theme.of(context).colorScheme.background,
+            )),
+          ],
+        ),
         leading: const SizedBox(),
         elevation: 1,
         backgroundColor: Theme.of(context).colorScheme.background,
