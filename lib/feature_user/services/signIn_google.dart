@@ -3,7 +3,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:so_frontend/feature_user/screens/loggedIn_screen.dart';
 
 class GoogleSignInApi {
-  static final _clientID = '66737086171-2qao8l71itbh358cj1hqqbe5ughhjqun.apps.googleusercontent.com';
+  //static final _clientID = '66737086171-2qao8l71itbh358cj1hqqbe5ughhjqun.apps.googleusercontent.com';
   static final _googleSignIn = GoogleSignIn(clientId: _clientIDWeb);
   static final _clientIDWeb = '66737086171-n8tcu6ru19jja2sevcs99stj2ff2dn6g.apps.googleusercontent.com';
   static Future<GoogleSignInAccount?> login() => _googleSignIn.signIn();
@@ -14,6 +14,7 @@ class GoogleSignInApi {
   static Future logout() => _googleSignIn.disconnect();
   static Future logout2() => _googleSignIn.signOut();
 
+  
   
   Future<void> _handleSignIn(BuildContext context) async {
     try {
