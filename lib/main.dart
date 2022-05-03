@@ -4,8 +4,11 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
 import 'package:so_frontend/feature_user/screens/login_screen.dart';
+import 'package:so_frontend/feature_user/screens/register_socialOut.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
+
+import 'feature_user/screens/form_register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,29 +24,30 @@ class MyApp extends StatelessWidget {
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme:ColorScheme(
-          brightness:Brightness.light,
-          primary: HexColor('22577A'),
-          onPrimary: Colors.white,
-          secondary: HexColor('38A3A5'),
-          onSecondary: Colors.white,
-          error: HexColor('ED4337'),
-          onError: Colors.white,
-          background: Colors.white,
-          onBackground: Colors.black,
-          surface: Colors.black,
-          onSurface: HexColor('767676'),
-        )
-      ),
+          colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        primary: HexColor('22577A'),
+        onPrimary: Colors.white,
+        secondary: HexColor('38A3A5'),
+        onSecondary: Colors.white,
+        error: HexColor('ED4337'),
+        onError: Colors.white,
+        background: Colors.white,
+        onBackground: Colors.black,
+        surface: Colors.black,
+        onSurface: HexColor('767676'),
+      )),
       initialRoute: '/welcome',
       home: const WelcomeScreen(),
       routes: {
         '/welcome': (_) => const WelcomeScreen(),
         '/login': (_) => const LoginScreen(),
         '/signup': (_) => const SignUpScreen(),
+        '/register': (_) => const RegisterScreen(),
         '/home': (_) => const NavigationBottomBar(),
-        '/map_screen': (_) =>  const MapScreen(),
-        '/profile': (_) => const ProfileScreen()
+        '/map_screen': (_) => const MapScreen(),
+        '/profile': (_) => const ProfileScreen(),
+        '/form_register': (_) => const FormRegister()
       },
     );
   }
