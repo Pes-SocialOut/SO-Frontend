@@ -136,8 +136,12 @@ class SignUpScreen extends StatelessWidget {
       }else{
         GoogleSignInAuthentication googleSignInAuthentication = await user.authentication;
         print(googleSignInAuthentication.accessToken);
+        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=googleSignInAuthentication.accessToken
+        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.A0ARrdaM-Uo5BGubza4xGpXK0JuFiAATuEHI_5UXjx-CWGtddi0Q_Qg6HxX-mRoNzKeQTc1ZyNs4JdwacIzGdSNQnzUlSyCfP3AVpK2OMaQcbqPcT3eM_4wSZSyKaYwIxhCZhI5zkLAtpCgHZj-XQ1vKUaOTrh
         print(" ");
+        //we can decode with this idtoken
         print(googleSignInAuthentication.idToken);
+
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context)=> LoggedInPage(user: user,),
           ));

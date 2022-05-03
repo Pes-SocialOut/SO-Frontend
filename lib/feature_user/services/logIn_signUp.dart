@@ -32,6 +32,18 @@ class userAPI {
     return json.decode(response.body);
   }
 
+    /* Comprobar que un Facebook socialout existe o no en la BD */
+  Future<List> checkUserFacebook(ftoken) async {
+    String _path = 'register/check?type=facebook&gtoken=';
+
+    final response = await http.get(Uri.parse(basicUrl + _path + ftoken));
+
+    if (response.statusCode != 200) {
+      // return error
+    }
+    return json.decode(response.body);
+  }
+
   /*ultimo paso de registro*/
   Future<int> finalRegistrer(
       email, passw, username, description, languages, hobbies, codiVeri) async {

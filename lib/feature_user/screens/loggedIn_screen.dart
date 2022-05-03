@@ -24,7 +24,7 @@ class LoggedInPage extends StatelessWidget{
                   builder: (BuildContext context) => loggedInWidget(),
                 );
             }, 
-            child: Text('Logout',style: TextStyle(color: Colors.white,fontSize: 20),))
+            child: Text('SIGN OUT',style: TextStyle(color: Colors.white,fontSize: 20),))
         ],
       ),
       body: Container(
