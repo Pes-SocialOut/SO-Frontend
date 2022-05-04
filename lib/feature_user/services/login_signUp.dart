@@ -31,7 +31,7 @@ class userAPI {
     return json.decode(response.body);
   }
 
-    /* Comprobar que un Facebook socialout existe o no en la BD */
+  /* Comprobar que un Facebook socialout existe o no en la BD */
   Future<List> checkUserFacebook(ftoken) async {
     String _path = 'register/check?type=facebook&gtoken=';
 
@@ -45,8 +45,8 @@ class userAPI {
 
   /* Get profile of a user given a access token */
   Future<List> getDataAcessTokenGoogle(gtoken) async {
-    String googleProfileGetter = "https://www.googleapis.com/oauth2/v3/userinfo?access_token=";
-    
+    String googleProfileGetter =
+        "https://www.googleapis.com/oauth2/v3/userinfo?access_token=";
 
     final response = await http.get(Uri.parse(googleProfileGetter + gtoken));
 
@@ -55,7 +55,6 @@ class userAPI {
     }
     return json.decode(response.body);
   }
-
 
   /*ultimo paso de registro*/
   Future<int> finalRegistrer(
