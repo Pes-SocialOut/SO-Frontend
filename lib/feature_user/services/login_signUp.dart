@@ -12,8 +12,7 @@ class userAPI {
     String _path = 'register/check?type=socialout&email=';
 
     String finalUri = basicUrl + _path + email;
-    print(finalUri);
-    final response = await http.get(Uri.parse(basicUrl + _path + email));
+    final response = await http.get(Uri.parse(finalUri));
 
     return json.decode(response.body);
   }
@@ -72,7 +71,6 @@ class userAPI {
       String codiVeri) async {
     String _path = 'register/socialout';
     String finalUri = basicUrl + _path;
-    print(finalUri);
     var str = {
       "email": email,
       "password": passw,
@@ -84,22 +82,43 @@ class userAPI {
     };
     final response = await http.post(Uri.parse(finalUri),
         body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
-    print("ya hizo la peticion");
+
     if (response.statusCode == 200) {
       String accessToken = json.decode(response.body)['access_token'];
-      print('accesToken: ' + accessToken);
       String userID = json.decode(response.body)['id'];
-      print('userID: ' + userID);
       String refreshToken = json.decode(response.body)['refresh_token'];
-      print('refreshToken: ' + refreshToken);
       APICalls a = APICalls();
       a.initialize(userID, accessToken, refreshToken, true);
+    } else {
       print('status code : ' + response.statusCode.toString());
-      print('id: ' + a.getCurrentUser());
-      print('refreshtoken: ' + a.getCurrentRefresh());
-      print('accesstoken: ' + a.getCurrentAccess());
-      a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
-          (msg, err) => print(err));
+    }
+    return response.statusCode;
+  }
+
+  /* check email para Login con cuenta SocialOut */
+  Future<Map<String, dynamic>> checkloginSocialOut(String email) async {
+    String _path = 'login/check?type=socialout&email=';
+
+    String finalUri = basicUrl + _path + email;
+    final response = await http.get(Uri.parse(finalUri));
+
+    return json.decode(response.body);
+  }
+
+  /* login con cuenta socialOut*/
+  Future<int> loginSocialOut(String email, String password) async {
+    String _path = 'login/socialout';
+    String finalUri = basicUrl + _path;
+    var str = {"email": email, "password": password};
+    final response = await http.post(Uri.parse(finalUri),
+        body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      String accessToken = json.decode(response.body)['access_token'];
+      String userID = json.decode(response.body)['id'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
+      APICalls a = APICalls();
+      a.initialize(userID, accessToken, refreshToken, true);
     } else {
       print('status code : ' + response.statusCode.toString());
     }

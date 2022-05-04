@@ -87,7 +87,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     RegExp regex =
                         RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
                     if (!regex.hasMatch(value)) {
-                      return 'Enter valid password: min4caracters(numeric,UpperCase,LowerCase)';
+                      return 'Enter valid password: min8caracters(numeric,UpperCase,LowerCase)';
                     } else {
                       return null;
                     }
@@ -118,16 +118,29 @@ class RegisterScreenState extends State<RegisterScreen> {
                     formKey.currentState!.save();
                     Map<String, dynamic> ap = await uapi.checkUserEmail(email);
                     if (ap["action"] == "continue") {
-                      print(email);
-                      print(password);
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   FormRegister(email, password)),
                           (route) => false);
+                    } else if (ap["action"] == "link_auth") {
+                      //enlazar cuentas
                     } else {
-                      print("enlazar a cuenta ya existente");
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Fail register"),
+                          content: const Text("Account already exists"),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text("Ok"),
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   }
                 },
