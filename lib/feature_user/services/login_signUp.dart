@@ -118,4 +118,42 @@ class userAPI {
     }
     return response.statusCode;
   }
+
+  /*ultimo paso de registro*/
+  Future<int> linkRegistrerAndLogin(
+      String email, String passw, String codiVeri, String type) async {
+    String _path = 'auth_method';
+    String finalUri = basicUrl + _path;
+
+    var str;
+
+    if (type == "socialout") {
+      str = {
+        "type": "socialout",
+        "credentials": {
+          "email": email,
+          "password": passw,
+          "verification": codiVeri
+        }
+      };
+    } else if (type == "google") {
+      str = "hola";
+    } else if (type == "faceboook") {
+      str = "bye";
+    }
+
+    final response = await http.post(Uri.parse(finalUri),
+        body: json.encode(str), headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      String accessToken = json.decode(response.body)['access_token'];
+      String userID = json.decode(response.body)['id'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
+      APICalls a = APICalls();
+      a.initialize(userID, accessToken, refreshToken, true);
+    } else {
+      print('status code : ' + response.statusCode.toString());
+    }
+    return response.statusCode;
+  }
 }

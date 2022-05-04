@@ -144,7 +144,11 @@ class LoginScreenState extends State<LoginScreen> {
                                 '/home', (route) => false);
                           }
                         } else if (ap["action"] == "link_auth") {
-                          //enlazar cuentas
+                          int aux = await uapi.loginSocialOut(email, password);
+                          if (aux == 200) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/home', (route) => false);
+                          }
                         } else {
                           showDialog(
                             context: context,
