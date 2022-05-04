@@ -34,6 +34,14 @@ class LinkScreenState extends State<LinkScreen> {
                 fontSize: 25,
               ),
             ),
+            Text(
+              widget.email,
+              style: TextStyle(
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            )
           ],
         ),
       ),

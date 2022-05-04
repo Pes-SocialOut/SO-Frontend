@@ -126,8 +126,8 @@ class userAPI {
   }
 
   /*ultimo paso de registro*/
-  Future<int> linkRegistrerAndLogin(
-      String email, String passw, String codiVeri, String type) async {
+  Future<int> linkRegistrerAndLogin(String email, String passw, String codiVeri,
+      String type, String token) async {
     String _path = 'auth_method';
     String finalUri = basicUrl + _path;
 
@@ -142,10 +142,8 @@ class userAPI {
           "verification": codiVeri
         }
       };
-    } else if (type == "google") {
-      str = "hola";
-    } else if (type == "faceboook") {
-      str = "bye";
+    } else if (type == "google" || type == "facebook") {
+      str = token;
     }
 
     final response = await http.post(Uri.parse(finalUri),
