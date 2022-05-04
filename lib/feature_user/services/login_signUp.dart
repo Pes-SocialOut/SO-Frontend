@@ -2,11 +2,10 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:so_frontend/utils/api_controller.dart';
 
 class userAPI {
   final String basicUrl = "https://socialout-develop.herokuapp.com/v1/users/";
-  String token = '';
-  String refreshToken = '';
 
   /* Comprobar que un email socialout existe o no en la BD */
   Future<Map<String, dynamic>> checkUserEmail(email) async {
@@ -58,24 +57,42 @@ class userAPI {
 
   /*ultimo paso de registro*/
   Future<int> finalRegistrer(
-      email, passw, username, description, languages, hobbies, codiVeri) async {
+      String email,
+      String passw,
+      String username,
+      String description,
+      String languages,
+      String hobbies,
+      String codiVeri) async {
     String _path = 'register/socialout';
-
+    String finalUri = basicUrl + _path;
+    print(finalUri);
+    Map<String, String> str = {
+      "email": email,
+      "password": passw,
+      "username": username,
+      "description": description,
+      "languages": languages,
+      "hobbies": hobbies,
+      "verification": codiVeri
+    };
+    var strjson = jsonEncode(str);
     final response = await http.post(
-      Uri.parse(basicUrl + _path),
-      body: {
-        "email": email,
-        "password": passw,
-        "username": username,
-        "description": description,
-        "languages": languages,
-        "hobbies": hobbies,
-        "verification": codiVeri
-      },
+      Uri.parse(finalUri),
+      body: strjson,
     );
-
+    print("ya hizo la peticion");
     if (response.statusCode == 200) {
-      token = response.body;
+      String accessToken = json.decode(response.body)['accessToken'];
+      print('accesToken: ' + accessToken);
+      String userID = json.decode(response.body)['userID'];
+      print('userID: ' + userID);
+      String refreshToken = json.decode(response.body)['refreshToken'];
+      print('refreshToken: ' + refreshToken);
+      APICalls a = APICalls();
+      a.initialize(userID, accessToken, refreshToken, true);
+    } else {
+      print('status code : ' + response.statusCode.toString());
     }
     return response.statusCode;
   }

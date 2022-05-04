@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_user/services/logIn_signUp.dart';
 
 class FormRegister extends StatefulWidget {
   final String email;
@@ -10,7 +11,9 @@ class FormRegister extends StatefulWidget {
 
 class _FormRegisterState extends State<FormRegister> {
   final formKey = GlobalKey<FormState>();
-
+  final userAPI uapi = userAPI();
+  late String email = widget.email;
+  late String password = widget.password;
   late String username;
   late String description;
   late String languages;
@@ -19,7 +22,6 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildUsername() {
     return TextFormField(
-      initialValue: widget.email,
       decoration: const InputDecoration(
         labelText: "Username",
         border: OutlineInputBorder(
@@ -149,11 +151,30 @@ class _FormRegisterState extends State<FormRegister> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         minimumSize: Size(250, 50)),
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
+                        print('email: ' + email);
+                        print('password: ' + password);
+                        print('username: ' + username);
+                        print('description: ' + description);
+                        print('languages: ' + languages);
+                        print('hobbies: ' + hobbies);
+                        print('codigo_verificacion: ' + verification);
+                        int ap = await uapi.finalRegistrer(
+                            widget.email,
+                            widget.password,
+                            username,
+                            description,
+                            languages,
+                            hobbies,
+                            verification);
+                        if (ap == 200) {
+                          Navigator.pushNamed(context, '/home');
+                        }
+                      } else {
+                        print("malos datos ingresados");
                       }
-                      Navigator.of(context).pushNamed('/edit_profile');
                     },
                     child: const Text(
                       'Submit',

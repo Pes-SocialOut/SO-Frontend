@@ -8,7 +8,6 @@ import 'package:so_frontend/feature_user/screens/login_screen.dart';
 import 'package:so_frontend/feature_user/screens/register_socialOut.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
-import 'package:so_frontend/feature_user/screens/form_register.dart';
 
 void main() {
   runApp(const MyApp());
