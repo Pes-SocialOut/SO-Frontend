@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
         '/home': (_) => const NavigationBottomBar(),
         '/map_screen': (_) => const MapScreen(),
         '/profile': (_) => const ProfileScreen(),
-        '/form_register': (_) => const FormRegister(),
         '/edit_profile': (_) => const EditarProfile(),
       },
     );

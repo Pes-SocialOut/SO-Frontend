@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FormRegister extends StatefulWidget {
-  const FormRegister({Key? key}) : super(key: key);
+  final String email;
+  final String password;
+  const FormRegister(this.email, this.password, {Key? key}) : super(key: key);
   @override
   _FormRegisterState createState() => _FormRegisterState();
 }
@@ -10,8 +11,6 @@ class FormRegister extends StatefulWidget {
 class _FormRegisterState extends State<FormRegister> {
   final formKey = GlobalKey<FormState>();
 
-  late String email;
-  late String password;
   late String username;
   late String description;
   late String languages;
@@ -20,6 +19,7 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildUsername() {
     return TextFormField(
+      initialValue: widget.email,
       decoration: const InputDecoration(
         labelText: "Username",
         border: OutlineInputBorder(
