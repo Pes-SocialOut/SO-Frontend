@@ -9,14 +9,11 @@ class userAPI {
   String refreshToken = '';
 
   /* Comprobar que un email socialout existe o no en la BD */
-  Future<List> checkUserEmail(email) async {
+  Future<Map<String, dynamic>> checkUserEmail(email) async {
     String _path = 'register/check?type=socialout&email=';
 
     final response = await http.get(Uri.parse(urlToken + _path + email));
 
-    if (response.statusCode != 200) {
-      // return error
-    }
     return json.decode(response.body);
   }
 

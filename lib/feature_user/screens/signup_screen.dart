@@ -15,7 +15,16 @@ class SignUpScreen extends StatelessWidget {
     double policyTextSize = 14;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Color(0xC8C8C8), title: const Text('Sign Up')),
+          backgroundColor: Color(0xC8C8C8),
+          title: const Text('Sign Up'),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/welcome');
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios_new_sharp,
+              )),
+        ),
         body: Center(
           child: Padding(
               padding: const EdgeInsets.all(10),

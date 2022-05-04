@@ -20,7 +20,11 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildUsername() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "Username"),
+      decoration: const InputDecoration(
+        labelText: "Username",
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(29))),
+      ),
       validator: (value) {
         if (value!.isEmpty) {
           return 'Please enter some Username';
@@ -35,7 +39,11 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildDescription() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "Description"),
+      decoration: const InputDecoration(
+        labelText: "Description",
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(29))),
+      ),
       validator: (value) {
         if (value!.isEmpty) {
           return 'Please enter some Description';
@@ -50,7 +58,11 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildLanguages() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "preferred languages"),
+      decoration: const InputDecoration(
+        labelText: "preferred languages",
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(29))),
+      ),
       validator: (value) {
         if (value!.isEmpty) {
           return 'Please enter some language';
@@ -65,7 +77,11 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildHobbies() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "hobbies"),
+      decoration: const InputDecoration(
+        labelText: "hobbies",
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(29))),
+      ),
       validator: (value) {
         if (value!.isEmpty) {
           return 'Please enter some hobbie';
@@ -80,7 +96,11 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildVerification() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "Verification Code"),
+      decoration: const InputDecoration(
+        labelText: "Verification Code",
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(29))),
+      ),
       validator: (value) {
         if (value!.isEmpty) {
           return 'Please enter verification code';
@@ -98,7 +118,7 @@ class _FormRegisterState extends State<FormRegister> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("User register"),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Container(
           margin: const EdgeInsets.all(24),
@@ -106,6 +126,7 @@ class _FormRegisterState extends State<FormRegister> {
             key: formKey,
             child: ListView(
               children: <Widget>[
+                const SizedBox(height: 25),
                 _buildUsername(),
                 const SizedBox(height: 15),
                 _buildDescription(),
@@ -115,7 +136,7 @@ class _FormRegisterState extends State<FormRegister> {
                 _buildHobbies(),
                 const SizedBox(height: 15),
                 _buildVerification(),
-                const SizedBox(height: 15),
+                const SizedBox(height: 25),
 
                 // Button submit
                 Container(
@@ -132,6 +153,7 @@ class _FormRegisterState extends State<FormRegister> {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
                       }
+                      Navigator.of(context).pushNamed('/edit_profile');
                     },
                     child: const Text(
                       'Submit',
@@ -157,6 +179,7 @@ class _FormRegisterState extends State<FormRegister> {
                     onPressed: () {
                       showDialog(
                         context: context,
+                        barrierDismissible: false,
                         builder: (context) => AlertDialog(
                           title: const Text("cancel subscription"),
                           content:

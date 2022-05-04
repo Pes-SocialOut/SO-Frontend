@@ -3,12 +3,12 @@ import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/feature_user/screens/edit_profile.dart';
 import 'package:so_frontend/feature_user/screens/login_screen.dart';
 import 'package:so_frontend/feature_user/screens/register_socialOut.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
-
-import 'feature_user/screens/form_register.dart';
+import 'package:so_frontend/feature_user/screens/form_register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +47,8 @@ class MyApp extends StatelessWidget {
         '/home': (_) => const NavigationBottomBar(),
         '/map_screen': (_) => const MapScreen(),
         '/profile': (_) => const ProfileScreen(),
-        '/form_register': (_) => const FormRegister()
+        '/form_register': (_) => const FormRegister(),
+        '/edit_profile': (_) => const EditarProfile(),
       },
     );
   }
