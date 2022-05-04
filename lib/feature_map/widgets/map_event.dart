@@ -26,16 +26,23 @@ class _EventWidgetState extends State<EventWidget> {
       const TextStyle(color: Color.fromARGB(255, 17, 92, 153), fontSize: 20);
   bool isFavourite = false;
 
+  // ignore: prefer_final_fields
+  List _event = [
+    {
+      "id": '1',
+      "title": "Gastronomic Route through El Born",
+      "creator": "Mark",
+      "date": "THURSDAY, 3 MAR · 17:00",
+      "air_quality": "MODERATE",
+      "description":
+          'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!',
+      "numAttendees": "17/20"
+    }
+  ];
+
   //Temporalmente hardcoded
   String eventPhoto = 'assets/gato.jpg';
-  String eventDate = 'FRI, 4 MAR · 16:00';
-  String eventTitle = 'Chess Competition at Tetuan';
-  String eventContamination = 'MODERATE';
-  String eventAssitants = '17/20';
   String creatorPhoto = 'assets/dog.jpg';
-  String creatorName = 'Mark';
-  String eventDescription =
-      'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Dont miss this opportunity and sign up now!';
 
   @override
   Widget build(BuildContext context) {
@@ -58,72 +65,72 @@ class _EventWidgetState extends State<EventWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(
-                  child: Text(eventDate, style: dateStyle),
+                  child: Text(_event[0]["date"], style: dateStyle),
                 ),
               ]),
               Row(children: [
                 Expanded(
-                  child: Text(eventTitle,
+                  child: Text(_event[0]["title"],
                       style: eventStyle, textAlign: TextAlign.left),
                 ),
               ]),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    ElevatedButton(
-                      child: Text(eventContamination),
-                      style: TextButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: (eventContamination == 'MODERATE')
-                              ? const Color.fromARGB(255, 230, 217, 106)
-                              : (eventContamination == 'LOW')
-                                  ? Colors.green
-                                  : Colors.red),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                    title: (eventContamination == 'MODERATE')
-                                        ? const Text('Contaminación moderada')
-                                        : (eventContamination == 'LOW')
-                                            ? const Text('Contaminación baja')
-                                            : const Text('Contaminación alta'),
-                                    content: (eventContamination == 'MODERATE')
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
+                  Widget>[
+                ElevatedButton(
+                  child: Text(_event[0]["air_quality"]),
+                  style: TextButton.styleFrom(
+                      primary: Colors.white,
+                      backgroundColor: (_event[0]["air_quality"] == 'MODERATE')
+                          ? const Color.fromARGB(255, 230, 217, 106)
+                          : (_event[0]["air_quality"] == 'LOW')
+                              ? Colors.green
+                              : Colors.red),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                                title: (_event[0]["air_quality"] == 'MODERATE')
+                                    ? const Text('Contaminación moderada')
+                                    : (_event[0]["air_quality"] == 'LOW')
+                                        ? const Text('Contaminación baja')
+                                        : const Text('Contaminación alta'),
+                                content: (_event[0]["air_quality"] ==
+                                        'MODERATE')
+                                    ? const Text(
+                                        'Se espera que para la fecha y hora indicados en el evento la polución sea moderada. Los contaminantes predominantes son los siguientes:')
+                                    : (_event[0]["air_quality"] == 'LOW')
                                         ? const Text(
-                                            'Se espera que para la fecha y hora indicados en el evento la polución sea moderada. Los contaminantes predominantes son los siguientes:')
-                                        : (eventContamination == 'LOW')
-                                            ? const Text(
-                                                'Se espera que para la fecha y hora indicados en el evento la polución sea baja. Los contaminantes predominantes son los siguientes:')
-                                            : const Text(
-                                                'Se espera que para la fecha y hora indicados en el evento la polución sea alta. Los contaminantes predominantes son los siguientes:'),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text('Aceptar'),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ]));
-                      },
-                    ),
-                    Row(children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(children: [
-                          const Icon(
-                            Icons.person,
-                            color: Colors.green,
-                            size: 30.0,
-                          ),
-                          Text(eventAssitants, style: participantsStyle)
-                        ]),
+                                            'Se espera que para la fecha y hora indicados en el evento la polución sea baja. Los contaminantes predominantes son los siguientes:')
+                                        : const Text(
+                                            'Se espera que para la fecha y hora indicados en el evento la polución sea alta. Los contaminantes predominantes son los siguientes:'),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Aceptar'),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ]));
+                  },
+                ),
+                Row(children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(children: [
+                      const Icon(
+                        Icons.person,
+                        color: Colors.green,
+                        size: 30.0,
                       ),
+                      Text(_event[0]["numAttendees"], style: participantsStyle)
                     ]),
-                  ])
+                  ),
+                ]),
+              ])
             ]),
           ),
         ]),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
-            'Created by: ' + creatorName + '  ',
+            'Created by: ' + _event[0]["creator"] + '  ',
             style: creatorStyle,
             textAlign: TextAlign.center,
           ),
@@ -140,7 +147,7 @@ class _EventWidgetState extends State<EventWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              eventDescription,
+              _event[0]["description"],
               style: explainStyle,
               textAlign: TextAlign.center,
             ),
