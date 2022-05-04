@@ -34,7 +34,6 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   showStation(String id) {
-    print(id);
     showModalBottomSheet(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -74,7 +73,7 @@ class _MapWidgetState extends State<MapWidget> {
     return FlutterMap(
       options: MapOptions(
         center: LatLng(widget.lat, widget.long),
-        zoom: 3,
+        zoom: 10,
       ),
       layers: [
         TileLayerOptions(
