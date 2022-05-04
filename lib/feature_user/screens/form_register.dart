@@ -154,13 +154,6 @@ class _FormRegisterState extends State<FormRegister> {
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        print('email: ' + email);
-                        print('password: ' + password);
-                        print('username: ' + username);
-                        print('description: ' + description);
-                        print('languages: ' + languages);
-                        print('hobbies: ' + hobbies);
-                        print('codigo_verificacion: ' + verification);
                         int ap = await uapi.finalRegistrer(
                             email,
                             password,

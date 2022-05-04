@@ -1,23 +1,34 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+  @override
+  LoginScreenState createState() => LoginScreenState();
+}
+
+class LoginScreenState extends State<LoginScreen> {
+  final formKey = GlobalKey<FormState>();
+  final userAPI uapi = userAPI();
+  late String email;
+  late String password;
+  double borderradius = 10.0;
+  double widthButton = 300.0;
+  double heightButton = 40.0;
+  double policyTextSize = 14;
 
   @override
   Widget build(BuildContext context) {
-    double borderradius = 10.0;
-    double widthButton = 300.0;
-    double heightButton = 40.0;
-    double policyTextSize = 14;
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Color(0xC8C8C8),
             title: const Text('Hello Agian!')),
-        body: Center(
+        body: Form(
+          key: formKey,
           child: Padding(
               padding: const EdgeInsets.all(10),
               child: ListView(children: <Widget>[
@@ -69,7 +80,18 @@ class LoginScreen extends StatelessWidget {
                   child: TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
-                        hintText: "Enter email", labelText: "Username"),
+                        hintText: "Enter email", labelText: "Email"),
+                    validator: (value) {
+                      if (value!.isEmpty ||
+                          !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value)) {
+                        return "a valid email is required";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      email = value.toString();
+                    },
                   ),
                 ),
                 Container(
@@ -79,7 +101,25 @@ class LoginScreen extends StatelessWidget {
                     keyboardType: TextInputType.text,
                     obscureText: true,
                     decoration: const InputDecoration(
-                        hintText: "Enter password", labelText: "Password"),
+                      hintText: "Enter password",
+                      labelText: "Password",
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "a password is required";
+                      } else {
+                        RegExp regex = RegExp(
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
+                        if (!regex.hasMatch(value)) {
+                          return 'Enter valid password: min8caracters(numeric,UpperCase,LowerCase)';
+                        } else {
+                          return null;
+                        }
+                      }
+                    },
+                    onSaved: (value) {
+                      password = value.toString();
+                    },
                   ),
                 ),
                 Container(
@@ -92,8 +132,37 @@ class LoginScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderradius)),
                         minimumSize: Size(widthButton, heightButton)),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/home');
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+                        Map<String, dynamic> ap =
+                            await uapi.checkloginSocialOut(email);
+                        if (ap["action"] == "continue") {
+                          int aux = await uapi.loginSocialOut(email, password);
+                          if (aux == 200) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/home', (route) => false);
+                          }
+                        } else if (ap["action"] == "link_auth") {
+                          //enlazar cuentas
+                        } else {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Fail Login"),
+                              content: const Text("Account does not exist"),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text("Ok"),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }
+                      //Navigator.of(context).pushNamed('/home');
                     },
                     child: const Text(
                       'Log In',
