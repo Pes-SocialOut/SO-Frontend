@@ -9,16 +9,13 @@ class userAPI {
   String refreshToken = '';
 
   /* Comprobar que un email socialout existe o no en la BD */
-  Future<List> checkUserEmail(email) async {
+  Future<Map<String, dynamic>> checkUserEmail(email) async {
     String _path = 'register/check?type=socialout&email=';
 
     String finalUri = basicUrl + _path + email;
     print(finalUri);
     final response = await http.get(Uri.parse(basicUrl + _path + email));
 
-    if (response.statusCode != 200) {
-      // return error
-    }
     return json.decode(response.body);
   }
 
@@ -34,7 +31,7 @@ class userAPI {
     return json.decode(response.body);
   }
 
-    /* Comprobar que un Facebook socialout existe o no en la BD */
+  /* Comprobar que un Facebook socialout existe o no en la BD */
   Future<List> checkUserFacebook(ftoken) async {
     String _path = 'register/check?type=facebook&gtoken=';
 
@@ -48,8 +45,8 @@ class userAPI {
 
   /* Get profile of a user given a access token */
   Future<List> getDataAcessTokenGoogle(gtoken) async {
-    String googleProfileGetter = "https://www.googleapis.com/oauth2/v3/userinfo?access_token=";
-    
+    String googleProfileGetter =
+        "https://www.googleapis.com/oauth2/v3/userinfo?access_token=";
 
     final response = await http.get(Uri.parse(googleProfileGetter + gtoken));
 
@@ -58,7 +55,6 @@ class userAPI {
     }
     return json.decode(response.body);
   }
-
 
   /*ultimo paso de registro*/
   Future<int> finalRegistrer(

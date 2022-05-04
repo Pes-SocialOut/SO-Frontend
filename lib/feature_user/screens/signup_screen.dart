@@ -16,45 +16,42 @@ class SignUpScreen extends StatelessWidget {
     double heightButton = 40.0;
     double policyTextSize = 14;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xC8C8C8),
-        title: const Text('Sign Up')
-      ),
-      body: Center(
-        
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: ListView(
-            children: <Widget>[
-              const SizedBox(height: 60),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: SignInButton(
-                  Buttons.Google,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderradius)),
-                  text: "Continue with Google",
-                  onPressed: () =>_handleSignIn(context),
+        appBar: AppBar(
+            backgroundColor: Color(0xC8C8C8), title: const Text('Sign Up')),
+        body: Center(
+          child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: ListView(children: <Widget>[
+                const SizedBox(height: 60),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: SignInButton(
+                    Buttons.Google,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(borderradius)),
+                    text: "Continue with Google",
+                    onPressed: () => _handleSignIn(context),
+                  ),
                 ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: SignInButton(
-                  Buttons.Facebook,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderradius)),
-                  text: "Continue with Facebook",
-                  onPressed: () {},
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: SignInButton(
+                    Buttons.Facebook,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(borderradius)),
+                    text: "Continue with Facebook",
+                    onPressed: () {},
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  "OR",
-                  style: TextStyle(color: Colors.black45, fontSize: 16),
-                  
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: const Text(
+                    "OR",
+                    style: TextStyle(color: Colors.black45, fontSize: 16),
                   ),
                 ),
                 Container(
@@ -122,42 +119,27 @@ class SignUpScreen extends StatelessWidget {
                     ]),
                   ),
                 ),
-              
-              const SizedBox(height: 60),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: const PolicyWidget(),
-              ),              
-              
-            
-            
-            ] 
-          )
-          
-          
-        ),
-        
-      )
-    );
-    
+                const SizedBox(height: 60),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: const PolicyWidget(),
+                ),
+              ])),
+        ));
   }
 
   Future<void> _handleSignIn(BuildContext context) async {
     try {
       final user = await GoogleSignInApi.login();
-      
-      if(user == null){
+
+      if (user == null) {
         Navigator.of(context).pushNamed('/welcome');
         ScaffoldMessenger.of(context).showSnackBar(
-          
-          const SnackBar(
-            content: 
-            Text('Sign in Failed, please try again')
-            )
-          );
-      }else{
-        GoogleSignInAuthentication googleSignInAuthentication = await user.authentication;
+            const SnackBar(content: Text('Sign in Failed, please try again')));
+      } else {
+        GoogleSignInAuthentication googleSignInAuthentication =
+            await user.authentication;
         print(googleSignInAuthentication.accessToken);
         //https://www.googleapis.com/oauth2/v3/userinfo?access_token=googleSignInAuthentication.accessToken
         //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.A0ARrdaM-Uo5BGubza4xGpXK0JuFiAATuEHI_5UXjx-CWGtddi0Q_Qg6HxX-mRoNzKeQTc1ZyNs4JdwacIzGdSNQnzUlSyCfP3AVpK2OMaQcbqPcT3eM_4wSZSyKaYwIxhCZhI5zkLAtpCgHZj-XQ1vKUaOTrh
@@ -166,34 +148,29 @@ class SignUpScreen extends StatelessWidget {
         print(googleSignInAuthentication.idToken);
 
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context)=> LoggedInPage(user: user,),
-          ));
+          builder: (context) => LoggedInPage(
+            user: user,
+          ),
+        ));
       }
-    }
-     catch ( error) {
-      
+    } catch (error) {
       print(error);
     }
   }
 
-  
-  Future signIn( BuildContext context) async{
-      final user = await GoogleSignInApi.login();
-      
-      if(user == null){
-        Navigator.of(context).pushNamed('/login');
-        ScaffoldMessenger.of(context).showSnackBar(
-          
-          const SnackBar(
-            content: 
-            Text('Sign in Failed')
-            )
-          );
-      }else{
-        
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context)=> LoggedInPage(user: user,),
-          ));
-      }
+  Future signIn(BuildContext context) async {
+    final user = await GoogleSignInApi.login();
+
+    if (user == null) {
+      Navigator.of(context).pushNamed('/login');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Sign in Failed')));
+    } else {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => LoggedInPage(
+          user: user,
+        ),
+      ));
     }
+  }
 }
