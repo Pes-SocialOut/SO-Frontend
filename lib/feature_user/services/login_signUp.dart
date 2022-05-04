@@ -67,7 +67,7 @@ class userAPI {
     String _path = 'register/socialout';
     String finalUri = basicUrl + _path;
     print(finalUri);
-    Map<String, String> str = {
+    var str = {
       "email": email,
       "password": passw,
       "username": username,
@@ -76,21 +76,24 @@ class userAPI {
       "hobbies": hobbies,
       "verification": codiVeri
     };
-    var strjson = jsonEncode(str);
-    final response = await http.post(
-      Uri.parse(finalUri),
-      body: strjson,
-    );
+    final response = await http.post(Uri.parse(finalUri),
+        body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
     print("ya hizo la peticion");
     if (response.statusCode == 200) {
-      String accessToken = json.decode(response.body)['accessToken'];
+      String accessToken = json.decode(response.body)['access_token'];
       print('accesToken: ' + accessToken);
-      String userID = json.decode(response.body)['userID'];
+      String userID = json.decode(response.body)['id'];
       print('userID: ' + userID);
-      String refreshToken = json.decode(response.body)['refreshToken'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
       print('refreshToken: ' + refreshToken);
       APICalls a = APICalls();
       a.initialize(userID, accessToken, refreshToken, true);
+      print('status code : ' + response.statusCode.toString());
+      print('id: ' + a.getCurrentUser());
+      print('refreshtoken: ' + a.getCurrentRefresh());
+      print('accesstoken: ' + a.getCurrentAccess());
+      a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
+          (msg, err) => print(err));
     } else {
       print('status code : ' + response.statusCode.toString());
     }

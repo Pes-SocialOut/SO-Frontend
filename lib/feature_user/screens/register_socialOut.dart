@@ -18,6 +18,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   final userAPI uapi = userAPI();
   late String email;
   late String password;
+  late String confirm;
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +98,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
             ),
+
             const SizedBox(height: 30),
             //REGISTER BUTTON
             Container(

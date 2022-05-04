@@ -162,15 +162,15 @@ class _FormRegisterState extends State<FormRegister> {
                         print('hobbies: ' + hobbies);
                         print('codigo_verificacion: ' + verification);
                         int ap = await uapi.finalRegistrer(
-                            widget.email,
-                            widget.password,
+                            email,
+                            password,
                             username,
                             description,
                             languages,
                             hobbies,
                             verification);
                         if (ap == 200) {
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.of(context).pushNamed('/home');
                         }
                       } else {
                         print("malos datos ingresados");
