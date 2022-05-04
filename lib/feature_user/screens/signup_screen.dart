@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:so_frontend/feature_user/screens/loggedIn_screen.dart';
+import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -15,16 +17,7 @@ class SignUpScreen extends StatelessWidget {
     double policyTextSize = 14;
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xC8C8C8),
-          title: const Text('Sign Up'),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/welcome');
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_new_sharp,
-              )),
-        ),
+            backgroundColor: Color(0xC8C8C8), title: const Text('Sign Up')),
         body: Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -38,7 +31,27 @@ class SignUpScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Continue with Google",
+                    onPressed: () => _handleSignIn(context),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: SignInButton(
+                    Buttons.Facebook,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(borderradius)),
+                    text: "Continue with Facebook",
                     onPressed: () {},
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: const Text(
+                    "OR",
+                    style: TextStyle(color: Colors.black45, fontSize: 16),
                   ),
                 ),
                 Container(
@@ -114,5 +127,50 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ])),
         ));
+  }
+
+  Future<void> _handleSignIn(BuildContext context) async {
+    try {
+      final user = await GoogleSignInApi.login();
+
+      if (user == null) {
+        Navigator.of(context).pushNamed('/welcome');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Sign in Failed, please try again')));
+      } else {
+        GoogleSignInAuthentication googleSignInAuthentication =
+            await user.authentication;
+        print(googleSignInAuthentication.accessToken);
+        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=googleSignInAuthentication.accessToken
+        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.A0ARrdaM-Uo5BGubza4xGpXK0JuFiAATuEHI_5UXjx-CWGtddi0Q_Qg6HxX-mRoNzKeQTc1ZyNs4JdwacIzGdSNQnzUlSyCfP3AVpK2OMaQcbqPcT3eM_4wSZSyKaYwIxhCZhI5zkLAtpCgHZj-XQ1vKUaOTrh
+        print(" ");
+        //we can decode with this idtoken
+        print(googleSignInAuthentication.idToken);
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => LoggedInPage(
+            user: user,
+          ),
+        ));
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future signIn(BuildContext context) async {
+    final user = await GoogleSignInApi.login();
+
+    if (user == null) {
+      Navigator.of(context).pushNamed('/login');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Sign in Failed')));
+    } else {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => LoggedInPage(
+          user: user,
+        ),
+      ));
+    }
   }
 }

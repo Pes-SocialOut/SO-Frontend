@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_user/services/logIn_signUp.dart';
 import 'package:so_frontend/utils/theme.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:so_frontend/feature_user/services/signIn_google.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  
   const WelcomeScreen({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    userAPI uAPI = userAPI();
     double borderradius = 10.0;
     double widthButton = 300.0;
     double heightButton = 40.0;
@@ -46,6 +50,8 @@ class WelcomeScreen extends StatelessWidget {
                     minimumSize: Size(widthButton, heightButton)
                   ),
                   onPressed: () {
+                    //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
+                    //print(aux);
                     Navigator.of(context).pushNamed('/signup');
                   },
                   
@@ -79,4 +85,5 @@ class WelcomeScreen extends StatelessWidget {
     );
     
   }
+  
 }

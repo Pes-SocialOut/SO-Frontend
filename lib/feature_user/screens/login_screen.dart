@@ -15,16 +15,8 @@ class LoginScreen extends StatelessWidget {
     double policyTextSize = 14;
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xC8C8C8),
-          title: const Text('Hello Agian!'),
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/welcome');
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_new_sharp,
-              )),
-        ),
+            backgroundColor: Color(0xC8C8C8),
+            title: const Text('Hello Agian!')),
         body: Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -36,8 +28,28 @@ class LoginScreen extends StatelessWidget {
                     Buttons.Google,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Sign up with Google",
+                    text: "Log in with Google",
                     onPressed: () {},
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: SignInButton(
+                    Buttons.Facebook,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(borderradius)),
+                    text: "Log in with Facebook",
+                    onPressed: () {},
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                        hintText: "Enter email", labelText: "Username"),
                   ),
                 ),
                 Container(
