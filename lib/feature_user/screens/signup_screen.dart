@@ -1,14 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
 import 'package:so_frontend/feature_user/screens/loggedIn_screen.dart';
 import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:so_frontend/feature_user/services/login_signUp.dart';
+
+import 'form_register_CS.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
-
+  SignUpScreen({Key? key}) : super(key: key);
+  final userAPI uapi = userAPI();
   @override
   Widget build(BuildContext context) {
     double borderradius = 10.0;
@@ -41,8 +47,8 @@ class SignUpScreen extends StatelessWidget {
                     Buttons.Facebook,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Continue with Facebook",
-                    onPressed: () {},
+                    text: "Google Log Out",
+                    onPressed: () {GoogleSignInApi.logout() ;},
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -129,6 +135,98 @@ class SignUpScreen extends StatelessWidget {
         ));
   }
 
+  void _handleSignUp(BuildContext context, Response response, GoogleSignInAuthentication googleSignInAuthentication){
+    if(response.statusCode == 200){
+      Map<String, dynamic>ap = json.decode(response.body);
+      //Map<String, dynamic> ap = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
+      if (ap["action"] == "continue") {
+        print("la cuanta no existe");
+        GoogleSignInApi.logout();
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    FormRegisterCS(googleSignInAuthentication.accessToken.toString())),
+            (route) => false);
+      }
+      else if(ap["action"] == "error" && ap["error_message"] == "User with this email already exists"){
+        print('status code : ' + response.statusCode.toString());
+        print('error_message: ' + json.decode(response.body)['error_message']);
+        GoogleSignInApi.logout();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("User with this email already exists"),
+            content:
+                const Text("Do you want to Log In?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed('/login'),
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("No")),
+            ],
+          ),
+        );
+      }
+    }
+    else if(response.statusCode == 400) {
+      print('status code : ' + response.statusCode.toString());
+      print('error_message: ' + json.decode(response.body)['error_message']);
+      String errorMessage = json.decode(response.body)['error_message'];
+      if(errorMessage == "Authentication method not available for this email"){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("Authentication method not available for this email, existe account with this email"),
+            content:
+                const Text("Do you want to connect the account of SocialOut?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed('/welcome'),
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("No")),
+            ],
+          ),
+        );
+        Navigator.of(context).pushNamed('/login');
+
+      }
+      else if(errorMessage == "Google token was invalid"){
+        Navigator.of(context).pushNamed('/login');
+      }
+      
+    }
+    else {
+      print('status code : ' + response.statusCode.toString());
+      print('error_message: ' + json.decode(response.body)['error_message']);
+      print("Undefined Error");
+    }
+    
+    /*
+    Map<String, dynamic>ap = json.decode(response.body);
+    //Map<String, dynamic> ap = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
+    if (ap["action"] == "continue") {
+      print("la cuanta no existe");
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  FormRegisterCS(googleSignInAuthentication.accessToken.toString())),
+          (route) => false);
+    } else {
+      print("enlazar a cuenta ya existente");
+    }
+    */
+  }
+
   Future<void> _handleSignIn(BuildContext context) async {
     try {
       final user = await GoogleSignInApi.login();
@@ -140,18 +238,24 @@ class SignUpScreen extends StatelessWidget {
       } else {
         GoogleSignInAuthentication googleSignInAuthentication =
             await user.authentication;
+            
         print(googleSignInAuthentication.accessToken);
         //https://www.googleapis.com/oauth2/v3/userinfo?access_token=googleSignInAuthentication.accessToken
         //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.A0ARrdaM-Uo5BGubza4xGpXK0JuFiAATuEHI_5UXjx-CWGtddi0Q_Qg6HxX-mRoNzKeQTc1ZyNs4JdwacIzGdSNQnzUlSyCfP3AVpK2OMaQcbqPcT3eM_4wSZSyKaYwIxhCZhI5zkLAtpCgHZj-XQ1vKUaOTrh
         print(" ");
         //we can decode with this idtoken
         print(googleSignInAuthentication.idToken);
-
+        Response response = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
+        _handleSignUp(context, response, googleSignInAuthentication);
+        
+        /*
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => LoggedInPage(
             user: user,
           ),
-        ));
+        )
+        );
+        */
       }
     } catch (error) {
       print(error);
