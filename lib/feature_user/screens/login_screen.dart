@@ -141,6 +141,15 @@ class LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(borderradius)),
                         minimumSize: Size(widthButton, heightButton)),
                     onPressed: () async {
+                      /* Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LinkScreen(
+                                  "franco.acevedo@estudiantat.upc.edu",
+                                  "probadno123EMAIL",
+                                  "socialout",
+                                  "")),
+                          (route) => false); */
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
                         Map<String, dynamic> ap =
@@ -155,8 +164,8 @@ class LoginScreenState extends State<LoginScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      LinkScreen(email, password, "socialout","")),
+                                  builder: (context) => LinkScreen(
+                                      email, password, "socialout", "")),
                               (route) => false);
                         } else {
                           showDialog(
@@ -233,82 +242,73 @@ class LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  
-  void _handleLogIn(BuildContext context, Response response, String accessToken){
-    String ?auxToken =  accessToken;
+  void _handleLogIn(
+      BuildContext context, Response response, String accessToken) {
+    String? auxToken = accessToken;
     Map<String, dynamic> ap = json.decode(response.body);
-        //Map<String, dynamic> ap = await uapi.logInGoogle(googleSignInAuthentication.accessToken.toString());
-        if (response.statusCode == 200) {
-          print("login:la cuanta  existe y voy a login correctamente");
-          Navigator.of(context).pushNamed('/home');
+    //Map<String, dynamic> ap = await uapi.logInGoogle(googleSignInAuthentication.accessToken.toString());
+    if (response.statusCode == 200) {
+      print("login:la cuanta  existe y voy a login correctamente");
+      Navigator.of(context).pushNamed('/home');
+    } else if (response.statusCode == 400) {
+      print('status code : ' + response.statusCode.toString());
+      print('error_message: ' + json.decode(response.body)['error_message']);
+      String errorMessage = json.decode(response.body)['error_message'];
+      if (errorMessage == "User does not exist") {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("User does not exist"),
+            content: const Text("Do you want to sign up now?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    //GoogleSignInApi.logout();
+                    Navigator.of(context).pushNamed('/signup');
+                  },
+                  child: const Text("Ok")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("cancel")),
+            ],
+          ),
+        );
+      } else if (errorMessage ==
+          "Authentication method not available for this email") {
+        print("estoy aqui");
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text(
+                "Authentication method not available for this email, existe account with this email"),
+            content:
+                const Text("Do you want to connect the account of SocialOut?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              LinkScreen("", "", "google", auxToken)),
+                      (route) => false),
+                  //Navigator.of(context).pushNamed('/welcome'),
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("No")),
+            ],
+          ),
+        );
+        //Navigator.of(context).pushNamed('/login');
 
-        } else if(response.statusCode == 400) {
-          print('status code : ' + response.statusCode.toString());
-          print('error_message: ' + json.decode(response.body)['error_message']);
-          String errorMessage = json.decode(response.body)['error_message'];
-          if(errorMessage == "User does not exist"){
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => AlertDialog(
-                title: const Text("User does not exist"),
-                content:
-                    const Text("Do you want to sign up now?"),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () 
-                          {
-                            //GoogleSignInApi.logout();
-                            Navigator.of(context).pushNamed('/signup');
-                          },
-
-
-                      child: const Text("Ok")),
-                  TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text("cancel")),
-                ],
-              ),
-            );
-          }
-          else if(errorMessage == "Authentication method not available for this email"){
-            print("estoy aqui");
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => AlertDialog(
-                title: const Text("Authentication method not available for this email, existe account with this email"),
-                content:
-                    const Text("Do you want to connect the account of SocialOut?"),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () =>
-                      Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          LinkScreen("","","google",auxToken )),
-                                  (route) => false),
-                          //Navigator.of(context).pushNamed('/welcome'),
-                      child: const Text("Yes")),
-                  TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text("No")
-                      ),
-                ],
-            ),
-          );
-            //Navigator.of(context).pushNamed('/login');
-
-          }
-          else if(errorMessage == "Google token was invalid"){
-            Navigator.of(context).pushNamed('/login');
-          }
-
-        }
-        else {
-          print("Undefined Error");
-        }
+      } else if (errorMessage == "Google token was invalid") {
+        Navigator.of(context).pushNamed('/login');
+      }
+    } else {
+      print("Undefined Error");
+    }
   }
 
   Future<void> _handleLoginGoogle(BuildContext context) async {
@@ -329,8 +329,10 @@ class LoginScreenState extends State<LoginScreen> {
         print(" ");
         //we can decode with this idtoken
         print(googleSignInAuthentication.idToken);
-        Response response = await uapi.logInGoogle(googleSignInAuthentication.accessToken.toString());
-        _handleLogIn( context, response, googleSignInAuthentication.accessToken!);
+        Response response = await uapi
+            .logInGoogle(googleSignInAuthentication.accessToken.toString());
+        _handleLogIn(
+            context, response, googleSignInAuthentication.accessToken!);
         GoogleSignInApi.logout();
         //Navigator.of(context).pushNamed('/home');
 
