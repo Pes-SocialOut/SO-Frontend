@@ -48,26 +48,6 @@ class SignUpScreen extends StatelessWidget {
                     Buttons.Facebook,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Google Log Out",
-                    onPressed: () {GoogleSignInApi.logout() ;},
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    "OR",
-                    style: TextStyle(color: Colors.black45, fontSize: 16),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
-                  child: SignInButton(
-                    Buttons.Facebook,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(borderradius)),
                     text: "Continue with Facebook",
                     onPressed: () {},
                   ),

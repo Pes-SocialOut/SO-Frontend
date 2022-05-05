@@ -51,6 +51,7 @@ class LoginScreenState extends State<LoginScreen> {
                     onPressed: () => _handleLoginGoogle(context),
                   ),
                 ),
+               
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -59,26 +60,6 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Log in with Facebook",
-                    onPressed: () {},
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                        hintText: "Enter email", labelText: "Username"),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
-                  child: SignInButton(
-                    Buttons.Facebook,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Sign up with Facebook",
                     onPressed: () {},
                   ),
                 ),
