@@ -122,7 +122,7 @@ class LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(borderradius)),
                         minimumSize: Size(widthButton, heightButton)),
                     onPressed: () async {
-                      /* Navigator.pushAndRemoveUntil(
+                      Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const LinkScreen(
@@ -130,8 +130,8 @@ class LoginScreenState extends State<LoginScreen> {
                                   "probadno123EMAIL",
                                   "socialout",
                                   "")),
-                          (route) => false); */
-                      if (formKey.currentState!.validate()) {
+                          (route) => false);
+                      /* if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
                         Map<String, dynamic> ap =
                             await uapi.checkloginSocialOut(email);
@@ -164,7 +164,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         }
-                      }
+                      } */
                     },
                     child: const Text(
                       'Log In',
