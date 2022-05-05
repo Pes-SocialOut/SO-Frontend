@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
+import 'package:so_frontend/feature_user/screens/link_user.dart';
 import 'package:so_frontend/feature_user/screens/loggedIn_screen.dart';
 import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
@@ -136,6 +137,7 @@ class SignUpScreen extends StatelessWidget {
   }
 
   void _handleSignUp(BuildContext context, Response response, GoogleSignInAuthentication googleSignInAuthentication){
+    String ?auxToken =  googleSignInAuthentication.accessToken;
     if(response.statusCode == 200){
       Map<String, dynamic>ap = json.decode(response.body);
       //Map<String, dynamic> ap = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
@@ -149,9 +151,10 @@ class SignUpScreen extends StatelessWidget {
                     FormRegisterCS(googleSignInAuthentication.accessToken.toString())),
             (route) => false);
       }
-      else if(ap["action"] == "error" && ap["error_message"] == "User with this email already exists"){
+      else if(ap["action"] == "error"){
         print('status code : ' + response.statusCode.toString());
         print('error_message: ' + json.decode(response.body)['error_message']);
+        
         GoogleSignInApi.logout();
         showDialog(
           context: context,
@@ -164,6 +167,38 @@ class SignUpScreen extends StatelessWidget {
               TextButton(
                   onPressed: () =>
                       Navigator.of(context).pushNamed('/login'),
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("No")),
+            ],
+          ),
+        );
+      }
+      else if(ap["action"] == "link_auth"){
+        print('status code : ' + response.statusCode.toString());
+        
+        GoogleSignInApi.logout();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("User with this email already exists in SocialOut"),
+            content:
+                const Text("Do you want to Link with SocialOut?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>{
+                    Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          LinkScreen("","","google",auxToken! )),
+                                  (route) => false),
+                          //Navigator.of(context).pushNamed('/welcome'),
+                      
+                  },
+                      //Navigator.of(context).pushNamed('/login'),
                   child: const Text("Yes")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -188,7 +223,13 @@ class SignUpScreen extends StatelessWidget {
             actions: <Widget>[
               TextButton(
                   onPressed: () =>
-                      Navigator.of(context).pushNamed('/welcome'),
+                  Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      LinkScreen("","","google",auxToken! )),
+                              (route) => false),
+                      //Navigator.of(context).pushNamed('/welcome'),
                   child: const Text("Yes")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),

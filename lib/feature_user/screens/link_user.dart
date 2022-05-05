@@ -5,7 +5,8 @@ class LinkScreen extends StatefulWidget {
   final String email;
   final String password;
   final String type;
-  const LinkScreen(this.email, this.password, this.type, {Key? key})
+  final String token;
+  const LinkScreen(this.email, this.password, this.type, this.token, {Key? key})
       : super(key: key);
   @override
   LinkScreenState createState() => LinkScreenState();
@@ -22,10 +23,12 @@ class LinkScreenState extends State<LinkScreen> {
         backgroundColor: Color(0xC8C8C8),
         title: const Text('Link account'),
       ),
-      body: Form(
-        key: formKey,
-        child: ListView(
-          children: <Widget>[
+      body: Container(
+        alignment: Alignment.center,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment:  MainAxisAlignment.center,
+          children: [
             Text(
               "Email is already registered with an associated account",
               style: TextStyle(
@@ -34,6 +37,7 @@ class LinkScreenState extends State<LinkScreen> {
                 fontSize: 25,
               ),
             ),
+            SizedBox(height: 50),
             Text(
               widget.email,
               style: TextStyle(
@@ -41,10 +45,23 @@ class LinkScreenState extends State<LinkScreen> {
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
               ),
-            )
-          ],
-        ),
+            ),
+            SizedBox(height: 50),
+            /*
+            Form(
+              key: formKey,
+              child: ListView(
+                children: <Widget>[
+                  
+                  
+                ],
+              ),
+            ),
+            */
+          ]
+          ),
       ),
+       
     );
   }
 }
