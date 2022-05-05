@@ -61,6 +61,7 @@ class LinkScreenState extends State<LinkScreen> {
             ),
             const SizedBox(height: 50),
             if (widget.type == 'socialout') codiVerification(),
+            //else if(widget.type == 'google'){},
             linkButton("socialout"),
             cancelButton(),
           ]),
@@ -69,33 +70,7 @@ class LinkScreenState extends State<LinkScreen> {
     );
   }
 
-  Widget linkButton(String s) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(10),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).colorScheme.secondary,
-            onPrimary: Theme.of(context).colorScheme.onSecondary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            minimumSize: const Size(200, 40)),
-        onPressed: () {
-          Navigator.of(context).pushNamed('/login');
-        },
-        child: const Text(
-          'Link account',
-          style: TextStyle(
-            height: 1.0,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
+  //CASILLA DE CODIGO DE VERIFICACION
   Widget codiVerification() {
     return TextFormField(
       decoration: const InputDecoration(
@@ -115,6 +90,53 @@ class LinkScreenState extends State<LinkScreen> {
     );
   }
 
+  // BOTON PARA CONFIRMAR ENLACE DE CUENTAS
+  Widget linkButton(String s) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(10),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).colorScheme.secondary,
+            onPrimary: Theme.of(context).colorScheme.onSecondary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            minimumSize: const Size(200, 40)),
+        onPressed: () {
+          /* if (formKey.currentState!.validate()) {
+            formKey.currentState!.save();
+            Map<String, dynamic> ap =
+                await uapi.checkloginSocialOut(email);
+            if (ap["action"] == "continue") {
+              int aux = await uapi.loginSocialOut(email, password);
+              if (aux == 200) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/home', (route) => false);
+              }
+            } else if (ap["action"] == "link_auth") {
+              Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LinkScreen(
+                      email, password, "socialout", "")),
+              (route) => false);
+            } else {}
+          } */
+        },
+        child: const Text(
+          'Link account',
+          style: TextStyle(
+            height: 1.0,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  //CANCELAR PROCEDIMIENTO Y RETORNAR A LOGIN
   Widget cancelButton() {
     return Container(
       alignment: Alignment.center,
