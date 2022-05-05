@@ -73,7 +73,7 @@ class _MapWidgetState extends State<MapWidget> {
     return FlutterMap(
       options: MapOptions(
         center: LatLng(widget.lat, widget.long),
-        zoom: 10,
+        zoom: 15,
       ),
       layers: [
         TileLayerOptions(
