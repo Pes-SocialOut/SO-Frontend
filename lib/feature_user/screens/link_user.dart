@@ -16,6 +16,7 @@ class LinkScreenState extends State<LinkScreen> {
   final formKey = GlobalKey<FormState>();
   final userAPI uapi = userAPI();
   late String verification;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,26 +104,34 @@ class LinkScreenState extends State<LinkScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
             minimumSize: const Size(200, 40)),
-        onPressed: () {
-          /* if (formKey.currentState!.validate()) {
+        onPressed: () async {
+          if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
-            Map<String, dynamic> ap =
-                await uapi.checkloginSocialOut(email);
-            if (ap["action"] == "continue") {
-              int aux = await uapi.loginSocialOut(email, password);
-              if (aux == 200) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/home', (route) => false);
-              }
-            } else if (ap["action"] == "link_auth") {
-              Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LinkScreen(
-                      email, password, "socialout", "")),
-              (route) => false);
-            } else {}
-          } */
+            int linkacount = await uapi.linkRegistrerAndLogin(widget.email,
+                widget.password, verification, widget.type, widget.token);
+            if (linkacount == 200) {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/home', (route) => false);
+            } else {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => AlertDialog(
+                  title: const Text("Fail link"),
+                  content: const Text(
+                    "Account does not exist\nor\nwrong verification code",
+                    textAlign: TextAlign.center,
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text("Ok"),
+                    ),
+                  ],
+                ),
+              );
+            }
+          }
         },
         child: const Text(
           'Link account',

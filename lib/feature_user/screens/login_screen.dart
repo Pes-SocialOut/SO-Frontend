@@ -51,7 +51,6 @@ class LoginScreenState extends State<LoginScreen> {
                     onPressed: () => _handleLoginGoogle(context),
                   ),
                 ),
-               
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -122,16 +121,16 @@ class LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(borderradius)),
                         minimumSize: Size(widthButton, heightButton)),
                     onPressed: () async {
-                      Navigator.pushAndRemoveUntil(
+                      /*  Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const LinkScreen(
-                                  "franco.acevedo@estudiantat.upc.edu",
-                                  "probadno123EMAIL",
+                                  "zjqtlwj@gmail.com",
+                                  "XIEqiaochu0829",
                                   "socialout",
                                   "")),
-                          (route) => false);
-                      /* if (formKey.currentState!.validate()) {
+                          (route) => false); */
+                      if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
                         Map<String, dynamic> ap =
                             await uapi.checkloginSocialOut(email);
@@ -164,7 +163,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         }
-                      } */
+                      }
                     },
                     child: const Text(
                       'Log In',
