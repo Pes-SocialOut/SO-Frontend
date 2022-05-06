@@ -21,7 +21,7 @@ class LinkScreenState extends State<LinkScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xC8C8C8),
+        backgroundColor: const Color(0x00c8c8c8),
         title: const Text('Link account'),
       ),
       body: Container(
@@ -110,11 +110,6 @@ class LinkScreenState extends State<LinkScreen> {
             formKey.currentState!.save();
             int linkacount = await uapi.linkRegistrerAndLogin(widget.email,
                 widget.password, verification, s, widget.token);
-                print("link_user = widget.email: "+widget.email);
-                print("link_user = widget.password: "+widget.password);
-                print("link_user = verification: "+verification);
-                print("link_user = widget.type: "+s);
-                print("link_user = widget.token: "+widget.token);
             if (linkacount == 200) {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/home', (route) => false);

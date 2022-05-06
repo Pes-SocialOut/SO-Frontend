@@ -25,7 +25,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xC8C8C8),
+        backgroundColor: const Color(0x00c8c8c8),
         title: const Text('Register!'),
       ),
       body: Form(
@@ -128,7 +128,6 @@ class RegisterScreenState extends State<RegisterScreen> {
                           (route) => false);
                     } else if (ap["action"] == "link_auth") {
                       //enlazar cuentas
-                      print("link_auth");
                       showDialog(
                         context: context,
                         barrierDismissible: false,

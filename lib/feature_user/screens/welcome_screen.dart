@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_user/services/logIn_signUp.dart';
 
 
 class WelcomeScreen extends StatelessWidget {
@@ -8,7 +7,6 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    userAPI uAPI = userAPI();
     double borderradius = 10.0;
     double widthButton = 300.0;
     double heightButton = 40.0;
@@ -47,9 +45,9 @@ class WelcomeScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).colorScheme.secondary,
                           onPrimary: Colors.white,
-                          shape: new RoundedRectangleBorder(
+                          shape:  RoundedRectangleBorder(
                               borderRadius:
-                                  new BorderRadius.circular(borderradius)),
+                                   BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
                       onPressed: () {
                         //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
@@ -69,9 +67,9 @@ class WelcomeScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).colorScheme.onSecondary,
                           onPrimary: Colors.black,
-                          shape: new RoundedRectangleBorder(
+                          shape:  RoundedRectangleBorder(
                               borderRadius:
-                                  new BorderRadius.circular(borderradius)),
+                                   BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
                       onPressed: () {
                         Navigator.of(context).pushNamed('/login');

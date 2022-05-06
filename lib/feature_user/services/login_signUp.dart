@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: file_names, camel_case_types
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -13,8 +13,6 @@ class userAPI {
 
     String finalUri = basicUrl + _path + email;
     final response = await http.get(Uri.parse(finalUri));
-    print('status code : ' + response.statusCode.toString());
-      print('error_message: ' + json.decode(response.body)['action']);
     return json.decode(response.body);
   }
 
@@ -22,17 +20,10 @@ class userAPI {
   Future<http.Response> checkUserGoogle(gtoken) async {
     String _path = 'register/check?type=google&token=';
 
-    String finalUri = basicUrl + _path + gtoken;
-    print(finalUri);
-
     final response = await http.get(Uri.parse(basicUrl + _path + gtoken));
-    final body = response.body;
-    final jsonResponse = json.decode(response.body);
-    final jsonResponsebody = json.decode(response.body);
     if (response.statusCode != 200) {
       // return error
     }
-    //return json.decode(response.body);
     return response;
   }
 
@@ -91,7 +82,7 @@ class userAPI {
       APICalls a = APICalls();
       a.initialize(userID, accessToken, refreshToken, true);
     } else {
-      print('status code : ' + response.statusCode.toString());
+      //print('status code : ' + response.statusCode.toString());
     }
     return response.statusCode;
   }
@@ -121,7 +112,7 @@ class userAPI {
       APICalls a = APICalls();
       a.initialize(userID, accessToken, refreshToken, true);
     } else {
-      print('status code : ' + response.statusCode.toString());
+      //print('status code : ' + response.statusCode.toString());
     }
     return response.statusCode;
   }
@@ -132,7 +123,7 @@ class userAPI {
     String _path = 'auth_method';
     String finalUri = basicUrl + _path;
 
-    var str;
+    var str={};
 
     if (type == "socialout") {
       str = {
@@ -163,8 +154,8 @@ class userAPI {
       APICalls a = APICalls();
       a.initialize(userID, accessToken, refreshToken, true);
     } else {
-      print('status code : ' + response.statusCode.toString());
-      print('error_message: ' + json.decode(response.body)['error_message']);
+      //print('status code : ' + response.statusCode.toString());
+      //print('error_message: ' + json.decode(response.body)['error_message']);
     }
     return response.statusCode;
   }
@@ -178,7 +169,6 @@ class userAPI {
   ) async {
     String _path = 'register/google';
     String finalUri = basicUrl + _path;
-    print(finalUri);
     var str = {
       "token": tokenGoogle,
       "username": username,
@@ -188,25 +178,17 @@ class userAPI {
     };
     final response = await http.post(Uri.parse(finalUri),
         body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
-    print("ya hizo la peticion aqui");
     if (response.statusCode == 200) {
       String accessToken = json.decode(response.body)['access_token'];
-      print('accesToken: ' + accessToken);
       String userID = json.decode(response.body)['id'];
-      print('userID: ' + userID);
       String refreshToken = json.decode(response.body)['refresh_token'];
-      print('refreshToken: ' + refreshToken);
       APICalls a = APICalls();
       a.initialize(userID, accessToken, refreshToken, true);
-      print('status code : ' + response.statusCode.toString());
-      print('id: ' + a.getCurrentUser());
-      print('refreshtoken: ' + a.getCurrentRefresh());
-      print('accesstoken: ' + a.getCurrentAccess());
-      a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
-          (msg, err) => print(err));
+      //a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
+      //    (msg, err) => print(err));
     } else {
-      print('status code : ' + response.statusCode.toString());
-      print('error_message: ' + json.decode(response.body)['error_message']);
+      //print('status code : ' + response.statusCode.toString());
+      //print('error_message: ' + json.decode(response.body)['error_message']);
     }
     return response.statusCode;
   }
@@ -216,32 +198,23 @@ class userAPI {
   ) async {
     String _path = 'login/google';
     String finalUri = basicUrl + _path;
-    print(finalUri);
     var str = {
       "token": tokenGoogle,
     };
     final response = await http.post(Uri.parse(finalUri),
         body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
-    print("logInGoogle");
     if (response.statusCode == 200) {
       String accessToken = json.decode(response.body)['access_token'];
-      print('accesToken: ' + accessToken);
       String userID = json.decode(response.body)['id'];
-      print('userID: ' + userID);
       String refreshToken = json.decode(response.body)['refresh_token'];
-      print('refreshToken: ' + refreshToken);
 
       APICalls a = APICalls();
       a.initialize(userID, accessToken, refreshToken, true);
-      print('status code : ' + response.statusCode.toString());
-      print('id: ' + a.getCurrentUser());
-      print('refreshtoken: ' + a.getCurrentRefresh());
-      print('accesstoken: ' + a.getCurrentAccess());
-      a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
-          (msg, err) => print(err));
+      //a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
+      //    (msg, err) => print(err));
     } else {
-      print('status code : ' + response.statusCode.toString());
-      print('error_message: ' + json.decode(response.body)['error_message']);
+      //print('status code : ' + response.statusCode.toString());
+      //print('error_message: ' + json.decode(response.body)['error_message']);
     }
     return response;
   }

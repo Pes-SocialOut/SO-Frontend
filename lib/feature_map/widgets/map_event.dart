@@ -68,17 +68,17 @@ class _EventWidgetState extends State<EventWidget> {
                       ),
                       onPressed: () {
                         showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                    title: const Text('Contaminación moderada'),
-                                    content: const Text(
-                                        'Se espera que para la fecha y hora indicados en el evento la polución sea moderada.'),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text('Aceptar'),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ]));
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Contaminación moderada'),
+                            content: const Text(
+                                'Se espera que para la fecha y hora indicados en el evento la polución sea moderada.'),
+                            actions: [
+                              TextButton(
+                                child: const Text('Aceptar'),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ]));
                       },
                     ),
                     // ignore: prefer_const_literals_to_create_immutables

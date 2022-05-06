@@ -48,8 +48,8 @@ class APICalls {
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
     final prefs = await SharedPreferences.getInstance();
     final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
-    print(_REFRESH_TOKEN_PREFS.toString());
-    print(refresh_prefs.toString());
+    //print(_REFRESH_TOKEN_PREFS.toString());
+    //print(refresh_prefs.toString());
     if (refresh_prefs == null) {
       _redirectToLogin();
     } else {
@@ -201,8 +201,8 @@ class APICalls {
       Map<String, dynamic> credentials = jsonDecode(response.body);
       _USER_ID = credentials['id'].toString();
       _ACCESS_TOKEN = credentials['access_token'].toString();
-      print("_USER_ID: "+ _USER_ID);
-      print("_ACCESS_TOKEN: "+ _ACCESS_TOKEN);
+      //print("_USER_ID: "+ _USER_ID);
+      //print("_ACCESS_TOKEN: "+ _ACCESS_TOKEN);
       if (credentials.containsKey('refresh_token')) {
         _REFRESH_TOKEN = credentials['refresh_token'].toString();
         final prefs = await SharedPreferences.getInstance();

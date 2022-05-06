@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:so_frontend/utils/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PolicyWidget extends StatelessWidget {
@@ -16,7 +15,7 @@ class PolicyWidget extends StatelessWidget {
         children: [
           TextSpan(
             style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: policyTextSize),
-            text: "By continuing, you agree to SocialOut\'s "
+            text: "By continuing, you agree to SocialOut's "
           ),
           TextSpan(
             style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: policyTextSize),

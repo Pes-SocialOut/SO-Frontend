@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
 
@@ -126,15 +128,10 @@ class _FormRegisterCSState extends State<FormRegisterCS> {
                         onPrimary: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        minimumSize: Size(250, 50)),
+                        minimumSize: const Size(250, 50)),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        print('accessToken: ' + accessToken);
-                        print('username: ' + username);
-                        print('description: ' + description);
-                        print('languages: ' + languages);
-                        print('hobbies: ' + hobbies);
 
                         int ap = await uapi.finalRegistrerGoogle(accessToken,
                             username, description, languages, hobbies);
@@ -142,9 +139,7 @@ class _FormRegisterCSState extends State<FormRegisterCS> {
                           Navigator.of(context)
                             .pushNamedAndRemoveUntil('/home', (route) => false);
                         }
-                      } else {
-                        print("malos datos ingresados");
-                      }
+                      } 
                     },
                     child: const Text(
                       'Submit',
@@ -162,11 +157,11 @@ class _FormRegisterCSState extends State<FormRegisterCS> {
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: Color(0xC8C8C8),
+                        primary: const Color(0x00c8c8c8),
                         onPrimary: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        minimumSize: Size(150, 50)),
+                        minimumSize: const Size(150, 50)),
                     onPressed: () {
                       showDialog(
                         context: context,

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:so_frontend/feature_user/screens/link_user.dart';
-import 'package:so_frontend/feature_user/screens/loggedIn_screen.dart';
 import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -19,12 +18,10 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double borderradius = 10.0;
-    double widthButton = 300.0;
-    double heightButton = 40.0;
     double policyTextSize = 14;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Color(0xC8C8C8), title: const Text('Sign Up')),
+            backgroundColor: const Color(0x00c8c8c8), title: const Text('Sign Up')),
         body: Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -121,9 +118,7 @@ class SignUpScreen extends StatelessWidget {
     if(response.statusCode == 200){
       Map<String, dynamic>ap = json.decode(response.body);
       //Map<String, dynamic> ap = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
-      if (ap["action"] == "continue") {
-        print("la cuanta no existe");
-        
+      if (ap["action"] == "continue") {        
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -133,8 +128,6 @@ class SignUpScreen extends StatelessWidget {
             GoogleSignInApi.logout2();
       }
       else if(ap["action"] == "error"){
-        print('status code : ' + response.statusCode.toString());
-        print('error_message: ' + json.decode(response.body)['error_message']);
         
         GoogleSignInApi.logout2();
         showDialog(
@@ -157,8 +150,6 @@ class SignUpScreen extends StatelessWidget {
         );
       }
       else if(ap["action"] == "link_auth"){
-        print('status code : ' + response.statusCode.toString());
-        
         GoogleSignInApi.logout2();
         showDialog(
           context: context,
@@ -190,8 +181,6 @@ class SignUpScreen extends StatelessWidget {
       }
     }
     else if(response.statusCode == 400) {
-      print('status code : ' + response.statusCode.toString());
-      print('error_message: ' + json.decode(response.body)['error_message']);
       String errorMessage = json.decode(response.body)['error_message'];
       if(errorMessage == "Authentication method not available for this email"){
         showDialog(
@@ -227,9 +216,9 @@ class SignUpScreen extends StatelessWidget {
       
     }
     else {
-      print('status code : ' + response.statusCode.toString());
+      /* print('status code : ' + response.statusCode.toString());
       print('error_message: ' + json.decode(response.body)['error_message']);
-      print("Undefined Error");
+      print("Undefined Error"); */
     }
     
     /*
@@ -254,19 +243,31 @@ class SignUpScreen extends StatelessWidget {
       final user = await GoogleSignInApi.login();
 
       if (user == null) {
-        Navigator.of(context).pushNamed('/welcome');
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Sign in Failed, please try again')));
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text('Sign up Failed'),
+            content: const Text("Please try again"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  
+                  child: const Text("Ok")),
+              
+            ],
+          ),
+        );
       } else {
         GoogleSignInAuthentication googleSignInAuthentication =
             await user.authentication;
             
-        print(googleSignInAuthentication.accessToken);
         //https://www.googleapis.com/oauth2/v3/userinfo?access_token=googleSignInAuthentication.accessToken
         //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.A0ARrdaM-Uo5BGubza4xGpXK0JuFiAATuEHI_5UXjx-CWGtddi0Q_Qg6HxX-mRoNzKeQTc1ZyNs4JdwacIzGdSNQnzUlSyCfP3AVpK2OMaQcbqPcT3eM_4wSZSyKaYwIxhCZhI5zkLAtpCgHZj-XQ1vKUaOTrh
-        print(" ");
+        
         //we can decode with this idtoken
-        print(googleSignInAuthentication.idToken);
+        //print(googleSignInAuthentication.idToken);
+
         Response response = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
         _handleSignUp(context, response, googleSignInAuthentication);
         
@@ -280,23 +281,9 @@ class SignUpScreen extends StatelessWidget {
         */
       }
     } catch (error) {
-      print(error);
+      //print(error);
     }
   }
 
-  Future signIn(BuildContext context) async {
-    final user = await GoogleSignInApi.login();
 
-    if (user == null) {
-      Navigator.of(context).pushNamed('/login');
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Sign in Failed')));
-    } else {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => LoggedInPage(
-          user: user,
-        ),
-      ));
-    }
-  }
 }

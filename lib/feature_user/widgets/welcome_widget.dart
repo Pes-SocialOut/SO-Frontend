@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/utils/theme.dart';
 
 class WelcomeWidget extends StatelessWidget {
   const WelcomeWidget({ Key? key }) : super(key: key);

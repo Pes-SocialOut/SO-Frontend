@@ -33,7 +33,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Color(0xC8C8C8),
+            backgroundColor: const Color(0x00c8c8c8),
             title: const Text('Hello Agian!')),
         body: Form(
           key: formKey,
@@ -222,54 +222,14 @@ class LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  Future<void> _handleLogInSocialOUT() async {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState!.save();
-      Map<String, dynamic> ap = await uapi.checkloginSocialOut(email);
-      if (ap["action"] == "continue") {
-        int aux = await uapi.loginSocialOut(email, password);
-        if (aux == 200) {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil('/home', (route) => false);
-        }
-      } else if (ap["action"] == "link_auth") {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    LinkScreen(email, password, "socialout", "")),
-            (route) => false);
-      } else {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: const Text("Fail Login"),
-            content: const Text("Account does not exist"),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Ok"),
-              ),
-            ],
-          ),
-        );
-      }
-    }
-  }
 
   void _handleLogIn(
       BuildContext context, Response response, String accessToken) {
     String? auxToken = accessToken;
-    Map<String, dynamic> ap = json.decode(response.body);
-    //Map<String, dynamic> ap = await uapi.logInGoogle(googleSignInAuthentication.accessToken.toString());
     if (response.statusCode == 200) {
-      print("login:la cuanta  existe y voy a login correctamente");
       Navigator.of(context)
               .pushNamedAndRemoveUntil('/home', (route) => false);
     } else if (response.statusCode == 400) {
-      print('status code : ' + response.statusCode.toString());
-      print('error_message: ' + json.decode(response.body)['error_message']);
       String errorMessage = json.decode(response.body)['error_message'];
       if (errorMessage == "User does not exist") {
         showDialog(
@@ -293,7 +253,6 @@ class LoginScreenState extends State<LoginScreen> {
         );
       } else if (errorMessage ==
           "Authentication method not available for this email") {
-        print("estoy aqui");
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -323,9 +282,7 @@ class LoginScreenState extends State<LoginScreen> {
       } else if (errorMessage == "Google token was invalid") {
         Navigator.of(context).pushNamed('/login');
       }
-    } else {
-      print("Undefined Error");
-    }
+    } 
   }
 
   Future<void> _handleLoginGoogle(BuildContext context) async {
@@ -352,13 +309,6 @@ class LoginScreenState extends State<LoginScreen> {
       } else {
         GoogleSignInAuthentication googleSignInAuthentication =
             await user.authentication;
-
-        print(googleSignInAuthentication.accessToken);
-        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=googleSignInAuthentication.accessToken
-        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.A0ARrdaM-Uo5BGubza4xGpXK0JuFiAATuEHI_5UXjx-CWGtddi0Q_Qg6HxX-mRoNzKeQTc1ZyNs4JdwacIzGdSNQnzUlSyCfP3AVpK2OMaQcbqPcT3eM_4wSZSyKaYwIxhCZhI5zkLAtpCgHZj-XQ1vKUaOTrh
-        print(" ");
-        //we can decode with this idtoken
-        print(googleSignInAuthentication.idToken);
         Response response = await uapi
             .logInGoogle(googleSignInAuthentication.accessToken.toString());
         _handleLogIn(context, response,
@@ -376,7 +326,7 @@ class LoginScreenState extends State<LoginScreen> {
         */
       }
     } catch (error) {
-      print(error);
+      //print(error);
     }
   }
 }

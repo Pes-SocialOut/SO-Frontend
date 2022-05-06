@@ -150,7 +150,7 @@ class _FormRegisterState extends State<FormRegister> {
                         onPrimary: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        minimumSize: Size(250, 50)),
+                        minimumSize: const Size(250, 50)),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
@@ -166,9 +166,7 @@ class _FormRegisterState extends State<FormRegister> {
                           Navigator.of(context)
                             .pushNamedAndRemoveUntil('/home', (route) => false);
                         }
-                      } else {
-                        print("malos datos ingresados");
-                      }
+                      } 
                     },
                     child: const Text(
                       'Submit',
@@ -186,11 +184,11 @@ class _FormRegisterState extends State<FormRegister> {
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: Color(0xC8C8C8),
+                        primary: const Color(0x00c8c8c8),
                         onPrimary: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        minimumSize: Size(150, 50)),
+                        minimumSize: const Size(150, 50)),
                     onPressed: () {
                       showDialog(
                         context: context,
