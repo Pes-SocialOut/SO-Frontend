@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_event/screens/event_screen.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
 class MainHomeScreen extends StatelessWidget {
