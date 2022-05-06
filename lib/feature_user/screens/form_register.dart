@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_user/services/logIn_signUp.dart';
+import 'package:so_frontend/feature_user/services/login_signUp.dart';
 
 class FormRegister extends StatefulWidget {
   final String email;
@@ -163,10 +163,10 @@ class _FormRegisterState extends State<FormRegister> {
                             hobbies,
                             verification);
                         if (ap == 200) {
-                          Navigator.of(context)
-                            .pushNamedAndRemoveUntil('/home', (route) => false);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/home', (route) => false);
                         }
-                      } 
+                      }
                     },
                     child: const Text(
                       'Submit',
