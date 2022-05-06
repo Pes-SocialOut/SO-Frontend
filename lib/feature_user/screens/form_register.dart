@@ -165,8 +165,8 @@ class _FormRegisterState extends State<FormRegister> {
                         if (ap == 200) {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/home', (route) => false);
-                        }
-                      }
+                               }
+                      } 
                     },
                     child: const Text(
                       'Submit',
