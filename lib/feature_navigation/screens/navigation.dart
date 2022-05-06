@@ -31,11 +31,25 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('SocialOut', style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.secondary,
-          backgroundColor: Theme.of(context).colorScheme.background,
-        )),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 35,
+              height: 35,
+              child: FittedBox(
+                child: Image.asset('assets/logo.png'),
+                fit: BoxFit.fill
+              ),
+            ),
+            const SizedBox(width:5),
+            Text('SocialOut', style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.secondary,
+              backgroundColor: Theme.of(context).colorScheme.background,
+            )),
+          ],
+        ),
         leading: const SizedBox(),
         elevation: 1,
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -46,9 +60,16 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
               onTap: () {
                 Navigator.of(context).pushNamed('/profile');
               },
-              child: ClipRRect(
-                child: Image.asset('assets/dog.jpg'),
-                borderRadius: BorderRadius.circular(100)
+              child: SizedBox(
+                width: 36,
+                height: 36,
+                child: ClipRRect(
+                  child: FittedBox(
+                    child: Image.asset('assets/dog.jpg'),
+                    fit: BoxFit.fitHeight
+                  ),
+                  borderRadius: BorderRadius.circular(100)
+                ),
               ),
             ),
           )

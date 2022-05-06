@@ -21,20 +21,19 @@ class MyApp extends StatelessWidget {
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme:ColorScheme(
-          brightness:Brightness.light,
-          primary: HexColor('22577A'),
-          onPrimary: Colors.white,
-          secondary: HexColor('38A3A5'),
-          onSecondary: Colors.white,
-          error: HexColor('ED4337'),
-          onError: Colors.white,
-          background: Colors.white,
-          onBackground: Colors.black,
-          surface: Colors.black,
-          onSurface: HexColor('767676'),
-        )
-      ),
+          colorScheme: ColorScheme(
+        brightness: Brightness.light,
+        primary: HexColor('22577A'),
+        onPrimary: Colors.white,
+        secondary: HexColor('38A3A5'),
+        onSecondary: Colors.white,
+        error: HexColor('ED4337'),
+        onError: HexColor('D4AC2B'),
+        background: Colors.white,
+        onBackground: Colors.black,
+        surface: Colors.black,
+        onSurface: HexColor('767676'),
+      )),
       initialRoute: '/welcome',
       home: const WelcomeScreen(),
       routes: {
@@ -42,10 +41,9 @@ class MyApp extends StatelessWidget {
         '/login': (_) => const LoginScreen(),
         '/signup': (_) => const SignUpScreen(),
         '/home': (_) => const NavigationBottomBar(),
-        '/map_screen': (_) =>  const MapScreen(),
-        '/profile': (_) => const ProfileScreen()
+        '/map_screen': (_) => const MapScreen(),
+        '/profile': (_) => const ProfileScreen(id: "0")
       },
     );
   }
 }
-
