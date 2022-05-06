@@ -122,49 +122,22 @@ class LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(borderradius)),
                         minimumSize: Size(widthButton, heightButton)),
                     onPressed: () async {
+                      /*
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const LinkScreen(
-                                  "franco.acevedo@estudiantat.upc.edu",
-                                  "probadno123EMAIL",
-                                  "socialout",
-                                  "")),
-                          (route) => false);
-                      /* if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        Map<String, dynamic> ap =
-                            await uapi.checkloginSocialOut(email);
-                        if (ap["action"] == "continue") {
-                          int aux = await uapi.loginSocialOut(email, password);
-                          if (aux == 200) {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/home', (route) => false);
-                          }
-                        } else if (ap["action"] == "link_auth") {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LinkScreen(
-                                      email, password, "socialout", "")),
-                              (route) => false);
-                        } else {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (context) => AlertDialog(
-                              title: const Text("Fail Login"),
-                              content: const Text("Account does not exist"),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text("Ok"),
-                                ),
-                              ],
+                            builder: (context) => const LinkScreen(
+                              "franco.acevedo@estudiantat.upc.edu",
+                              "probadno123EMAIL",
+                              "socialout",
+                              ""
+                            )
                             ),
-                          );
-                        }
-                      } */
+                          (route) => false);
+                          */
+                      
+                      _handleLogInSocialOUT();
+
                     },
                     child: const Text(
                       'Log In',
@@ -223,15 +196,53 @@ class LoginScreenState extends State<LoginScreen> {
         ));
   }
 
+  Future<void> _handleLogInSocialOUT() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      Map<String, dynamic> ap =
+          await uapi.checkloginSocialOut(email);
+      if (ap["action"] == "continue") {
+        int aux = await uapi.loginSocialOut(email, password);
+        if (aux == 200) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/home', (route) => false);
+        }
+      } else if (ap["action"] == "link_auth") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LinkScreen(
+                    email, password, "socialout", "")),
+            (route) => false);
+      } else {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("Fail Login"),
+            content: const Text("Account does not exist"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Ok"),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
+
   void _handleLogIn(
-      BuildContext context, Response response, String accessToken) {
+    BuildContext context, Response response, String accessToken) {
     String? auxToken = accessToken;
     Map<String, dynamic> ap = json.decode(response.body);
     //Map<String, dynamic> ap = await uapi.logInGoogle(googleSignInAuthentication.accessToken.toString());
     if (response.statusCode == 200) {
       print("login:la cuanta  existe y voy a login correctamente");
       Navigator.of(context).pushNamed('/home');
-    } else if (response.statusCode == 400) {
+    } 
+    else if (response.statusCode == 400) {
       print('status code : ' + response.statusCode.toString());
       print('error_message: ' + json.decode(response.body)['error_message']);
       String errorMessage = json.decode(response.body)['error_message'];
@@ -245,7 +256,7 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    //GoogleSignInApi.logout();
+                    GoogleSignInApi.logout2();
                     Navigator.of(context).pushNamed('/signup');
                   },
                   child: const Text("Ok")),
@@ -300,7 +311,8 @@ class LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushNamed('/welcome');
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Sign in Failed, please try again')));
-      } else {
+      } 
+      else {
         GoogleSignInAuthentication googleSignInAuthentication =
             await user.authentication;
 
@@ -310,11 +322,13 @@ class LoginScreenState extends State<LoginScreen> {
         print(" ");
         //we can decode with this idtoken
         print(googleSignInAuthentication.idToken);
-        Response response = await uapi
-            .logInGoogle(googleSignInAuthentication.accessToken.toString());
+        Response response = await uapi.logInGoogle(googleSignInAuthentication.accessToken.toString());
         _handleLogIn(
-            context, response, googleSignInAuthentication.accessToken!);
-        GoogleSignInApi.logout();
+            context, 
+            response, 
+            googleSignInAuthentication.accessToken.toString()
+            );
+        GoogleSignInApi.logout2();
         //Navigator.of(context).pushNamed('/home');
 
         /*

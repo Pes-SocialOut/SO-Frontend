@@ -117,25 +117,26 @@ class SignUpScreen extends StatelessWidget {
   }
 
   void _handleSignUp(BuildContext context, Response response, GoogleSignInAuthentication googleSignInAuthentication){
-    String ?auxToken =  googleSignInAuthentication.accessToken;
+    String auxToken =  googleSignInAuthentication.accessToken.toString();
     if(response.statusCode == 200){
       Map<String, dynamic>ap = json.decode(response.body);
       //Map<String, dynamic> ap = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
       if (ap["action"] == "continue") {
         print("la cuanta no existe");
-        GoogleSignInApi.logout();
+        
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    FormRegisterCS(googleSignInAuthentication.accessToken.toString())),
+                    FormRegisterCS(auxToken.toString())),
             (route) => false);
+            GoogleSignInApi.logout2();
       }
       else if(ap["action"] == "error"){
         print('status code : ' + response.statusCode.toString());
         print('error_message: ' + json.decode(response.body)['error_message']);
         
-        GoogleSignInApi.logout();
+        GoogleSignInApi.logout2();
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -158,7 +159,7 @@ class SignUpScreen extends StatelessWidget {
       else if(ap["action"] == "link_auth"){
         print('status code : ' + response.statusCode.toString());
         
-        GoogleSignInApi.logout();
+        GoogleSignInApi.logout2();
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -173,7 +174,7 @@ class SignUpScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          LinkScreen("","","google",auxToken! )),
+                                          LinkScreen("","","google",auxToken.toString() )),
                                   (route) => false),
                           //Navigator.of(context).pushNamed('/welcome'),
                       
@@ -207,7 +208,7 @@ class SignUpScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      LinkScreen("","","google",auxToken! )),
+                                      LinkScreen("","","google",auxToken )),
                               (route) => false),
                       //Navigator.of(context).pushNamed('/welcome'),
                   child: const Text("Yes")),

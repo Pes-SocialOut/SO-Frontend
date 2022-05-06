@@ -62,7 +62,8 @@ class LinkScreenState extends State<LinkScreen> {
             const SizedBox(height: 50),
             if (widget.type == 'socialout') codiVerification(),
             //else if(widget.type == 'google'){},
-            linkButton("socialout"),
+            if (widget.type == 'socialout') linkButton("socialout"),
+            if (widget.type == 'google') linkButton("google"),
             cancelButton(),
           ]),
         ),
@@ -104,6 +105,15 @@ class LinkScreenState extends State<LinkScreen> {
             ),
             minimumSize: const Size(200, 40)),
         onPressed: () {
+
+          //falta aqui!
+          if (s == "socialout"){
+            uapi.linkRegistrerAndLogin("email", "password","codiVeri", "socialout", "");
+          }
+          else if(s =="google"){
+            uapi.linkRegistrerAndLogin("","","","google","token");
+          }
+          
           /* if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
             Map<String, dynamic> ap =

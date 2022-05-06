@@ -14,7 +14,7 @@ class WelcomeScreen extends StatelessWidget {
     double borderradius = 10.0;
     double widthButton = 300.0;
     double heightButton = 40.0;
-
+    
     return Stack(
       children: <Widget>[
         Image.asset(
