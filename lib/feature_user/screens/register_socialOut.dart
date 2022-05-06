@@ -2,6 +2,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_user/screens/link_user.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 
@@ -117,6 +118,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
                     Map<String, dynamic> ap = await uapi.checkUserEmail(email);
+                    
                     if (ap["action"] == "continue") {
                       Navigator.pushAndRemoveUntil(
                           context,
@@ -126,6 +128,26 @@ class RegisterScreenState extends State<RegisterScreen> {
                           (route) => false);
                     } else if (ap["action"] == "link_auth") {
                       //enlazar cuentas
+                      print("link_auth");
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => AlertDialog(
+                          title: const Text(
+                              "Authentication method not available for this email, existe account with this email"),
+                          content:
+                              const Text("Do you want to LogIn?"),
+                          actions: <Widget>[
+                            TextButton(
+                                onPressed: () => Navigator.of(context).pushNamed('/login'),
+                                //Navigator.of(context).pushNamed('/welcome'),
+                                child: const Text("Yes")),
+                            TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text("No")),
+                          ],
+                        ),
+                      );
                     } else {
                       showDialog(
                         context: context,

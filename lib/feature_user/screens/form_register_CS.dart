@@ -139,7 +139,8 @@ class _FormRegisterCSState extends State<FormRegisterCS> {
                         int ap = await uapi.finalRegistrerGoogle(accessToken,
                             username, description, languages, hobbies);
                         if (ap == 200) {
-                          Navigator.of(context).pushNamed('/home');
+                          Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/home', (route) => false);
                         }
                       } else {
                         print("malos datos ingresados");

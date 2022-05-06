@@ -265,7 +265,8 @@ class LoginScreenState extends State<LoginScreen> {
     //Map<String, dynamic> ap = await uapi.logInGoogle(googleSignInAuthentication.accessToken.toString());
     if (response.statusCode == 200) {
       print("login:la cuanta  existe y voy a login correctamente");
-      Navigator.of(context).pushNamed('/home');
+      Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home', (route) => false);
     } else if (response.statusCode == 400) {
       print('status code : ' + response.statusCode.toString());
       print('error_message: ' + json.decode(response.body)['error_message']);
@@ -332,9 +333,22 @@ class LoginScreenState extends State<LoginScreen> {
       final user = await GoogleSignInApi.login();
 
       if (user == null) {
-        Navigator.of(context).pushNamed('/welcome');
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Sign in Failed, please try again')));
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text('Sign in Failed'),
+            content: const Text("Please try again"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  
+                  child: const Text("Ok")),
+              
+            ],
+          ),
+        );
+
       } else {
         GoogleSignInAuthentication googleSignInAuthentication =
             await user.authentication;

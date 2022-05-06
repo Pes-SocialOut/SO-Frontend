@@ -13,7 +13,8 @@ class userAPI {
 
     String finalUri = basicUrl + _path + email;
     final response = await http.get(Uri.parse(finalUri));
-
+    print('status code : ' + response.statusCode.toString());
+      print('error_message: ' + json.decode(response.body)['action']);
     return json.decode(response.body);
   }
 
@@ -135,7 +136,7 @@ class userAPI {
 
     if (type == "socialout") {
       str = {
-        "type": "socialout",
+        "type": type,
         "credentials": {
           "email": email,
           "password": passw,
@@ -143,7 +144,13 @@ class userAPI {
         }
       };
     } else if (type == "google" || type == "facebook") {
-      str = token;
+      str = 
+        {
+        "type": type,
+        "credentials": {
+          "token": token,
+        },
+      };
     }
 
     final response = await http.post(Uri.parse(finalUri),
@@ -157,6 +164,7 @@ class userAPI {
       a.initialize(userID, accessToken, refreshToken, true);
     } else {
       print('status code : ' + response.statusCode.toString());
+      print('error_message: ' + json.decode(response.body)['error_message']);
     }
     return response.statusCode;
   }

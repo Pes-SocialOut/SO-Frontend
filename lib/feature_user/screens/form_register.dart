@@ -163,7 +163,8 @@ class _FormRegisterState extends State<FormRegister> {
                             hobbies,
                             verification);
                         if (ap == 200) {
-                          Navigator.of(context).pushNamed('/home');
+                          Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/home', (route) => false);
                         }
                       } else {
                         print("malos datos ingresados");

@@ -208,7 +208,7 @@ class SignUpScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      LinkScreen("","","google",auxToken )),
+                                      LinkScreen("","","google",auxToken.toString() )),
                               (route) => false),
                       //Navigator.of(context).pushNamed('/welcome'),
                   child: const Text("Yes")),

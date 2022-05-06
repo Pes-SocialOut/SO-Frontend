@@ -15,7 +15,7 @@ class LinkScreen extends StatefulWidget {
 class LinkScreenState extends State<LinkScreen> {
   final formKey = GlobalKey<FormState>();
   final userAPI uapi = userAPI();
-  late String verification;
+  late String verification = "";
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,12 @@ class LinkScreenState extends State<LinkScreen> {
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
             int linkacount = await uapi.linkRegistrerAndLogin(widget.email,
-                widget.password, verification, widget.type, widget.token);
+                widget.password, verification, s, widget.token);
+                print("link_user = widget.email: "+widget.email);
+                print("link_user = widget.password: "+widget.password);
+                print("link_user = verification: "+verification);
+                print("link_user = widget.type: "+s);
+                print("link_user = widget.token: "+widget.token);
             if (linkacount == 200) {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/home', (route) => false);
