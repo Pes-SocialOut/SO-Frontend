@@ -125,7 +125,7 @@ class userAPI {
     return response.statusCode;
   }
 
-  /*ultimo paso de registro*/
+  /*paso de para link SocialOut y cuenta social*/
   Future<int> linkRegistrerAndLogin(String email, String passw, String codiVeri,
       String type, String token) async {
     String _path = 'auth_method';
@@ -180,7 +180,7 @@ class userAPI {
     };
     final response = await http.post(Uri.parse(finalUri),
         body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
-    print("ya hizo la peticion");
+    print("ya hizo la peticion aqui");
     if (response.statusCode == 200) {
       String accessToken = json.decode(response.body)['access_token'];
       print('accesToken: ' + accessToken);
@@ -198,6 +198,7 @@ class userAPI {
           (msg, err) => print(err));
     } else {
       print('status code : ' + response.statusCode.toString());
+      print('error_message: ' + json.decode(response.body)['error_message']);
     }
     return response.statusCode;
   }

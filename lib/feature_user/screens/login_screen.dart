@@ -222,6 +222,42 @@ class LoginScreenState extends State<LoginScreen> {
         ));
   }
 
+  Future<void> _handleLogInSocialOUT() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      Map<String, dynamic> ap = await uapi.checkloginSocialOut(email);
+      if (ap["action"] == "continue") {
+        int aux = await uapi.loginSocialOut(email, password);
+        if (aux == 200) {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home', (route) => false);
+        }
+      } else if (ap["action"] == "link_auth") {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    LinkScreen(email, password, "socialout", "")),
+            (route) => false);
+      } else {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("Fail Login"),
+            content: const Text("Account does not exist"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Ok"),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
+
   void _handleLogIn(
       BuildContext context, Response response, String accessToken) {
     String? auxToken = accessToken;
@@ -244,7 +280,7 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    //GoogleSignInApi.logout();
+                    GoogleSignInApi.logout2();
                     Navigator.of(context).pushNamed('/signup');
                   },
                   child: const Text("Ok")),
@@ -311,9 +347,9 @@ class LoginScreenState extends State<LoginScreen> {
         print(googleSignInAuthentication.idToken);
         Response response = await uapi
             .logInGoogle(googleSignInAuthentication.accessToken.toString());
-        _handleLogIn(
-            context, response, googleSignInAuthentication.accessToken!);
-        GoogleSignInApi.logout();
+        _handleLogIn(context, response,
+            googleSignInAuthentication.accessToken.toString());
+        GoogleSignInApi.logout2();
         //Navigator.of(context).pushNamed('/home');
 
         /*

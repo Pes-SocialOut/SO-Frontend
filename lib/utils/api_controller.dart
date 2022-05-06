@@ -48,6 +48,7 @@ class APICalls {
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
     final prefs = await SharedPreferences.getInstance();
     final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
+    print(_REFRESH_TOKEN_PREFS.toString());
     if (refresh_prefs == null) {
       _redirectToLogin();
     } else {

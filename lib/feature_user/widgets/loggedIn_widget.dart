@@ -17,7 +17,7 @@ class loggedInWidget extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () async{
-              await GoogleSignInApi.logout();
+              await GoogleSignInApi.logout2();
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) => SignUpScreen()
                 ));
@@ -80,7 +80,7 @@ class loggedInWidget extends StatelessWidget {
       actions: <Widget>[
         new FlatButton(
           onPressed: () {
-            GoogleSignInApi.logout();
+            GoogleSignInApi.logout2();
             Navigator.of(context).pushNamed('/welcome');
           },
           textColor: Theme.of(context).primaryColor,
