@@ -136,10 +136,17 @@ class RegisterScreenState extends State<RegisterScreen> {
                           title: const Text(
                               "Authentication method not available for this email, existe account with this email"),
                           content:
-                              const Text("Do you want to LogIn?"),
+                              const Text("Do you want to connect the account of SocialOut??"),
                           actions: <Widget>[
                             TextButton(
-                                onPressed: () => Navigator.of(context).pushNamed('/login'),
+                                onPressed: () => {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LinkScreen(
+                                            email, password, "socialout", "")),
+                                    (route) => false)
+                                },
                                 //Navigator.of(context).pushNamed('/welcome'),
                                 child: const Text("Yes")),
                             TextButton(

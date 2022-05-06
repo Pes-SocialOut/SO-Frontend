@@ -10,7 +10,9 @@ import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
+  
   runApp(const MyApp());
 }
 
@@ -21,7 +23,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
+    APICalls().tryInitializeFromPreferences();
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

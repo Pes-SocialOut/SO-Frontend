@@ -4,14 +4,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:so_frontend/main.dart';
 class APICalls {
   static final APICalls _instance = APICalls._internal();
 
   // Seguramente se pueda usar patrón singleton.
   final String _REFRESH_TOKEN_PREFS = 'socialout_refresh_token';
 
-  final String API_URL = 'socialout-develop.herokuapp.com';
+  final String API_URL = 'http://socialout-develop.herokuapp.com';
   final String _REFRESH_ENDPOINT = '/v1/users/refresh';
   final int _UNAUTHORIZED = 401;
 
@@ -49,6 +49,7 @@ class APICalls {
     final prefs = await SharedPreferences.getInstance();
     final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
     print(_REFRESH_TOKEN_PREFS.toString());
+    print(refresh_prefs.toString());
     if (refresh_prefs == null) {
       _redirectToLogin();
     } else {
@@ -197,9 +198,11 @@ class APICalls {
           'Content-Type': 'application/json'
         });
     if (response.statusCode ~/ 100 == 2) {
-      Map<String, String> credentials = jsonDecode(response.body);
+      Map<String, dynamic> credentials = jsonDecode(response.body);
       _USER_ID = credentials['id'].toString();
       _ACCESS_TOKEN = credentials['access_token'].toString();
+      print("_USER_ID: "+ _USER_ID);
+      print("_ACCESS_TOKEN: "+ _ACCESS_TOKEN);
       if (credentials.containsKey('refresh_token')) {
         _REFRESH_TOKEN = credentials['refresh_token'].toString();
         final prefs = await SharedPreferences.getInstance();
@@ -222,11 +225,13 @@ class APICalls {
   void _redirectToLogin() {
     // ignore: todo
     // TODO: Navegar a la login screen
+    navigatorKey.currentState!.pushNamed('/welcome');
   }
 
   void _redirectToHomeScreen() {
     // ignore: todo
     // TODO: Navegar a la home screen
+    navigatorKey.currentState!.pushNamed('/home');
   }
 
   factory APICalls() {
