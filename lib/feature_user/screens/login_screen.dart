@@ -60,8 +60,23 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Log in with Facebook",
-                    onPressed: () {
-                      
+                    onPressed: () async {
+                      final result = await FacebookAuth.i.login(
+                        permissions:["public_profile", "email"]
+                      );
+                      final accessTokenFacebook = result.accessToken.toString();
+                      print("accessTokenFacebook: " + accessTokenFacebook);
+                      if(result.status == LoginStatus.success){
+                        final requestData = await FacebookAuth.i.getUserData(
+                          fields: "email, name",
+                        );
+                        setState(() {
+                          _userData = requestData;
+                        });
+
+                        print("email: " + requestData[email]);
+                        print("name: " + requestData[email]);
+                      }
                     },
                   ),
                 ),
