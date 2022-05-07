@@ -147,7 +147,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: IconButton(
                 icon: const Icon(Icons.edit),
                 color: const Color.fromARGB(255, 42, 115, 45),
-                onPressed: () {},
+                onPressed: () {
+                  //Navigator.of(context).pushNamed('/edit_profile');
+                },
               ),
             ),
           ]),

@@ -107,10 +107,13 @@ class _MapWidgetState extends State<MapWidget> {
                   height: 35.0,
                   point: LatLng(stations[i]["lat"], stations[i]["long"]),
                   builder: (context) => IconButton(
-                        icon: const Icon(Icons.location_on_sharp, size: 40),
-                        onPressed: () => showStation(stations[i]["id"]),
-                        color: const Color.fromARGB(255, 101, 101, 101),
-                      ))
+                      icon: const Icon(Icons.device_thermostat, size: 30),
+                      onPressed: () => showStation(stations[i]["id"]),
+                      color: (stations[i]["pollution"] < 0.15)
+                          ? Colors.green
+                          : (stations[i]["pollution"] > 0.3)
+                              ? Colors.red
+                              : Colors.yellow))
           ],
         ),
       ],
