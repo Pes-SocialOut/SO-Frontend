@@ -4,4 +4,5 @@
     <string name="app_name">SocialOut</string>
     <string name="facebook_app_id">536013834550793</string>
     <string name="fb_login_protocol_scheme">fb536013834550793</string>
+    <string name="facebook_client_token">527e683dca5fecf447e43b07159b7d1b</string>
 </resources>
