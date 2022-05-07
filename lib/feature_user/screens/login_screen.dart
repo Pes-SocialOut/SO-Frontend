@@ -28,6 +28,7 @@ class LoginScreenState extends State<LoginScreen> {
   double widthButton = 300.0;
   double heightButton = 40.0;
   double policyTextSize = 14;
+  Map? _userData;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,9 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Log in with Facebook",
-                    onPressed: () {},
+                    onPressed: () {
+                      
+                    },
                   ),
                 ),
                 Container(
