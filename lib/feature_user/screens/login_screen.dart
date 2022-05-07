@@ -9,7 +9,7 @@ import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../services/signIn_google.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,6 +28,7 @@ class LoginScreenState extends State<LoginScreen> {
   double widthButton = 300.0;
   double heightButton = 40.0;
   double policyTextSize = 14;
+  Map? _userData;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,27 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Log in with Facebook",
-                    onPressed: () {},
+                    onPressed: () async{
+                      
+                      final result = await FacebookAuth.i.login(
+                        permissions:["public_profile", "email"]
+                      );
+                      final accessTokenFacebook = result.accessToken.toString();
+                      print("accessTokenFacebook: " + accessTokenFacebook);
+                      if(result.status == LoginStatus.success){
+                        final requestData = await FacebookAuth.i.getUserData(
+                          fields: "email, name",
+                        );
+                        setState(() {
+                          _userData = requestData;
+                        });
+
+                        print("email: " + requestData[email]);
+                        print("name: " + requestData[email]);
+                      }
+                      
+
+                    },
                   ),
                 ),
                 Container(
