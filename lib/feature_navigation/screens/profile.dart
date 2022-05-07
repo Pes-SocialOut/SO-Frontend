@@ -203,62 +203,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Column(
                 children: [
                   SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.42,
+                      height: MediaQuery.of(context).size.height * 0.47,
                       width: MediaQuery.of(context).size.width * 0.42,
-                      child: ListView(children: const <Widget>[
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/crear_evento.png'),
+                      child: ListView(children: <Widget>[
+                        for (var i = 0; i < 10; i++)
+                          const ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/crear_evento.png'),
+                            ),
+                            title: Text('Creador'),
+                            subtitle: Text('Has creado un evento'),
                           ),
-                          title: Text('Creador'),
-                          subtitle: Text('Has creado un evento'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/crear_evento.png'),
-                          ),
-                          title: Text('Creador'),
-                          subtitle: Text('Has creado un evento'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/crear_evento.png'),
-                          ),
-                          title: Text('Creador'),
-                          subtitle: Text('Has creado un evento'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/crear_evento.png'),
-                          ),
-                          title: Text('Creador'),
-                          subtitle: Text('Has creado un evento'),
-                        ),
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/crear_evento.png'),
-                          ),
-                          title: Text('Creador'),
-                          subtitle: Text('Has creado un evento'),
-                        ),
                       ])),
                 ],
               ),
               Column(children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.42,
+                  height: MediaQuery.of(context).size.height * 0.47,
                   width: MediaQuery.of(context).size.width * 0.07,
                 ),
               ]),
               Column(
                 children: [
                   SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.42,
+                      height: MediaQuery.of(context).size.height * 0.47,
                       width: MediaQuery.of(context).size.width * 0.42,
                       child: ListView(children: <Widget>[
                         for (var i = 0; i < user[0]["friend_list"].length; i++)
