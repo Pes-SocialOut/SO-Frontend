@@ -257,7 +257,7 @@ class SignUpScreen extends StatelessWidget {
             FacebookSignInApi.logout2();
       }
       else if(ap["action"] == "error"){
-        
+        print("ap[action] == error");
         FacebookSignInApi.logout2();
         showDialog(
           context: context,
@@ -279,6 +279,7 @@ class SignUpScreen extends StatelessWidget {
         );
       }
       else if(ap["action"] == "link_auth"){
+        print("errorMessage == link_auth");
         FacebookSignInApi.logout2();
         showDialog(
           context: context,
@@ -310,6 +311,7 @@ class SignUpScreen extends StatelessWidget {
       }
     }
     else if(response.statusCode == 400) {
+      print("errorMessage == response.statusCode == 400");
       String errorMessage = json.decode(response.body)['error_message'];
       if(errorMessage == "Authentication method not available for this email"){
         showDialog(
@@ -338,6 +340,7 @@ class SignUpScreen extends StatelessWidget {
 
       }
       else if(errorMessage == "Facebook token was invalid"){
+        print("errorMessage == Facebook token was invalid");
         Navigator.of(context).pushNamed('/signup');
       }
       
