@@ -32,11 +32,11 @@ class userAPI {
     String _path = 'register/check?type=facebook&token=';
   
     final response = await http.get(Uri.parse(basicUrl + _path + ftoken));
-
+    
     if (response.statusCode != 200) {
       // return error
     }
-    return json.decode(response.body);
+    return response;
   }
 
   /* Get profile of a user given a access token */

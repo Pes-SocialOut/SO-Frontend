@@ -247,6 +247,7 @@ class SignUpScreen extends StatelessWidget {
       Map<String, dynamic>ap = json.decode(response.body);
       if (ap["action"] == "continue") {      
         print("aqui");  
+        FacebookSignInApi.logout2();
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -415,7 +416,7 @@ class SignUpScreen extends StatelessWidget {
 
 
         Response response = await uapi.checkUserFacebook(accessTokenFacebook);
-        
+        print("object");
         _handleSignUpFacebook(context, response, accessTokenFacebook!);
         
       }
