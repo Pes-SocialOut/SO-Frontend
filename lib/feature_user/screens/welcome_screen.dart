@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_facebook_keyhash/flutter_facebook_keyhash.dart';
+import 'package:so_frontend/feature_user/services/signIn_facebook.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -49,9 +50,13 @@ class WelcomeScreen extends StatelessWidget {
                               borderRadius:
                                    BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
-                      onPressed: () {
+                      onPressed: () async {
                         //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
                         //print(aux);
+                        //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
+                                'Unknown platform version';
+                        //print(key??"");
+                        //FacebookSignInApi.logout2();
                         Navigator.of(context).pushNamed('/signup');
                       },
                       child: const Text(
@@ -71,7 +76,8 @@ class WelcomeScreen extends StatelessWidget {
                               borderRadius:
                                    BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
-                      onPressed: () {
+                      onPressed: () async {
+                        
                         Navigator.of(context).pushNamed('/login');
                       },
                       child: const Text(

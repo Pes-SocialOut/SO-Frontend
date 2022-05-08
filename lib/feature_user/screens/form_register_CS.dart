@@ -5,7 +5,8 @@ import 'package:so_frontend/feature_user/services/login_signUp.dart';
 
 class FormRegisterCS extends StatefulWidget {
   final String accessToken;
-  const FormRegisterCS(this.accessToken, {Key? key}) : super(key: key);
+  final String type;
+  const FormRegisterCS(this.accessToken, this.type,{Key? key}) : super(key: key);
   @override
   _FormRegisterCSState createState() => _FormRegisterCSState();
 }
@@ -132,9 +133,15 @@ class _FormRegisterCSState extends State<FormRegisterCS> {
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-
-                        int ap = await uapi.finalRegistrerGoogle(accessToken,
+                        int ap = 0;
+                        if(widget.type == "google"){
+                          await uapi.finalRegistrerGoogle(accessToken,
                             username, description, languages, hobbies);
+                        }
+                        else if(widget.type=="facebook"){
+                          await uapi.finalRegistrerFacebook(accessToken,
+                            username, description, languages, hobbies);
+                        }
                         if (ap == 200) {
                           Navigator.of(context)
                             .pushNamedAndRemoveUntil('/home', (route) => false);
