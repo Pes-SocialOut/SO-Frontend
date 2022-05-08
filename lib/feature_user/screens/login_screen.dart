@@ -361,7 +361,7 @@ class LoginScreenState extends State<LoginScreen> {
         );
         final faceemail = requestData["email"];
         Response response = await uapi
-            .logInGoogle(accessTokenFacebook.toString());
+            .logInFacebook(accessTokenFacebook.toString());
         _handleLogIn(context, response,
             accessTokenFacebook.toString(),"facebook");
         FacebookSignInApi.logout2();

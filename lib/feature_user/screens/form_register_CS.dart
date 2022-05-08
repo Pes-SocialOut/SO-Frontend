@@ -135,11 +135,11 @@ class _FormRegisterCSState extends State<FormRegisterCS> {
                         formKey.currentState!.save();
                         int ap = 0;
                         if(widget.type == "google"){
-                          await uapi.finalRegistrerGoogle(accessToken,
+                          ap = await uapi.finalRegistrerGoogle(accessToken,
                             username, description, languages, hobbies);
                         }
                         else if(widget.type=="facebook"){
-                          await uapi.finalRegistrerFacebook(accessToken,
+                          ap = await uapi.finalRegistrerFacebook(accessToken,
                             username, description, languages, hobbies);
                         }
                         if (ap == 200) {

@@ -438,47 +438,6 @@ class SignUpScreen extends StatelessWidget {
         );
       }
 
-
-      final user = await GoogleSignInApi.login();
-
-      if (user == null) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: const Text('Sign up Failed'),
-            content: const Text("Please try again"),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  
-                  child: const Text("Ok")),
-              
-            ],
-          ),
-        );
-      } else {
-        GoogleSignInAuthentication googleSignInAuthentication =
-            await user.authentication;
-            
-        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=googleSignInAuthentication.accessToken
-        //https://www.googleapis.com/oauth2/v3/userinfo?access_token=ya29.A0ARrdaM-Uo5BGubza4xGpXK0JuFiAATuEHI_5UXjx-CWGtddi0Q_Qg6HxX-mRoNzKeQTc1ZyNs4JdwacIzGdSNQnzUlSyCfP3AVpK2OMaQcbqPcT3eM_4wSZSyKaYwIxhCZhI5zkLAtpCgHZj-XQ1vKUaOTrh
-        
-        //we can decode with this idtoken
-        //print(googleSignInAuthentication.idToken);
-
-        Response response = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
-        _handleSignUpGoogle(context, response, googleSignInAuthentication);
-        
-        /*
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => LoggedInPage(
-            user: user,
-          ),
-        )
-        );
-        */
-      }
     } catch (error) {
       //print(error);
     }
