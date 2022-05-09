@@ -25,25 +25,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Map<String, dynamic> user = {};
   String idProfile = "0";
 
-  String endpoint = "/v1/users/:";
-
   void getItem() async {
-    ac.getItem(
-        "/v1/users/:0",
-        [idProfile],
-        (response) => {
-              print(response),
-              setState(() {
-                user = response;
-              })
-            },
-        (errMsg, status) => {});
+    ac.getItem("/v1/users/:0", [idProfile]);
   }
 
   @override
   void initState() {
     super.initState();
-    endpoint = endpoint + widget.id;
     idProfile = widget.id;
     getItem();
   }

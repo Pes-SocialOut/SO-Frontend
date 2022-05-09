@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:so_frontend/utils/api_controller.dart';
+import 'dart:convert';
 
 class RecommendedList extends StatefulWidget {
   const RecommendedList({ Key? key }) : super(key: key);
@@ -10,11 +12,33 @@ class RecommendedList extends StatefulWidget {
 
 class _RecommendedListState extends State<RecommendedList> {
 
-  List recommendations = [{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"}, ];
+  // List _recommendations = [{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"}, ];
+   
+  List _recommendations = [];
+
+  APICalls api = APICalls();
+
+
+  Future<void> getAllEvents() async {
+
+    
+    
+    final response = await api.getCollection('/v2/events/', [] , null);
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+
+      setState((){
+        _recommendations = json.decode(response.body);
+      });
+
+    }
+  }
+
 
   @override
   void initState() {
     super.initState();
+    getAllEvents();
+
   }
 
   @override
@@ -22,11 +46,11 @@ class _RecommendedListState extends State<RecommendedList> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 280,
-      child: ListView.separated(
+      child: _recommendations.length == 0 ? Center(child: CircularProgressIndicator()):  ListView.separated(
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
         separatorBuilder: (context, index) => const SizedBox(width: 4),
-        itemCount: recommendations.length,
+        itemCount: _recommendations.length,
         itemBuilder: (BuildContext context, int index) {
           return Center(
             child: InkWell(
@@ -52,7 +76,7 @@ class _RecommendedListState extends State<RecommendedList> {
                 height: 250,
                 child: Stack(
                   children: [
-                    Image.asset(recommendations[index]["image"]),
+                    Image.asset(_recommendations[index]["image"]),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -74,9 +98,9 @@ class _RecommendedListState extends State<RecommendedList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(recommendations[index]["date"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text(_recommendations[index]["date"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 10),
-                                Text(recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text(_recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
                                 Row(
                                   children: [
                                     Container(
@@ -86,7 +110,7 @@ class _RecommendedListState extends State<RecommendedList> {
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(2.0),
-                                        child: Text(recommendations[index]["air"], style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)),
+                                        child: Text(_recommendations[index]["air"], style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)),
                                       ),
                                       
                                     ),
