@@ -5,13 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so_frontend/main.dart';
+
 class APICalls {
   static final APICalls _instance = APICalls._internal();
 
   // Seguramente se pueda usar patrón singleton.
   final String _REFRESH_TOKEN_PREFS = 'socialout_refresh_token';
 
-  final String API_URL = 'http://socialout-develop.herokuapp.com';
+  final String API_URL = 'socialout-develop.herokuapp.com';
   final String _REFRESH_ENDPOINT = '/v1/users/refresh';
   final int _UNAUTHORIZED = 401;
 
@@ -192,11 +193,11 @@ class APICalls {
 
   void _refresh(Function onSuccess, Function onError) async {
     // Llama a refresh, si es correcto setea las variables y llama a onSuccess. Si no llama a onError
-    final response = await http.get(Uri.parse(API_URL + _REFRESH_ENDPOINT),
-        headers: {
-          'Authorization': 'Bearer $_REFRESH_TOKEN',
-          'Content-Type': 'application/json'
-        });
+    final response = await http
+        .get(Uri.parse("https://" + API_URL + _REFRESH_ENDPOINT), headers: {
+      'Authorization': 'Bearer $_REFRESH_TOKEN',
+      'Content-Type': 'application/json'
+    });
     if (response.statusCode ~/ 100 == 2) {
       Map<String, dynamic> credentials = jsonDecode(response.body);
       _USER_ID = credentials['id'].toString();
