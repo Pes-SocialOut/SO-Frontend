@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_event/widgets/event_map.dart';
 import 'package:so_frontend/feature_map/widgets/map_widget.dart';
 
 class MapEventScreen extends StatelessWidget {

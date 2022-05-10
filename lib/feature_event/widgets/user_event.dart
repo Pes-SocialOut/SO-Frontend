@@ -198,7 +198,7 @@ class _UserEventState extends State<UserEvent> {
               children: [
                 InkWell(
                   onTap: () async {
-                    final response = await api.deleteEventById(widget.id);
+                    
                     Navigator.pop(context);
                   },
                   child: Container(

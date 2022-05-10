@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/event.dart';
 
 class EventScreen extends StatelessWidget {
-  final String? id;
+  final String id;
   const EventScreen({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -35,6 +35,6 @@ class EventScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             )),
-        body: const Center(child: Event()));
+        body:  Center(child: Event(id: id)));
   }
 }
