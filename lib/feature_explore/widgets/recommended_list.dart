@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class RecommendedList extends StatefulWidget {
   const RecommendedList({ Key? key }) : super(key: key);
@@ -15,6 +16,8 @@ class _RecommendedListState extends State<RecommendedList> {
   // List _recommendations = [{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"}, ];
    
   List _recommendations = [];
+
+  List _airQuality = [];
 
   APICalls api = APICalls();
 
@@ -30,9 +33,23 @@ class _RecommendedListState extends State<RecommendedList> {
         _recommendations = json.decode(response.body);
       });
 
-      print(json.decode(response.body));
-
     }
+
+    final tmp = [];
+
+    for (int i = 0; i < _recommendations.length; i++) {
+      
+      final airResponse = await http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/air/location?long=' +_recommendations[i]["longitud"].toString()+ '&lat=' + _recommendations[i]["latitude"].toString()));
+
+      final airJson = json.decode(airResponse.body);
+
+      tmp.add(airJson);
+    }
+
+    setState(() {
+      _airQuality = tmp;
+    });
+    print(_airQuality);
   }
 
 
@@ -130,12 +147,12 @@ class _RecommendedListState extends State<RecommendedList> {
                                   children: [
                                     Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.onError,
+                                        color: _airQuality.isEmpty ? Theme.of(context).colorScheme.onSurface : _airQuality[index]["pollution"] < 0.15 ? Theme.of(context).colorScheme.secondary : _airQuality[index]["pollution"] < 0.3 ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.error,
                                         borderRadius: const BorderRadius.all(Radius.circular(25))
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(2.0),
-                                        child: Text("MODERATE", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)),
+                                        child: _airQuality.isEmpty ? Text("LOADING", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[index]["pollution"] < 0.15 ? Text("GOOD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[index]["pollution"] < 0.3 ? Text("MODERATE", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : Text("BAD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)), 
                                       ),
                                       
                                     ),
