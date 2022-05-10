@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+import 'dart:convert';
 
 class ProfileScreen extends StatefulWidget {
   final String id;
@@ -22,47 +23,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ac.getCurrentUser();
   }
 
-  Map<String, dynamic> user = {};
+  Map user = {};
   String idProfile = "0";
 
-  void getItem() async {
-    ac.getItem("/v1/users/:0", [idProfile]);
+  Future<void> getUser() async {
+    final response = await ac.getItem("/v1/users/:0", [idProfile]);
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      setState(() {
+        user = json.decode(response.body);
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
     idProfile = widget.id;
-    getItem();
+    getUser();
   }
 
-  /*List user = [
+  List friends = [
     {
-      "id": "1234",
-      "username": "Marta Díaz",
-      "profile_img_uri": "assets/gato.jpg",
-      "languages": ["catalan", "english"],
-      "description": "I really like chess and camping. Take me home.",
-      "email": "martadiaz@gmail.com",
-      "friend_list": [
-        {
-          "id": "2345",
-          "username": "Miguel de Cervantes",
-          "profile_img_uri": "assets/dog.jpg"
-        },
-        {
-          "id": "3456",
-          "username": "Garcilaso de la Vega",
-          "profile_img_uri": "assets/dog.jpg"
-        },
-        {
-          "id": "4567",
-          "username": "Miguel de Unamuno",
-          "profile_img_uri": "assets/dog.jpg"
-        }
-      ]
+      "id": "2345",
+      "username": "Miguel de Cervantes",
+      "profile_img_uri": "assets/dog.jpg"
+    },
+    {
+      "id": "3456",
+      "username": "Garcilaso de la Vega",
+      "profile_img_uri": "assets/dog.jpg"
+    },
+    {
+      "id": "4567",
+      "username": "Miguel de Unamuno",
+      "profile_img_uri": "assets/dog.jpg"
     }
-  ];*/
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +68,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: CircularProgressIndicator(),
       ));
     } else {
-      print(user);
       return Scaffold(
         appBar: AppBar(
             centerTitle: true,
@@ -96,12 +91,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.14,
                 width: MediaQuery.of(context).size.width * 0.3,
-                child: Column(children: [
+                child: Column(children: const [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: (user["profile_img_uri"] != null)
-                        ? AssetImage(user["profile_img_uri"])
-                        : const AssetImage("assets/dog.jpg"),
+                    backgroundImage: /*({user["profile_img_uri"]} != null)
+                        ? AssetImage(user[0]["profile_img_uri"])
+                        :*/
+                        AssetImage("assets/dog.jpg"),
                   ),
                 ]),
               ),
@@ -113,7 +109,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Row(children: [
                           Expanded(
-                            child: Text(user["username"], style: creatorStyle),
+                            child: Text("${user["username"]}",
+                                style: creatorStyle),
                           ),
                         ]),
                         const Divider(indent: 50, endIndent: 50),
@@ -122,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 23.0,
                             width: 30.0,
                             decoration: BoxDecoration(
-                              image: (user["languages"].contains("catalan"))
+                              image: ({user["languages"]}.contains("catalan"))
                                   ? const DecorationImage(
                                       image: AssetImage('assets/cat.png'),
                                       fit: BoxFit.fill,
@@ -140,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 23.0,
                             width: 30.0,
                             decoration: BoxDecoration(
-                                image: (user["languages"].contains("spanish"))
+                                image: ({user["languages"]}.contains("spanish"))
                                     ? const DecorationImage(
                                         image: AssetImage('assets/esp.jpg'),
                                         fit: BoxFit.fill,
@@ -157,7 +154,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             height: 23.0,
                             width: 30.0,
                             decoration: BoxDecoration(
-                              image: (user["languages"].contains("english"))
+                              image: ({user["languages"]}.contains("english"))
                                   ? const DecorationImage(
                                       image: AssetImage('assets/ing.jpg'),
                                       fit: BoxFit.fill,
@@ -191,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20), //apply padding horizontal or vertical only
                 child: Text(
-                  user["description"],
+                  "${user["description"]}",
                   style: explainStyle,
                   textAlign: TextAlign.center,
                 ),
@@ -261,13 +258,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: MediaQuery.of(context).size.height * 0.47,
                         width: MediaQuery.of(context).size.width * 0.42,
                         child: ListView(children: <Widget>[
-                          for (var i = 0; i < user["friend_list"].length; i++)
+                          for (var i = 0; i < friends.length; i++)
                             ListTile(
                               leading: CircleAvatar(
-                                backgroundImage: AssetImage(user[0]
-                                    ["friend_list"][i]["profile_img_uri"]),
+                                backgroundImage:
+                                    AssetImage(friends[i]["profile_img_uri"]),
                               ),
-                              title: Text(user["friend_list"][i]["username"]),
+                              title: Text(friends[i]["username"]),
                             )
                         ])),
                   ],

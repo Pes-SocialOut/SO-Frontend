@@ -71,7 +71,7 @@ class APICalls {
       return _refresh(
           () => getItem(endpoint, pathParams), () => _redirectToLogin());
     }
-    return response.body;
+    return response;
   }
 
   Future<dynamic> getCollection(String endpoint, List<String> pathParams,
