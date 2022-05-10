@@ -31,7 +31,7 @@ class MainHomeScreen extends StatelessWidget {
             )
           ),
           const SizedBox(height: 20),
-          EventsTabMenu()
+          const EventsTabMenu()
         ],
       ),
     );
