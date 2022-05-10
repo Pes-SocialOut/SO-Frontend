@@ -8,11 +8,10 @@ class GetEventsAPI {
     final response = await http.get(Uri.parse(url + id));
 
     if (response.statusCode == 200) {
-      print("Get event by id successful");
+      
       return json.decode(response.body);
     }
 
-    print("Get event by id ERROR!!!");
     return [];
   }
 

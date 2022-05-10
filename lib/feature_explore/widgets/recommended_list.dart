@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:so_frontend/utils/api_controller.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class RecommendedList extends StatefulWidget {
   const RecommendedList({ Key? key }) : super(key: key);
@@ -10,11 +13,51 @@ class RecommendedList extends StatefulWidget {
 
 class _RecommendedListState extends State<RecommendedList> {
 
-  List recommendations = [{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"}, ];
+  // List _recommendations = [{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"}, ];
+   
+  List _recommendations = [];
+
+  List _airQuality = [];
+
+  APICalls api = APICalls();
+
+
+  Future<void> getAllEvents() async {
+
+    
+    
+    final response = await api.getCollection('/v2/events/', [] , null);
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+
+      setState((){
+        _recommendations = json.decode(response.body);
+      });
+
+    }
+
+    final tmp = [];
+
+    for (int i = 0; i < _recommendations.length; i++) {
+      
+      final airResponse = await http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/air/location?long=' +_recommendations[i]["longitud"].toString()+ '&lat=' + _recommendations[i]["latitude"].toString()));
+
+      final airJson = json.decode(airResponse.body);
+
+      tmp.add(airJson);
+    }
+
+    setState(() {
+      _airQuality = tmp;
+    });
+    
+  }
+
 
   @override
   void initState() {
     super.initState();
+    getAllEvents();
+
   }
 
   @override
@@ -22,18 +65,18 @@ class _RecommendedListState extends State<RecommendedList> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 280,
-      child: ListView.separated(
+      child: _recommendations.isEmpty ? const  Center(child: CircularProgressIndicator()):  ListView.separated(
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
         separatorBuilder: (context, index) => const SizedBox(width: 4),
-        itemCount: recommendations.length,
+        itemCount: _recommendations.length,
         itemBuilder: (BuildContext context, int index) {
           return Center(
             child: InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EventScreen(id: '0'))
+                  MaterialPageRoute(builder: (context) => EventScreen(id: _recommendations[index]["id"]))
                 );
               },
               child: Container(
@@ -52,7 +95,22 @@ class _RecommendedListState extends State<RecommendedList> {
                 height: 250,
                 child: Stack(
                   children: [
-                    Image.asset(recommendations[index]["image"]),
+                    Container(
+                      width: 250,
+                      height: 250,
+                      alignment: Alignment.topCenter,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.white, 
+                      ),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        child: FittedBox(
+                          child: Image.network(_recommendations[index]["event_image_uri"], width: 250, height: 250, alignment: Alignment.topCenter),
+                          fit: BoxFit.fitHeight
+                        ),
+                      )
+                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -61,7 +119,15 @@ class _RecommendedListState extends State<RecommendedList> {
                           height: 110,
                           decoration: BoxDecoration(
                             borderRadius: const BorderRadius.all(Radius.circular(10)),
-                            color: Theme.of(context).colorScheme.background
+                            color: Theme.of(context).colorScheme.background,
+                            boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, -3), // changes position of shadow
+                            ),
+                          ],
                           ),
                           child: Padding(
                             padding: const EdgeInsets.only(
@@ -74,19 +140,19 @@ class _RecommendedListState extends State<RecommendedList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(recommendations[index]["date"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text(_recommendations[index]["date_creation"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 10),
-                                Text(recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
+                                Text(_recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
                                 Row(
                                   children: [
                                     Container(
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.onError,
+                                        color: _airQuality.isEmpty ? Theme.of(context).colorScheme.onSurface : _airQuality[index]["pollution"] < 0.15 ? Theme.of(context).colorScheme.secondary : _airQuality[index]["pollution"] < 0.3 ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.error,
                                         borderRadius: const BorderRadius.all(Radius.circular(25))
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(2.0),
-                                        child: Text(recommendations[index]["air"], style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)),
+                                        child: _airQuality.isEmpty ? Text("LOADING", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[index]["pollution"] < 0.15 ? Text("GOOD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[index]["pollution"] < 0.3 ? Text("MODERATE", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : Text("BAD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)), 
                                       ),
                                       
                                     ),

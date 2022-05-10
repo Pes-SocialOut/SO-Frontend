@@ -5,13 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so_frontend/main.dart';
+
 class APICalls {
   static final APICalls _instance = APICalls._internal();
 
   // Seguramente se pueda usar patrón singleton.
   final String _REFRESH_TOKEN_PREFS = 'socialout_refresh_token';
 
-  final String API_URL = 'http://socialout-develop.herokuapp.com';
+  final String API_URL = 'socialout-develop.herokuapp.com';
   final String _REFRESH_ENDPOINT = '/v1/users/refresh';
   final int _UNAUTHORIZED = 401;
 
@@ -60,52 +61,31 @@ class APICalls {
     }
   }
 
-  void getItem(String endpoint, List<String> pathParams, Function onSuccess,
-      Function onError) async {
+  Future<dynamic> getItem(String endpoint, List<String> pathParams) async {
     final uri = buildUri(endpoint, pathParams, {});
     final response = await http.get(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(() => getItem(endpoint, pathParams, onSuccess, onError),
-          () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
+      return _refresh(
+          () => getItem(endpoint, pathParams), () => _redirectToLogin());
     }
+    return response;
   }
 
-  void getCollection(
-      String endpoint,
-      List<String> pathParams,
-      Map<String, String> queryParams,
-      Function onSuccess,
-      Function onError) async {
+  Future<dynamic> getCollection(String endpoint, List<String> pathParams,
+      Map<String, String>? queryParams) async {
     final uri = buildUri(endpoint, pathParams, queryParams);
     final response = await http.get(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(
-          () => getCollection(
-              endpoint, pathParams, queryParams, onSuccess, onError),
+      return _refresh(() => getCollection(endpoint, pathParams, queryParams),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
     }
+    return response;
   }
 
   void postItem(
@@ -190,13 +170,13 @@ class APICalls {
     _redirectToLogin();
   }
 
-  void _refresh(Function onSuccess, Function onError) async {
+  Future<dynamic> _refresh(Function onSuccess, Function onError) async {
     // Llama a refresh, si es correcto setea las variables y llama a onSuccess. Si no llama a onError
-    final response = await http.get(Uri.parse(API_URL + _REFRESH_ENDPOINT),
-        headers: {
-          'Authorization': 'Bearer $_REFRESH_TOKEN',
-          'Content-Type': 'application/json'
-        });
+    final response = await http
+        .get(Uri.parse('https://' + API_URL + _REFRESH_ENDPOINT), headers: {
+      'Authorization': 'Bearer $_REFRESH_TOKEN',
+      'Content-Type': 'application/json'
+    });
     if (response.statusCode ~/ 100 == 2) {
       Map<String, dynamic> credentials = jsonDecode(response.body);
       _USER_ID = credentials['id'].toString();
@@ -208,14 +188,15 @@ class APICalls {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(_REFRESH_TOKEN_PREFS, _REFRESH_TOKEN);
       }
-      onSuccess();
+      return onSuccess();
     } else {
       onError();
     }
+    return response;
   }
 
   Uri buildUri(String endpoint, List<String> pathParams,
-      Map<String, String> queryParams) {
+      Map<String, String>? queryParams) {
     String formattedEndpoint = endpoint;
     pathParams.forEachIndexed((idx, param) =>
         formattedEndpoint = formattedEndpoint.replaceAll(":$idx", param));

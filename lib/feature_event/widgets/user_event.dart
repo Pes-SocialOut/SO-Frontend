@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/services/delete.dart';
+import 'package:so_frontend/feature_event/widgets/event_map.dart';
 
 class UserEvent extends StatefulWidget {
   final String id;
@@ -13,14 +14,14 @@ class _UserEventState extends State<UserEvent> {
 
   List attendees = [{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"}];
 
-  List _event = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20"}];
+  List _event = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20", "lat":21.0, "lng":0.0}];
 
   DeleteEventAPI api = DeleteEventAPI();
 
   @override
   void initState() {
     super.initState();
-    List tmp = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20"}];
+    List tmp = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20", "lat":21.0, "lng":0.0}];
     setState(() {
       _event = tmp;
     });
@@ -160,7 +161,16 @@ class _UserEventState extends State<UserEvent> {
                                         )
                                       ),
                                       const SizedBox(height: 20),
-                                      const Divider()
+                                      const Divider(),
+                                      const SizedBox(height: 20),
+                                      Text('Location', style: TextStyle(color: Theme.of(context).colorScheme.surface, fontWeight: FontWeight.bold, fontSize: 18)),
+                                      const SizedBox(height: 20),
+                                      EventMapButton(
+                                        lat: _event[0]["lat"],
+                                        lng: _event[0]["lng"]
+                                      ),
+                                      const SizedBox(height:20)
+
                                     ],
                                   ),
                                 ),
@@ -188,7 +198,7 @@ class _UserEventState extends State<UserEvent> {
               children: [
                 InkWell(
                   onTap: () async {
-                    final response = await api.deleteEventById(widget.id);
+                    
                     Navigator.pop(context);
                   },
                   child: Container(

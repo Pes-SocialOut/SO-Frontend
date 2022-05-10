@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_event/widgets/event_map.dart';
+import 'package:so_frontend/utils/api_controller.dart';
+import 'dart:convert';
 
 class Event extends StatefulWidget {
-  const Event({ Key? key }) : super(key: key);
+  final String id;
+  const Event({ Key? key, required this.id}) : super(key: key);
 
   @override
   State<Event> createState() => _EventState();
@@ -11,15 +15,31 @@ class _EventState extends State<Event> {
 
   List attendees = [{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"}];
 
-  List _event = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20"}];
+  List _event = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20", "lat":21.0, "lng":0.0}];
+
+  
+
+  APICalls api = APICalls();
+
+
+  Future<void> getEventById() async {
+
+    
+
+    final response = await api.getItem('/v2/events/', [widget.id]);
+    if (response.statusCode < 300 && response.statusCode >= 200) {
+      setState(() {
+        _event = [];
+        _event.add(json.decode(response.body));
+      });
+    
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    List tmp = [{"id":'1', "title": "Gastronomic Route through El Born", "creator":"Mark", "date": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20"}];
-    setState(() {
-      _event = tmp;
-    });
+    
   }
 
   @override
@@ -156,7 +176,16 @@ class _EventState extends State<Event> {
                                         )
                                       ),
                                       const SizedBox(height: 20),
-                                      const Divider()
+                                      const Divider(),
+                                      const SizedBox(height: 20),
+                                      Text('Location', style: TextStyle(color: Theme.of(context).colorScheme.surface, fontWeight: FontWeight.bold, fontSize: 18)),
+                                      const SizedBox(height:20),
+                                      EventMapButton(
+                                        lat: _event[0]["lat"],
+                                        lng: _event[0]["lng"]
+                                      ),
+                                      const SizedBox(height:20)
+
                                     ],
                                   ),
                                 ),
