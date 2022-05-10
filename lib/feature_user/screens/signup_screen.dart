@@ -38,7 +38,7 @@ class SignUpScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Continue with Google",
-                    onPressed: () {print("object"); FacebookSignInApi.logout2();}//=> _handleSignInGoogle(context),
+                    onPressed: () => _handleSignInGoogle(context),//{print("object"); FacebookSignInApi.logout2();}
                   ),
                 ),
                 Container(
