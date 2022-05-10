@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/widgets/user_events.dart';
+import 'package:so_frontend/feature_home/widgets/events_tab_menu.dart';
 
 class MainHomeScreen extends StatelessWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -28,7 +29,9 @@ class MainHomeScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 18
             )
-          )
+          ),
+          const SizedBox(height: 20),
+          EventsTabMenu()
         ],
       ),
     );

@@ -18,7 +18,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  
+    
   
   // This widget is the root of your application.
   @override
@@ -30,7 +30,19 @@ class MyApp extends StatelessWidget {
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          colorScheme: ColorScheme(
+        primaryColor: Colors.green,
+        tabBarTheme:  TabBarTheme(
+          labelColor: Theme.of(context).colorScheme.secondary,
+          labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary),   // color for text
+          indicator: UnderlineTabIndicator( // color for indicator (underline)
+          borderSide: BorderSide(
+            width: 2,
+            color: Theme.of(context).colorScheme.primary)
+          ),
+          unselectedLabelColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+          unselectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Theme.of(context).colorScheme.secondary), // color for text
+        ),
+        colorScheme: ColorScheme(
         brightness: Brightness.light,
         primary: HexColor('22577A'),
         onPrimary: Colors.white,
@@ -42,6 +54,7 @@ class MyApp extends StatelessWidget {
         onBackground: Colors.black,
         surface: Colors.black,
         onSurface: HexColor('767676'),
+        
       )),
       initialRoute: '/welcome',
       home: const WelcomeScreen(),
