@@ -24,7 +24,7 @@ class _EventState extends State<Event> {
 
   Future<void> getEventById() async {
 
-    print(api.getCurrentAccess());
+    
 
     final response = await api.getItem('/v2/events/', [widget.id]);
     if (response.statusCode < 300 && response.statusCode >= 200) {
@@ -32,7 +32,7 @@ class _EventState extends State<Event> {
         _event = [];
         _event.add(json.decode(response.body));
       });
-      print(json.decode(response.body));
+    
     }
   }
 

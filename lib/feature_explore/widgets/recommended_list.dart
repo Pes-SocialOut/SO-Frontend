@@ -49,7 +49,7 @@ class _RecommendedListState extends State<RecommendedList> {
     setState(() {
       _airQuality = tmp;
     });
-    print(_airQuality);
+    
   }
 
 
