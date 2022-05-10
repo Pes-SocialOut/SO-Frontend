@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so_frontend/main.dart';
+
 class APICalls {
   static final APICalls _instance = APICalls._internal();
 
@@ -67,29 +68,23 @@ class APICalls {
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      return _refresh(() => getItem(endpoint, pathParams),
-          () => _redirectToLogin());
+      return _refresh(
+          () => getItem(endpoint, pathParams), () => _redirectToLogin());
     }
-    return response.body;
+    return response;
   }
 
-  Future<dynamic> getCollection(
-      String endpoint,
-      List<String> pathParams,
-      Map<String, String>? queryParams)
-      async {
+  Future<dynamic> getCollection(String endpoint, List<String> pathParams,
+      Map<String, String>? queryParams) async {
     final uri = buildUri(endpoint, pathParams, queryParams);
-    print(uri);
     final response = await http.get(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      return _refresh(
-          () => getCollection(
-              endpoint, pathParams, queryParams),
+      return _refresh(() => getCollection(endpoint, pathParams, queryParams),
           () => _redirectToLogin());
-    } 
+    }
     return response;
   }
 
@@ -177,11 +172,11 @@ class APICalls {
 
   Future<dynamic> _refresh(Function onSuccess, Function onError) async {
     // Llama a refresh, si es correcto setea las variables y llama a onSuccess. Si no llama a onError
-    final response = await http.get(Uri.parse('https://' + API_URL + _REFRESH_ENDPOINT),
-        headers: {
-          'Authorization': 'Bearer $_REFRESH_TOKEN',
-          'Content-Type': 'application/json'
-        });
+    final response = await http
+        .get(Uri.parse('https://' + API_URL + _REFRESH_ENDPOINT), headers: {
+      'Authorization': 'Bearer $_REFRESH_TOKEN',
+      'Content-Type': 'application/json'
+    });
     if (response.statusCode ~/ 100 == 2) {
       Map<String, dynamic> credentials = jsonDecode(response.body);
       _USER_ID = credentials['id'].toString();
