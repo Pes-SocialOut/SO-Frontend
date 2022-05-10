@@ -34,9 +34,7 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
               Expanded(
                 child: TabBarView(
                   children: [
-                    Container(
-                      child: JoinedList()
-                    ),
+                    const JoinedList(),
                     Container(
                       color: Colors.red
                     )

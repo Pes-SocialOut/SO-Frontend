@@ -19,10 +19,8 @@ class EditEventsAPI {
     );
     
     if (response.statusCode == 200) {
-      print("Event updated successfully!");
       return true;
     }
-    print("Event update ERROR!!!");
     return false;
   }
 }
