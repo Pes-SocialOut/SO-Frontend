@@ -29,7 +29,6 @@ class LoginScreenState extends State<LoginScreen> {
   double widthButton = 300.0;
   double heightButton = 40.0;
   double policyTextSize = 14;
-  Map? _userData;
 
   @override
   Widget build(BuildContext context) {
@@ -347,31 +346,21 @@ class LoginScreenState extends State<LoginScreen> {
 
   Future<void> _handleLoginFacebook(BuildContext context) async {
     try {
-      print("facebook1 " );
       final LoginResult result = await FacebookAuth.i.login(
         permissions:['public_profile', 'email']
       );
-      print("facebook2 " );
       
       if(result.status == LoginStatus.success){
         final accessTokenFacebook = result.accessToken?.token.toString();
-        print("facebook3 " );
-        print("accessTokenFacebook: " + accessTokenFacebook.toString());
-        final requestData = await FacebookAuth.i.getUserData(
-        );
-        final faceemail = requestData["email"];
         Response response = await uapi
             .logInFacebook(accessTokenFacebook.toString());
         _handleLogIn(context, response,
             accessTokenFacebook.toString(),"facebook");
         FacebookSignInApi.logout2();
-        print("email: " + requestData["email"]);
-        print("name: " + requestData["name"]);
       }
       else{
-        print("facebook fail " );
       }
-
+      FacebookSignInApi.logout2();
     } catch (error) {
       //print(error);
     }

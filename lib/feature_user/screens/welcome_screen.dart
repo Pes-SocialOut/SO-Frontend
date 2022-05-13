@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_keyhash/flutter_facebook_keyhash.dart';
-import 'package:so_frontend/feature_user/services/signIn_facebook.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
