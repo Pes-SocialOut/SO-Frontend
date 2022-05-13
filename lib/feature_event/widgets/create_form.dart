@@ -17,7 +17,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DateTime _selectedTime = DateTime.now();
+  final DateTime _selectedTime = DateTime.now();
 
   List event = [];
 
