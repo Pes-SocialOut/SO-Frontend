@@ -14,18 +14,8 @@ class StationsAPI {
     return [];
   }
 
-  /*Future<List> getStation(String id) async {
-    final String url2 = url + id;
-    final response = await http.get(Uri.parse(url2));
-
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    }
-
-    return [];
-  }*/
   Future<Map<String, dynamic>> getStation(String id) async {
-    final String url2 = url + id;
+    final String url2 = url + "/" + id;
     final response = await http.get(Uri.parse(url2));
 
     if (response.statusCode == 200) {
