@@ -2,19 +2,17 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 
-class EditarProfile extends StatefulWidget {
-  const EditarProfile({Key? key}) : super(key: key);
+class ChangePassword extends StatefulWidget {
+  const ChangePassword({Key? key}) : super(key: key);
 
   @override
-  State<EditarProfile> createState() => _EditarProfileState();
+  State<ChangePassword> createState() => _ChangePassword();
 }
 
-class _EditarProfileState extends State<EditarProfile> {
-  String username = "niceCat";
-  String password = "fibupc";
-  String description = "description_cat";
-  String languages = "catalán";
-  String hobbies = "miau miau";
+class _ChangePassword extends State<ChangePassword> {
+  String oldPassword = '';
+  String newPassword1 = '';
+  String newPassword2 = '';
   bool showPassword = true;
 
   @override
@@ -22,7 +20,7 @@ class _EditarProfileState extends State<EditarProfile> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Edit Profile',
+        title: Text('Change password',
             style: TextStyle(
                 color: Theme.of(context).colorScheme.surface, fontSize: 16)),
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -40,59 +38,9 @@ class _EditarProfileState extends State<EditarProfile> {
         child: ListView(
           children: [
             const SizedBox(height: 15),
-            Center(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    width: 180,
-                    height: 180,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        width: 4.0,
-                        style: BorderStyle.solid,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondary
-                                .withOpacity(0.6),
-                            offset: const Offset(0, 10))
-                      ],
-                      shape: BoxShape.circle,
-                      image: const DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/cat.jpg'),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: IconButton(
-                      iconSize: 24,
-                      icon: Icon(
-                        Icons.edit,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        // editar foto de perfil
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 15),
-            builContainerText("Username", username, false),
-            builContainerText("Password", password, true),
-            builContainerText("description", description, false),
-            builContainerText("languages", languages, false),
-            builContainerText("hobbies", hobbies, false),
+            builContainerText("Enter your current password", oldPassword, true),
+            builContainerText("Enter your new password", newPassword1, true),
+            builContainerText("Repeat your new password", newPassword2, true),
             const SizedBox(height: 15),
             Center(
               child: Row(
@@ -108,8 +56,39 @@ class _EditarProfileState extends State<EditarProfile> {
                       minimumSize: const Size(200, 40),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/welcome');
-                      // retornar a home de usuario
+                      (oldPassword.isEmpty ||
+                              newPassword1.isEmpty ||
+                              newPassword2.isEmpty)
+                          ? showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                      title: const Text('Error'),
+                                      content: const Text(
+                                          'All fields are required.'),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('OK'),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        )
+                                      ]))
+                          : (newPassword1.length <= 6)
+                              ? showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                          title: const Text('Error'),
+                                          content: const Text(
+                                              'The password must be at least 6 characters long.'),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('OK'),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            )
+                                          ]))
+                              : (newPassword2 == newPassword1)
+                                  ? Navigator.of(context).pushNamed('/profile')
+                                  : Navigator.of(context).pushNamed('/profile');
                     },
                     child: const Text(
                       'Update',

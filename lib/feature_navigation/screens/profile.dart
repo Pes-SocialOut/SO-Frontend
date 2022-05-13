@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
+import 'package:so_frontend/feature_navigation/widgets/settings.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String id;
@@ -70,20 +71,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else {
       return Scaffold(
         appBar: AppBar(
-            centerTitle: true,
-            title: Text('Profile',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.surface,
-                    fontSize: 16)),
-            backgroundColor: Theme.of(context).colorScheme.background,
-            leading: IconButton(
-              iconSize: 24,
-              color: Theme.of(context).colorScheme.onSurface,
-              icon: const Icon(Icons.arrow_back_ios_new_sharp),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )),
+          centerTitle: true,
+          title: Text('Profile',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.surface, fontSize: 16)),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          leading: IconButton(
+            iconSize: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+            icon: const Icon(Icons.arrow_back_ios_new_sharp),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+
+          /*actions: [
+            IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onPressed: () {
+                  //Scaffold.of(context).MenuLateral();
+                })
+          ],*/
+        ),
+        endDrawer: const Settings(),
         body: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(children: [
@@ -169,17 +182,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ])
                       ])),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.14,
-                width: MediaQuery.of(context).size.width * 0.1,
-                child: IconButton(
-                  icon: const Icon(Icons.edit),
-                  color: const Color.fromARGB(255, 42, 115, 45),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/edit_profile');
-                  },
-                ),
-              ),
             ]),
             const Divider(indent: 5, endIndent: 5),
             SizedBox(
