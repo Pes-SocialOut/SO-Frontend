@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
 class MainHomeScreen extends StatelessWidget {
