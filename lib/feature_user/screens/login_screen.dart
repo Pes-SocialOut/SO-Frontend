@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:so_frontend/feature_user/screens/link_user.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
+import 'package:so_frontend/feature_user/services/signIn_facebook.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -60,27 +61,7 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Log in with Facebook",
-                    onPressed: () async{
-                      
-                      final result = await FacebookAuth.i.login(
-                        permissions:["public_profile", "email"]
-                      );
-                      final accessTokenFacebook = result.accessToken.toString();
-                      print("accessTokenFacebook: " + accessTokenFacebook);
-                      if(result.status == LoginStatus.success){
-                        final requestData = await FacebookAuth.i.getUserData(
-                          fields: "email, name",
-                        );
-                        setState(() {
-                          _userData = requestData;
-                        });
-
-                        print("email: " + requestData[email]);
-                        print("name: " + requestData[email]);
-                      }
-                      
-
-                    },
+                    onPressed: () =>_handleLoginFacebook(context),
                   ),
                 ),
                 Container(
@@ -245,7 +226,7 @@ class LoginScreenState extends State<LoginScreen> {
 
 
   void _handleLogIn(
-      BuildContext context, Response response, String accessToken) {
+      BuildContext context, Response response, String accessToken, String type) {
     String? auxToken = accessToken;
     if (response.statusCode == 200) {
       Navigator.of(context)
@@ -262,7 +243,8 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    GoogleSignInApi.logout2();
+                    if(type == "google") GoogleSignInApi.logout2();
+                    if(type == "facebook")FacebookSignInApi.logout();
                     Navigator.of(context).pushNamed('/signup');
                   },
                   child: const Text("Ok")),
@@ -284,12 +266,24 @@ class LoginScreenState extends State<LoginScreen> {
                 const Text("Do you want to connect the account of SocialOut?"),
             actions: <Widget>[
               TextButton(
-                  onPressed: () => Navigator.pushAndRemoveUntil(
+                  onPressed: () => {
+                    if(type == "google"){
+                      Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
                               LinkScreen("", "", "google", auxToken)),
                       (route) => false),
+                    }
+                    else if(type == "facebook"){
+                      Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              LinkScreen("", "", "facebook", auxToken)),
+                      (route) => false),
+                    }
+                  },
                   //Navigator.of(context).pushNamed('/welcome'),
                   child: const Text("Yes")),
               TextButton(
@@ -300,7 +294,7 @@ class LoginScreenState extends State<LoginScreen> {
         );
         //Navigator.of(context).pushNamed('/login');
 
-      } else if (errorMessage == "Google token was invalid") {
+      } else if (errorMessage == "Google token was invalid" || errorMessage == "Facebook token was invalid") {
         Navigator.of(context).pushNamed('/login');
       }
     } 
@@ -333,7 +327,7 @@ class LoginScreenState extends State<LoginScreen> {
         Response response = await uapi
             .logInGoogle(googleSignInAuthentication.accessToken.toString());
         _handleLogIn(context, response,
-            googleSignInAuthentication.accessToken.toString());
+            googleSignInAuthentication.accessToken.toString(),"google");
         GoogleSignInApi.logout2();
         //Navigator.of(context).pushNamed('/home');
 
@@ -346,6 +340,28 @@ class LoginScreenState extends State<LoginScreen> {
         );
         */
       }
+    } catch (error) {
+      //print(error);
+    }
+  }
+
+  Future<void> _handleLoginFacebook(BuildContext context) async {
+    try {
+      final LoginResult result = await FacebookAuth.i.login(
+        permissions:['public_profile', 'email']
+      );
+      
+      if(result.status == LoginStatus.success){
+        final accessTokenFacebook = result.accessToken?.token.toString();
+        Response response = await uapi
+            .logInFacebook(accessTokenFacebook.toString());
+        _handleLogIn(context, response,
+            accessTokenFacebook.toString(),"facebook");
+        FacebookSignInApi.logout();
+      }
+      else{
+      }
+      FacebookSignInApi.logout();
     } catch (error) {
       //print(error);
     }
