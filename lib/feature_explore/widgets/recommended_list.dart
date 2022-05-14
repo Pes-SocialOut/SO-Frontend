@@ -24,7 +24,7 @@ class _RecommendedListState extends State<RecommendedList> {
 
   Future<void> getAllEvents() async {
 
-    
+    print(api.getCurrentAccess());
     
     final response = await api.getCollection('/v2/events/', [] , null);
     if (response.statusCode >= 200 && response.statusCode < 300) {
