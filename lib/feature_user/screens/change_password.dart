@@ -2,6 +2,9 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 
+import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/utils/api_controller.dart';
+
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
 
@@ -10,10 +13,17 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePassword extends State<ChangePassword> {
-  String oldPassword = '';
-  String newPassword1 = '';
-  String newPassword2 = '';
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newPassword1Controller = TextEditingController();
+  TextEditingController newPassword2Controller = TextEditingController();
+
   bool showPassword = true;
+
+  APICalls ac = APICalls();
+
+  String getCurrentUser() {
+    return ac.getCurrentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +48,108 @@ class _ChangePassword extends State<ChangePassword> {
         child: ListView(
           children: [
             const SizedBox(height: 15),
-            builContainerText("Enter your current password", oldPassword, true),
-            builContainerText("Enter your new password", newPassword1, true),
-            builContainerText("Repeat your new password", newPassword2, true),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextFormField(
+                controller: oldPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.only(left: 30),
+                  labelText: 'Enter your current password',
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(29),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextFormField(
+                controller: newPassword1Controller,
+                obscureText: true,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.only(left: 30),
+                  labelText: 'Enter your new password',
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(29),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextFormField(
+                controller: newPassword2Controller,
+                obscureText: true,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.only(left: 30),
+                  labelText: 'Repeat your new password',
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(29),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 15),
             Center(
               child: Row(
@@ -56,9 +165,9 @@ class _ChangePassword extends State<ChangePassword> {
                       minimumSize: const Size(200, 40),
                     ),
                     onPressed: () {
-                      (oldPassword.isEmpty ||
-                              newPassword1.isEmpty ||
-                              newPassword2.isEmpty)
+                      (oldPasswordController.text.isEmpty ||
+                              newPassword1Controller.text.isEmpty ||
+                              newPassword2Controller.text.isEmpty)
                           ? showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -72,13 +181,13 @@ class _ChangePassword extends State<ChangePassword> {
                                               Navigator.pop(context),
                                         )
                                       ]))
-                          : (newPassword1.length <= 6)
+                          : (newPassword1Controller.text.length <= 6)
                               ? showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
                                           title: const Text('Error'),
                                           content: const Text(
-                                              'The password must be at least 6 characters long.'),
+                                              'The password must be at least 6 characters long and contain one number and one of the following symbols =, *, <, > or !.'),
                                           actions: [
                                             TextButton(
                                               child: const Text('OK'),
@@ -86,9 +195,83 @@ class _ChangePassword extends State<ChangePassword> {
                                                   Navigator.pop(context),
                                             )
                                           ]))
-                              : (newPassword2 == newPassword1)
-                                  ? Navigator.of(context).pushNamed('/profile')
-                                  : Navigator.of(context).pushNamed('/profile');
+                              : (!newPassword1Controller.text.contains('0') &&
+                                      !newPassword1Controller.text
+                                          .contains('1') &&
+                                      !newPassword1Controller.text
+                                          .contains('2') &&
+                                      !newPassword1Controller.text
+                                          .contains('3') &&
+                                      !newPassword1Controller.text
+                                          .contains('4') &&
+                                      !newPassword1Controller.text
+                                          .contains('5') &&
+                                      !newPassword1Controller.text
+                                          .contains('6') &&
+                                      !newPassword1Controller.text
+                                          .contains('7') &&
+                                      !newPassword1Controller.text
+                                          .contains('8') &&
+                                      !newPassword1Controller.text
+                                          .contains('9'))
+                                  ? showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: const Text('Error'),
+                                              content: const Text(
+                                                  'The password must be at least 6 characters long and contain one number and one of the following symbols =, *, <, > or !.'),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                )
+                                              ]))
+                                  : (!newPassword1Controller.text
+                                              .contains('=') &&
+                                          !newPassword1Controller.text
+                                              .contains('*') &&
+                                          !newPassword1Controller.text
+                                              .contains('<') &&
+                                          !newPassword1Controller.text
+                                              .contains('>') &&
+                                          !newPassword1Controller.text
+                                              .contains('!'))
+                                      ? showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                  title: const Text('Error'),
+                                                  content: const Text(
+                                                      'The password must be at least 6 characters long and contain one number and one of the following symbols =, *, <, > or !.'),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text('OK'),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                    )
+                                                  ]))
+                                      : (newPassword2Controller.text ==
+                                              newPassword1Controller.text)
+                                          ? Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfileScreen(
+                                                  id: getCurrentUser(),
+                                                ),
+                                              ))
+                                          : showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  AlertDialog(title: const Text('Error'), content: const Text('Botch passwords must match'), actions: [
+                                                    TextButton(
+                                                      child: const Text('OK'),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                    )
+                                                  ]));
                     },
                     child: const Text(
                       'Update',
@@ -102,47 +285,6 @@ class _ChangePassword extends State<ChangePassword> {
               ),
             )
           ],
-        ),
-      ),
-    );
-  }
-
-  Container builContainerText(
-      String labelText2, String placeHolder, bool isPasswordTextField) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextFormField(
-        obscureText: isPasswordTextField ? showPassword : false,
-        initialValue: placeHolder,
-        decoration: InputDecoration(
-          suffixIcon: isPasswordTextField
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      showPassword = !showPassword;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                )
-              : null,
-          contentPadding: const EdgeInsets.only(left: 30),
-          labelText: labelText2,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          hintStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(29),
-            ),
-          ),
         ),
       ),
     );

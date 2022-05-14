@@ -84,17 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Navigator.pop(context);
             },
           ),
-
-          /*actions: [
-            IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                onPressed: () {
-                  //Scaffold.of(context).MenuLateral();
-                })
-          ],*/
         ),
         endDrawer: const Settings(),
         body: Padding(
