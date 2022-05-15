@@ -30,9 +30,9 @@ class userAPI {
   /* Comprobar que un Facebook socialout existe o no en la BD */
   Future<http.Response> checkUserFacebook(ftoken) async {
     String _path = 'register/check?type=facebook&token=';
-  
+
     final response = await http.get(Uri.parse(basicUrl + _path + ftoken));
-    
+
     if (response.statusCode != 200) {
       // return error
     }
@@ -58,7 +58,7 @@ class userAPI {
       String passw,
       String username,
       String description,
-      String languages,
+      List languages,
       String hobbies,
       String codiVeri) async {
     String _path = 'register/socialout';
@@ -224,7 +224,6 @@ class userAPI {
     }
     return response.statusCode;
   }
-
 
   Future<http.Response> logInGoogle(
     String tokenGoogle,

@@ -65,7 +65,7 @@ class _EditarProfileState extends State<EditarProfile> {
                       shape: BoxShape.circle,
                       image: const DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage('assets/cat.jpg'),
+                        image: AssetImage('assets/dog.jpg'),
                       ),
                     ),
                   ),
