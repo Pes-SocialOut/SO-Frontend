@@ -34,15 +34,6 @@ class _EditarProfileState extends State<EditarProfile> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              // ignore: prefer_const_constructors
-              icon: Icon(
-                Icons.settings,
-                color: Theme.of(context).colorScheme.primary,
-              ))
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

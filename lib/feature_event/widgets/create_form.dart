@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_event/screens/creation_sucess.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:so_frontend/feature_event/services/create.dart';
 
 class CreateEventForm extends StatefulWidget {
@@ -17,7 +17,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DateTime _selectedTime = DateTime.now();
+  final DateTime _selectedTime = DateTime.now();
 
   List event = [];
 
@@ -76,7 +76,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                 Text('Date and time', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
                 TextButton(
                   
-                  onPressed: () {
+                  onPressed: () {/*
                     DatePicker.showDatePicker(context,
                       showTitleActions: true,
                       minTime: DateTime(2018, 3, 5),
@@ -89,7 +89,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                           _selectedTime = date;
                         });
                       }, 
-                      currentTime: DateTime.now(), locale: LocaleType.en);
+                      currentTime: DateTime.now(), locale: LocaleType.en);*/
                   },
                   child: Text(
                       ('' + _selectedTime.year.toString() + '/' + _selectedTime.month.toString() + '/' + _selectedTime.day.toString()),

@@ -202,13 +202,34 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_datetime_picker:
+  flutter_facebook_auth:
     dependency: "direct main"
     description:
-      name: flutter_datetime_picker
+      name: flutter_facebook_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.1"
+    version: "4.3.3"
+  flutter_facebook_auth_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_facebook_auth_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.2"
+  flutter_facebook_auth_web:
+    dependency: "direct main"
+    description:
+      name: flutter_facebook_auth_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.2"
+  flutter_facebook_keyhash:
+    dependency: "direct main"
+    description:
+      name: flutter_facebook_keyhash
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
