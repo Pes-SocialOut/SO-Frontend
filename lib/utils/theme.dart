@@ -24,8 +24,8 @@ class SocialOutTheme {
   /* COLOR SCHEME */
   static Color primary = HexColor('22577A');
   static Color onPrimary = Colors.white;
-  static Color secondary = HexColor('38A3A5');
-  static Color onSecondary = Colors.white;
+  static Color secondary = HexColor('57CC99');
+  static Color onSecondary = HexColor('80ED99');
   static Color error = HexColor('ED4337');
   static Color onError = Colors.white;
   static Color background = Colors.white;
