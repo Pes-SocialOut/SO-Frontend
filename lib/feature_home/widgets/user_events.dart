@@ -11,14 +11,7 @@ class UserEventsList extends StatefulWidget {
 }
 
 class _UserEventsListState extends State<UserEventsList> {
-  final List _events = [
-    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
-    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
-    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
-    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
-    {"id": "1", "name": "Padel 2x2 Tournament", "image": "assets/user-event.png"},
-  ];
-
+  
   APICalls api = APICalls();
 
   @override
