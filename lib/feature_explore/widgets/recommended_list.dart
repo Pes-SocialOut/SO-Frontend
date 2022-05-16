@@ -13,51 +13,7 @@ class RecommendedList extends StatefulWidget {
 
 class _RecommendedListState extends State<RecommendedList> {
 
-  // List _recommendations = [{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"},{"name": "Gastronomic Route through El Born", "date":"THU, 3 MAR · 17:00", "air":"MODERATE", "image":"assets/event-preview.png"}, ];
-   
-  List _recommendations = [];
-
-  List _airQuality = [];
-
   APICalls api = APICalls();
-
-
-  Future<void> getAllEvents() async {
-
-    // CHANGE     
-    final response = await api.getCollection('/v2/events/', [] , null);
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-
-      setState((){
-        _recommendations = json.decode(response.body);
-      });
-
-    }
-
-    final tmp = [];
-
-    for (int i = 0; i < _recommendations.length; i++) {
-      
-      final airResponse = await http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/air/location?long=' +_recommendations[i]["longitud"].toString()+ '&lat=' + _recommendations[i]["latitude"].toString()));
-
-      final airJson = json.decode(airResponse.body);
-
-      tmp.add(airJson);
-    }
-
-    setState(() {
-      _airQuality = tmp;
-    });
-    
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    getAllEvents();
-
-  }
 
   @override
   Widget build(BuildContext context) {
