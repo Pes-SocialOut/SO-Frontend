@@ -75,7 +75,15 @@ class _EventState extends State<Event> {
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),
-                                )
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 3), // changes position of shadow
+                                  ),
+                                ],
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -145,16 +153,27 @@ class _EventState extends State<Event> {
                                                 const Expanded(
                                                   child: SizedBox()
                                                 ),
-                                                // Container(
-                                                //   decoration: BoxDecoration(
-                                                //     borderRadius: BorderRadius.circular(10.0),
-                                                //     color: Theme.of(context).colorScheme.onError
-                                                //   ),
-                                                //   child: Padding(
-                                                //     padding: const EdgeInsets.all(4.0),
-                                                //     child: Text(_event[0]["air_quality"], style: TextStyle(color: Theme.of(context).colorScheme.background, fontSize: 14, fontWeight: FontWeight.bold)),
-                                                //   )
-                                                // )
+                                                FutureBuilder(
+                                                  future: http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/air/location?long=' +_event[0]["longitud"].toString()+ '&lat=' + _event[0]["latitude"].toString())),
+                                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                                    if (snapshot.connectionState ==  ConnectionState.done) {
+                                                      var _airQuality = [json.decode(snapshot.data.body)];
+                                                      return Container(
+                                                        decoration: BoxDecoration(
+                                                          color: _airQuality.isEmpty ? Theme.of(context).colorScheme.onSurface : _airQuality[0]["pollution"] < 0.15 ? Theme.of(context).colorScheme.secondary : _airQuality[0]["pollution"] < 0.3 ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.error,
+                                                          borderRadius: const BorderRadius.all(Radius.circular(25))
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(2.0),
+                                                          child: _airQuality.isEmpty ? Text("LOADING", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[0]["pollution"] < 0.15 ? Text("GOOD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[0]["pollution"] < 0.3 ? Text("MODERATE", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : Text("BAD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)), 
+                                                        ),
+                                                      );
+                                                    }
+                                                    else {
+                                                      return const CircularProgressIndicator();
+                                                    }
+                                                  }
+                                                )
                                               ]
                                             ),
                                             const SizedBox(height:20),
@@ -217,50 +236,55 @@ class _EventState extends State<Event> {
                     )
                   )
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(top:BorderSide( width: 1.0, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)))
-                  ),
-                  height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center, 
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        iconSize: 27,
-                        color: Theme.of(context).colorScheme.secondary,
-                        icon: const Icon(Icons.people),
-                        onPressed: () {}
-                      ),
-                      //Text(_event[0]["numAttendees"], style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16)),
-                      const SizedBox(width: 30),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
+                Material(
+                  elevation: 15.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(top:BorderSide( width: 1.0, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)))
+                    ),
+                    height: 100,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center, 
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          iconSize: 27,
                           color: Theme.of(context).colorScheme.secondary,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
+                          icon: const Icon(Icons.people),
+                          onPressed: () {}
                         ),
-                        width: 150,
-                        height: 40,
-                        child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
-                        
-                      )
-                    ],
-                  )
+                        //Text(_event[0]["numAttendees"], style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16)),
+                        const SizedBox(width: 30),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Theme.of(context).colorScheme.secondary,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          width: 150,
+                          height: 40,
+                          child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                          
+                        )
+                      ],
+                    )
+                  ),
                 )
               ],
             )
           );
         }
-        else return CircularProgressIndicator();
+        else {
+          return const CircularProgressIndicator();
+        }
       },
     );
   }
