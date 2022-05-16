@@ -50,7 +50,9 @@ class ChatScreen extends StatelessWidget {
       
       body: Stack(
         
+        alignment: Alignment.topRight,
         children: <Widget>[
+          
           ListView.builder(
             
             itemCount: messages.length,
@@ -61,14 +63,16 @@ class ChatScreen extends StatelessWidget {
             ),
             
             physics: AlwaysScrollableScrollPhysics(),
+            
             itemBuilder: (context, index){
+              
               //for each message
-              double paddingSelf = 60;
+              double paddingSelf = 30;
               double paddingOther = 10;
               //hardcode
               bool messageMine = messages[index].senderID == "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f";
               return Container(//icon+message
-                alignment: messageMine?Alignment.centerLeft:Alignment.centerLeft,
+                alignment: messageMine?Alignment.centerRight:Alignment.centerLeft,
                 padding: EdgeInsets.only(
                   left: messageMine?paddingSelf:paddingOther,
                   right: messageMine?paddingOther:paddingSelf,
@@ -81,40 +85,45 @@ class ChatScreen extends StatelessWidget {
                     ?Alignment.topRight:Alignment.topLeft
                   ),
                   child: Row(
-                    children: [
+                    children: <Widget>[
                         if(!messageMine)
                           CircleAvatar(
                             backgroundImage: AssetImage('assets/gato.jpg') as ImageProvider,
                             //sender's icon
                             maxRadius: 20,
                           ),
-                        Container(
+                        Flexible(
                           
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: messageMine?Radius.circular(20):Radius.circular(0),
-                              topRight: messageMine?Radius.circular(0):Radius.circular(20),
-                              bottomLeft: Radius.circular(20), 
-                              bottomRight: Radius.circular(20)
-                            ),//BorderRadius.circular(20),
-                            color: (
-                              messageMine
-                              //?Theme.of(context).colorScheme.secondary:Theme.of(context).colorScheme.onSecondary
-                              ?HexColor('80ED99'):Colors.white
+                          child: Container(
+                            
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: messageMine?Radius.circular(20):Radius.circular(0),
+                                topRight: messageMine?Radius.circular(0):Radius.circular(20),
+                                bottomLeft: Radius.circular(20), 
+                                bottomRight: Radius.circular(20)
+                              ),//BorderRadius.circular(20),
+                              color: (
+                                messageMine
+                                //?Theme.of(context).colorScheme.secondary:Theme.of(context).colorScheme.onSecondary
+                                ?HexColor('80ED99'):Colors.white
+                              ),
                             ),
-                          ),
-                          padding: EdgeInsets.all(12),
-                          
-                          child: Text(
-                            messages[index].messageContent, 
-                            style: TextStyle(fontSize: 15),
-                          ),
+                            padding: EdgeInsets.all(12),
+                            
+                            child: Text(
+                              messages[index].messageContent, 
+                              style: TextStyle(fontSize: 15),
+                            ),
                         
                         ),
+                          
+                        ), 
+                        
                         if(messageMine)
                           CircleAvatar(
                             backgroundImage: AssetImage('assets/dog.jpg') as ImageProvider,
-                            //receiver's icon
+                            //user's icon
                             //backgroundImage: NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
                             maxRadius: 20,
                           ),
