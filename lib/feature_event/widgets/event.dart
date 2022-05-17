@@ -24,6 +24,12 @@ class _EventState extends State<Event> {
     print(response.statusCode);
   }
 
+  Future<void> leaveEvent(String id, Map<String, dynamic> bodyData) async {
+
+    final response = await api.postItem('/v2/events/:0/:1', [widget.id, 'leave'], bodyData);
+    print(response.statusCode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -312,7 +318,7 @@ class _EventState extends State<Event> {
                                 return InkWell(
                                   onTap: () {
                                     final bodyData = {"user_id": api.getCurrentUser()};
-                                    joinEvent(_event[0]["id"], bodyData);
+                                    leaveEvent(_event[0]["id"], bodyData);
                                     setState(() {
                                       found = false;
                                     });
