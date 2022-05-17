@@ -8,6 +8,7 @@ class ChatScreen extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey,
       appBar: AppBar(
         elevation: 0,
@@ -41,21 +42,15 @@ class ChatScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: (){},
-                  
-                 icon: Icon(Icons.more_vert,color: Theme.of(context).colorScheme.primary,),
-                )
-                
+                Icon(Icons.more_vert,color: Theme.of(context).colorScheme.primary,),
               ],
             ),
           ),
         ),
       ),
       
-      body: Stack(
+      body: Column(
         
-        alignment: Alignment.topRight,
         children: <Widget>[
           
           ListView.builder(
@@ -76,7 +71,6 @@ class ChatScreen extends StatelessWidget {
               double paddingOther = 10;
               //hardcode
               bool messageMine = messages[index].senderID == "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f";
-              
               return Container(//icon+message
                 alignment: messageMine?Alignment.centerRight:Alignment.centerLeft,
                 padding: EdgeInsets.only(
@@ -91,6 +85,7 @@ class ChatScreen extends StatelessWidget {
                     ?Alignment.topRight:Alignment.topLeft
                   ),
                   child: Row(
+                    mainAxisAlignment: messageMine?MainAxisAlignment.end:MainAxisAlignment.start,
                     children: <Widget>[
                         if(!messageMine)
                           CircleAvatar(
