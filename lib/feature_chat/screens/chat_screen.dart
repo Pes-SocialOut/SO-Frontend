@@ -41,7 +41,12 @@ class ChatScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Icon(Icons.more_vert,color: Theme.of(context).colorScheme.primary,),
+                IconButton(
+                  onPressed: (){},
+                  
+                 icon: Icon(Icons.more_vert,color: Theme.of(context).colorScheme.primary,),
+                )
+                
               ],
             ),
           ),
@@ -71,6 +76,7 @@ class ChatScreen extends StatelessWidget {
               double paddingOther = 10;
               //hardcode
               bool messageMine = messages[index].senderID == "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f";
+              
               return Container(//icon+message
                 alignment: messageMine?Alignment.centerRight:Alignment.centerLeft,
                 padding: EdgeInsets.only(
