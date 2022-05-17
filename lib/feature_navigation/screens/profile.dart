@@ -25,9 +25,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Map user = {};
-  String idProfile = "0";
 
-  Future<void> getUser() async {
+  Future<void> getUser(String idProfile) async {
     final response = await ac.getItem("/v1/users/:0", [idProfile]);
     if (response.statusCode >= 200 && response.statusCode < 300) {
       setState(() {
@@ -39,8 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    idProfile = widget.id;
-    getUser();
+    getUser(widget.id);
   }
 
   List friends = [
