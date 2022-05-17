@@ -41,7 +41,7 @@ class _UserEventState extends State<UserEvent> {
                           width: MediaQuery.of(context).size.width,
                           child: FittedBox(
                             child: Image.network(_event[0]["event_image_uri"]),
-                            fit: BoxFit.fitHeight
+                            fit: BoxFit.cover
                           )
                         ),
                         Column(
