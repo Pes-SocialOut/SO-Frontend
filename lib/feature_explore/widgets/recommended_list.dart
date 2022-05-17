@@ -57,7 +57,7 @@ class _RecommendedListState extends State<RecommendedList> {
                         children: [
                           Container(
                             width: 250,
-                            height: 250,
+                            height: 180,
                             alignment: Alignment.topCenter,
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -65,9 +65,13 @@ class _RecommendedListState extends State<RecommendedList> {
                             ),
                             child: ClipRRect(
                               borderRadius: const BorderRadius.all(Radius.circular(10)),
-                              child: FittedBox(
-                                child: Image.network(_recommendations[index]["event_image_uri"], width: 250, height: 250, alignment: Alignment.topCenter),
-                                fit: BoxFit.fitHeight
+                              child: SizedBox(
+                                width: 250,
+                                height: 180,
+                                child: FittedBox(
+                                  child: Image.network(_recommendations[index]["event_image_uri"],alignment: Alignment.topCenter),
+                                  fit: BoxFit.cover
+                                ),
                               ),
                             )
                           ),

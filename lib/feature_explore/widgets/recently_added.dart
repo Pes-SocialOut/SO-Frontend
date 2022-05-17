@@ -66,17 +66,21 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                         children: [
                           Container(
                             width: 250,
-                            height: 250,
+                            height: 180,
                             alignment: Alignment.topCenter,
                             decoration: const BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                               color: Colors.white, 
                             ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(10)),
-                              child: FittedBox(
-                                child: Image.network(recommendations[index]["event_image_uri"], width: 250, height: 250, alignment: Alignment.topCenter),
-                                fit: BoxFit.fitHeight
+                            child: SizedBox(
+                              width: 250,
+                              height: 180,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                child: FittedBox(
+                                  child: Image.network(recommendations[index]["event_image_uri"], alignment: Alignment.topCenter),
+                                  fit: BoxFit.cover
+                                ),
                               ),
                             )
                           ),
