@@ -14,37 +14,24 @@ class Event extends StatefulWidget {
 
 class _EventState extends State<Event> {
 
-  List attendees = [{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"},{"image":"assets/dog.jpg"}];
-
-  List _event = [{"event_image_uri":"https://data.nssmag.com/images/galleries/12611/thumbs/9-00a4c280-2531-4f61-9f2f-4708f19b20a8.jpg","id":'1', "name": "Gastronomic Route through El Born", "user_creator":"Mark", "date_started": "THURSDAY, 3 MAR · 17:00", "air_quality":"MODERATE", "description": 'Hello everybody! If you like chess as much as I do, you have to come to this open-air tournament in Tetuan square in Barcelona. There will be drinks and food until one of us wins. Don\'t miss this opportunity and sign up now!', "numAttendees": "17/20", "latitude":21.0, "longitud":0.0}];
-
-  List<String> pathParams = [];
-  
-
   APICalls api = APICalls();
 
+  bool found = false;
 
+  Future<void> joinEvent(String id, Map<String, dynamic> bodyData) async {
 
-
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      pathParams = [widget.id];
-    });
-
+    final response = await api.postItem('/v2/events/:0/:1', [widget.id, 'join'], bodyData);
+    print(response.statusCode);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getItem('/v2/events/:0', pathParams),
+      future: api.getItem('/v2/events/:0', [widget.id]),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           
-          
-          _event = [json.decode(snapshot.data.body)];
+          var _event = [json.decode(snapshot.data.body)];
           return SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -192,22 +179,33 @@ class _EventState extends State<Event> {
                                             SizedBox(
                                               height: 80,
                                               width: MediaQuery.of(context).size.width,
-                                              child: ListView.separated(
-                                                shrinkWrap: true,
-                                                scrollDirection: Axis.horizontal,
-                                                separatorBuilder: (context, index) => const SizedBox(width: 20),
-                                                itemCount: attendees.length,
-                                                itemBuilder: (BuildContext context, int index)  {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      Navigator.of(context).pushNamed('/profile');
-                                                    },
-                                                      child: CircleAvatar(
-                                                        radius: 40,
-                                                        backgroundImage: AssetImage(attendees[index]["image"]),
-                                                      )
+                                              child: FutureBuilder(
+                                                future: api.getCollection('/v2/events/participants',[],{"eventid":_event[0]["id"]}),
+                                                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                                  if (snapshot.connectionState == ConnectionState.done) {
+                                                    var attendees = json.decode(snapshot.data.body);
+                                                    return ListView.separated(
+                                                      shrinkWrap: true,
+                                                      scrollDirection: Axis.horizontal,
+                                                      separatorBuilder: (context, index) => const SizedBox(width: 20),
+                                                      itemCount: attendees.length,
+                                                      itemBuilder: (BuildContext context, int index)  {
+                                                        return InkWell(
+                                                          onTap: () {
+                                                            Navigator.of(context).pushNamed('/profile');
+                                                          },
+                                                            child: CircleAvatar(
+                                                              radius: 40,
+                                                              backgroundImage: NetworkImage(_event[0]['event_image_uri']),
+                                                            )
+                                                          );
+                                                      }
                                                     );
-                                                }
+                                                  }
+                                                  else {
+                                                    return const CircularProgressIndicator();
+                                                  }
+                                                } 
                                               )
                                             ),
                                             const SizedBox(height: 20),
@@ -254,25 +252,97 @@ class _EventState extends State<Event> {
                           icon: const Icon(Icons.people),
                           onPressed: () {}
                         ),
-                        //Text(_event[0]["numAttendees"], style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16)),
+                        FutureBuilder(
+                          future: api.getCollection('/v2/events/participants', [], {"eventid":_event[0]["id"]}),
+                          builder: (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              var participants = json.decode(snapshot.data.body);
+                              return Text(participants.length.toString() +"/" + _event[0]["max_participants"].toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16));
+                            } 
+                            else {
+                              return const CircularProgressIndicator();
+                            }
+
+                          }
+                        ),
                         const SizedBox(width: 30),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Theme.of(context).colorScheme.secondary,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          width: 150,
-                          height: 40,
-                          child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
-                          
+                        FutureBuilder(
+                          future: api.getCollection('/v2/events/participants',[],{"eventid":_event[0]["id"]}),
+                          builder: (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              var participants = json.decode(snapshot.data.body);
+                              print(participants);
+                              found = false;
+                              int i = 0;
+                              while (!found && i < participants.length) {
+                                if (participants[i] == api.getCurrentUser()) {
+                                  found = true;
+                                }
+                                ++i;
+                              }
+                              if (!found) {
+                                  return InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        found = false;
+                                      });
+                                      final bodyData = {"user_id": api.getCurrentUser()};
+                                      joinEvent(_event[0]["id"], bodyData);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        color: Theme.of(context).colorScheme.secondary,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: const Offset(0, 3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      width: 150,
+                                      height: 40,
+                                      child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                                    ),
+                                  );
+                              }
+                              else {
+                                return InkWell(
+                                  onTap: () {
+                                    final bodyData = {"user_id": api.getCurrentUser()};
+                                    joinEvent(_event[0]["id"], bodyData);
+                                    setState(() {
+                                      found = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: Theme.of(context).colorScheme.error,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Theme.of(context).colorScheme.error.withOpacity(0.5),
+                                          spreadRadius: 5,
+                                          blurRadius: 7,
+                                          offset: const Offset(0, 3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    width: 150,
+                                    height: 40,
+                                    child: Center(child: Text('LEAVE', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                                    
+                                  ),
+                                );
+                              }
+                              
+                            }
+                            else {
+                              return const CircularProgressIndicator();
+                            }
+                          }
                         )
                       ],
                     )
