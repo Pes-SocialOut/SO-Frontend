@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/api_controller.dart';
 
 class JoinedList extends StatefulWidget {
@@ -64,16 +64,27 @@ class _JoinedListState extends State<JoinedList> {
                                     }
                                   ),
                                   const SizedBox(width: 20),
-                                  // Container(
-                                  //   decoration: BoxDecoration(
-                                  //     borderRadius: BorderRadius.circular(10.0),
-                                  //     color: Theme.of(context).colorScheme.secondary
-                                  //   ),
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.all(4.0),
-                                  //     child: Text(_joined[index]["air"], style: TextStyle(color: Theme.of(context).colorScheme.background, fontSize: 14, fontWeight: FontWeight.bold)),
-                                  //   )
-                                  // )
+                                  FutureBuilder(
+                                    future: http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/air/location?long=' + _joined[index]["longitud"].toString()+ '&lat=' + _joined[index]["latitude"].toString())),
+                                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                      if (snapshot.connectionState ==  ConnectionState.done) {
+                                        var _airQuality = [json.decode(snapshot.data.body)];
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: _airQuality.isEmpty ? Theme.of(context).colorScheme.onSurface : _airQuality[0]["pollution"] < 0.15 ? Theme.of(context).colorScheme.secondary : _airQuality[0]["pollution"] < 0.3 ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.error,
+                                            borderRadius: const BorderRadius.all(Radius.circular(25))
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: _airQuality.isEmpty ? Text("LOADING", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[0]["pollution"] < 0.15 ? Text("GOOD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[0]["pollution"] < 0.3 ? Text("MODERATE", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : Text("BAD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)), 
+                                          ),
+                                        );
+                                      }
+                                      else {
+                                        return const CircularProgressIndicator();
+                                      }
+                                    }
+                                  )
                                 ]
                               )
               
@@ -97,13 +108,13 @@ class _JoinedListState extends State<JoinedList> {
                               Row(
                                 children: [
                                   IconButton(
-                                      iconSize: 24,
+                                      iconSize: 20,
                                       color: Theme.of(context).colorScheme.onSurface,
                                       icon: const Icon(Icons.share),
                                       onPressed: () {}),
                                   const SizedBox(width: 10),
                                   IconButton(
-                                      iconSize: 24,
+                                      iconSize: 20,
                                       color: Theme.of(context).colorScheme.onSurface,
                                       icon: const Icon(Icons.favorite),
                                       onPressed: () {}),
