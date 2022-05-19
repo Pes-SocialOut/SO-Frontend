@@ -8,7 +8,6 @@ class ChatScreen extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey,
       appBar: AppBar(
         elevation: 0,
@@ -49,8 +48,9 @@ class ChatScreen extends StatelessWidget {
         ),
       ),
       
-      body: Column(
+      body: Stack(
         
+        alignment: Alignment.topRight,
         children: <Widget>[
           
           ListView.builder(
