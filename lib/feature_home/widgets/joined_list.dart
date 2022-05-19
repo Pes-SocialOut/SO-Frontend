@@ -25,6 +25,7 @@ class _JoinedListState extends State<JoinedList> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var _joined = json.decode(snapshot.data.body);
+            if (_joined.isEmpty) return const Center(child: Text('You have not joined any event!'));
             return ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,

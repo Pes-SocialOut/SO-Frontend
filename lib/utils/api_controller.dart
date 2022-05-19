@@ -123,25 +123,17 @@ class APICalls {
     return response;
   }
 
-  void deleteItem(String endpoint, List<String> pathParams, Function onSuccess,
-      Function onError) async {
+  Future<dynamic> deleteItem(String endpoint, List<String> pathParams) async {
     final uri = buildUri(endpoint, pathParams, {});
     final response = await http.post(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(() => deleteItem(endpoint, pathParams, onSuccess, onError),
+      return _refresh(() => deleteItem(endpoint, pathParams),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
-    }
+    } 
+    return response;
   }
 
   void logOut() async {
