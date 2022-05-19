@@ -14,7 +14,7 @@ class _LikeButtonState extends State<LikeButton> {
 
   APICalls api = APICalls();
 
-  bool _liked = false;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +30,19 @@ class _LikeButtonState extends State<LikeButton> {
             color: _liked ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.favorite),
             onPressed: () {
+              print("LIKE STATUS: $_liked");
               if (_liked) {
                 setState((){
                   _liked = false;
                 });
-                api.postItem('/v2/events/:0/:1', [widget.id, 'dislike'], {"user_id":api.getCurrentUser()});
+                api.postItem('/v3/events/:0/:1', [widget.id, 'dislike'], {"user_id":api.getCurrentUser()});
                 
               }
               else {
                 setState((){
                   _liked = true;
                 });
-                api.postItem('/v2/events/:0/:1', [widget.id, 'like'], {"user_id":api.getCurrentUser()});
+                api.postItem('/v3/events/:0/:1', [widget.id, 'like'], {"user_id":api.getCurrentUser()});
               }
             });
         }

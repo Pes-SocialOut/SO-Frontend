@@ -93,7 +93,8 @@ class APICalls {
       String endpoint,
       List<String> pathParams,
       Map<String, dynamic>? bodyData) async {
-    final uri = buildUri(endpoint, pathParams, {});
+    final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
     final response = await http.post(uri, body: jsonEncode(bodyData), headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
