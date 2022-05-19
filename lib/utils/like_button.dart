@@ -23,14 +23,12 @@ class _LikeButtonState extends State<LikeButton> {
       builder:(BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var response = [json.decode(snapshot.data.body)];
-          print(response);
           var _liked = response[0]["message"] == "Le ha dado like";
           return IconButton(
             iconSize:20,
             color: _liked ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.favorite),
             onPressed: () {
-              print("LIKE STATUS: $_liked");
               if (_liked) {
                 setState((){
                   _liked = false;

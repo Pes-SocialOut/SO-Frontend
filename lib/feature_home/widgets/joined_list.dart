@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/api_controller.dart';
+import 'package:so_frontend/utils/like_button.dart';
 
 class JoinedList extends StatefulWidget {
   const JoinedList({ Key? key }) : super(key: key);
@@ -111,11 +112,7 @@ class _JoinedListState extends State<JoinedList> {
                                   icon: const Icon(Icons.share),
                                   onPressed: () {}),
                               const SizedBox(width: 10),
-                              IconButton(
-                                  iconSize: 20,
-                                  color: Theme.of(context).colorScheme.onSurface,
-                                  icon: const Icon(Icons.favorite),
-                                  onPressed: () {}),
+                              LikeButton(id: _joined[index]["id"])
                             ],
                           )
                         ]
