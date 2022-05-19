@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/widgets/joined_list.dart';
+import 'package:so_frontend/feature_home/widgets/liked_list.dart';
 
 
 class EventsTabMenu extends StatefulWidget {
@@ -20,8 +21,8 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
           
           length: 2,
           child: Column(
-            children:  [
-               const TabBar(
+            children:  const [
+               TabBar(
                 tabs:  [
                   Tab(
                     text: 'JOINED'
@@ -34,10 +35,8 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
               Expanded(
                 child: TabBarView(
                   children: [
-                    const JoinedList(),
-                    Container(
-                      color: Colors.red
-                    )
+                    JoinedList(),
+                    LikedList(),
               
                   ],
                 ),
