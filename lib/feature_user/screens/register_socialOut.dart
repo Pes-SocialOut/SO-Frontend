@@ -24,6 +24,16 @@ class RegisterScreenState extends State<RegisterScreen> {
   bool isPasswordTextField1 = true;
   bool showPassword2 = true;
   bool isPasswordTextField2 = true;
+  bool incorrectConfirm = false;
+
+  Widget crearMensajeError() {
+    return const Center(
+      child: Text(
+        "password and confirm password do not match",
+        style: TextStyle(color: Colors.red),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,8 +167,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                 },
               ),
             ),
-
-            const SizedBox(height: 30),
+            if (incorrectConfirm) crearMensajeError(),
+            const SizedBox(height: 10),
             //REGISTER BUTTON
             Container(
               alignment: Alignment.center,
@@ -176,21 +186,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
                     if (confirm != password) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Fail register"),
-                          content: const Text(
-                              "password and confirm password do not match"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text("Ok"),
-                            ),
-                          ],
-                        ),
-                      );
+                      setState(() {
+                        incorrectConfirm = true;
+                      });
                     } else {
                       Map<String, dynamic> ap =
                           await uapi.checkUserEmail(email);
