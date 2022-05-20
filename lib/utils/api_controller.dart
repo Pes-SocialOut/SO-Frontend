@@ -125,7 +125,8 @@ class APICalls {
   }
 
   Future<dynamic> deleteItem(String endpoint, List<String> pathParams) async {
-    final uri = buildUri(endpoint, pathParams, {});
+    final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
     final response = await http.post(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
