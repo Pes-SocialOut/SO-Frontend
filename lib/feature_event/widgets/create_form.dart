@@ -119,7 +119,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                   children: [
                     TextButton(
                   
-                  onPressed: () {
+                  onPressed: () {/*
                     DatePicker.showDatePicker(context,
                       showTitleActions: true,
                       maxTime: DateTime(2100, 1, 1),
@@ -133,7 +133,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                           _selectedEndTime = date;
                         });
                       }, 
-                      currentTime: DateTime.now(), locale: LocaleType.en);
+                      currentTime: DateTime.now(), locale: LocaleType.en);*/
                   },
                   child: Text(
                       ('' + _selectedStartedTime.year.toString() + '/' + _selectedStartedTime.month.toString() + '/' + _selectedStartedTime.day.toString()),

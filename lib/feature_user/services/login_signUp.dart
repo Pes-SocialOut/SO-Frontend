@@ -28,15 +28,15 @@ class userAPI {
   }
 
   /* Comprobar que un Facebook socialout existe o no en la BD */
-  Future<Map<String, dynamic>> checkUserFacebook(ftoken) async {
-    String _path = 'register/check?type=facebook&gtoken=';
-
+  Future<http.Response> checkUserFacebook(ftoken) async {
+    String _path = 'register/check?type=facebook&token=';
+  
     final response = await http.get(Uri.parse(basicUrl + _path + ftoken));
-
+    
     if (response.statusCode != 200) {
       // return error
     }
-    return json.decode(response.body);
+    return response;
   }
 
   /* Get profile of a user given a access token */
@@ -192,10 +192,70 @@ class userAPI {
     return response.statusCode;
   }
 
+  Future<int> finalRegistrerFacebook(
+    String tokenFacebook,
+    String username,
+    String description,
+    String languages,
+    String hobbies,
+  ) async {
+    String _path = 'register/facebook';
+    String finalUri = basicUrl + _path;
+    var str = {
+      "token": tokenFacebook,
+      "username": username,
+      "description": description,
+      "languages": languages,
+      "hobbies": hobbies,
+    };
+    final response = await http.post(Uri.parse(finalUri),
+        body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      String accessToken = json.decode(response.body)['access_token'];
+      String userID = json.decode(response.body)['id'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
+      APICalls a = APICalls();
+      a.initialize(userID, accessToken, refreshToken, true);
+      //a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
+      //    (msg, err) => print(err));
+    } else {
+      //print('status code : ' + response.statusCode.toString());
+      //print('error_message: ' + json.decode(response.body)['error_message']);
+    }
+    return response.statusCode;
+  }
+
+
   Future<http.Response> logInGoogle(
     String tokenGoogle,
   ) async {
     String _path = 'login/google';
+    String finalUri = basicUrl + _path;
+    var str = {
+      "token": tokenGoogle,
+    };
+    final response = await http.post(Uri.parse(finalUri),
+        body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      String accessToken = json.decode(response.body)['access_token'];
+      String userID = json.decode(response.body)['id'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
+
+      APICalls a = APICalls();
+      a.initialize(userID, accessToken, refreshToken, true);
+      //a.getItem('/v1/users/:0', [a.getCurrentUser()], (body) => print(body),
+      //    (msg, err) => print(err));
+    } else {
+      //print('status code : ' + response.statusCode.toString());
+      //print('error_message: ' + json.decode(response.body)['error_message']);
+    }
+    return response;
+  }
+
+  Future<http.Response> logInFacebook(
+    String tokenGoogle,
+  ) async {
+    String _path = 'login/facebook';
     String finalUri = basicUrl + _path;
     var str = {
       "token": tokenGoogle,

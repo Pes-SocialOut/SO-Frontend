@@ -63,8 +63,9 @@ class LinkScreenState extends State<LinkScreen> {
             const SizedBox(height: 50),
             if (widget.type == 'socialout') codiVerification(),
             //else if(widget.type == 'google'){},
-            if (widget.type == 'socialout') linkButton("socialout"),
-            if (widget.type == 'google') linkButton("google"),
+            if (widget.type == 'socialout') linkButton("socialout")
+            else if (widget.type == 'google') linkButton("google")
+            else if (widget.type == 'facebook') linkButton("facebook"),
             cancelButton(),
           ]),
         ),

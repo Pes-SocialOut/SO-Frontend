@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:so_frontend/feature_user/screens/link_user.dart';
+import 'package:so_frontend/feature_user/services/signIn_facebook.dart';
 import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -35,7 +37,7 @@ class SignUpScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Continue with Google",
-                    onPressed: () => _handleSignIn(context),
+                    onPressed: () => _handleSignInGoogle(context),//{print("object"); FacebookSignInApi.logout2();}
                   ),
                 ),
                 Container(
@@ -46,7 +48,7 @@ class SignUpScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Continue with Facebook",
-                    onPressed: () {},
+                    onPressed: () =>_handleSignInFacebook(context),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -113,7 +115,7 @@ class SignUpScreen extends StatelessWidget {
         ));
   }
 
-  void _handleSignUp(BuildContext context, Response response, GoogleSignInAuthentication googleSignInAuthentication){
+  void _handleSignUpGoogle(BuildContext context, Response response, GoogleSignInAuthentication googleSignInAuthentication){
     String auxToken =  googleSignInAuthentication.accessToken.toString();
     if(response.statusCode == 200){
       Map<String, dynamic>ap = json.decode(response.body);
@@ -123,7 +125,7 @@ class SignUpScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    FormRegisterCS(auxToken.toString())),
+                    FormRegisterCS(auxToken,"google")),
             (route) => false);
             GoogleSignInApi.logout2();
       }
@@ -238,7 +240,115 @@ class SignUpScreen extends StatelessWidget {
     */
   }
 
-  Future<void> _handleSignIn(BuildContext context) async {
+  void _handleSignUpFacebook(BuildContext context, Response response, String accessToken){
+    if(response.statusCode == 200){
+      Map<String, dynamic>ap = json.decode(response.body);
+      if (ap["action"] == "continue") {
+        FacebookSignInApi.logout();
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    FormRegisterCS(accessToken,"facebook")),
+            (route) => false);
+            FacebookSignInApi.logout();
+      }
+      else if(ap["action"] == "error"){
+        FacebookSignInApi.logout();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("User with this email already exists"),
+            content:
+                const Text("Do you want to Log In?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed('/login'),
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("No")),
+            ],
+          ),
+        );
+      }
+      else if(ap["action"] == "link_auth"){
+        FacebookSignInApi.logout();
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("User with this email already exists in SocialOut"),
+            content:
+                const Text("Do you want to Link with SocialOut?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>{
+                    Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          LinkScreen("","","facebook",accessToken )),
+                                  (route) => false),
+                          //Navigator.of(context).pushNamed('/welcome'),
+                      
+                  },
+                      //Navigator.of(context).pushNamed('/login'),
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("No")),
+            ],
+          ),
+        );
+      }
+    }
+    else if(response.statusCode == 400) {
+      String errorMessage = json.decode(response.body)['error_message'];
+      if(errorMessage == "Authentication method not available for this email"){
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("Authentication method not available for this email, existe account with this email"),
+            content:
+                const Text("Do you want to connect the account of SocialOut?"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () =>
+                  Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      LinkScreen("","","facebook",accessToken )),
+                              (route) => false),
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("No")),
+            ],
+          ),
+        );
+
+      }
+      else if(errorMessage == "Facebook token was invalid"){
+        Navigator.of(context).pushNamed('/signup');
+      }
+      
+    }
+    else {
+      /* print('status code : ' + response.statusCode.toString());
+      print('error_message: ' + json.decode(response.body)['error_message']);
+      print("Undefined Error"); */
+    }
+    
+
+  }
+
+
+  Future<void> _handleSignInGoogle(BuildContext context) async {
     try {
       final user = await GoogleSignInApi.login();
 
@@ -269,7 +379,7 @@ class SignUpScreen extends StatelessWidget {
         //print(googleSignInAuthentication.idToken);
 
         Response response = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
-        _handleSignUp(context, response, googleSignInAuthentication);
+        _handleSignUpGoogle(context, response, googleSignInAuthentication);
         
         /*
         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -285,5 +395,39 @@ class SignUpScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _handleSignInFacebook(BuildContext context) async {
+    try {
+      final LoginResult result = await FacebookAuth.i.login(
+        permissions:['public_profile', 'email']
+      );
+      if(result.status == LoginStatus.success){
+        final accessTokenFacebook = result.accessToken?.token.toString();
+
+        Response response = await uapi.checkUserFacebook(accessTokenFacebook);
+        _handleSignUpFacebook(context, response, accessTokenFacebook!);
+        
+      }
+      else{
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text('Sign up Failed'),
+            content: const Text("Please try again"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  
+                  child: const Text("Ok")),
+              
+            ],
+          ),
+        );
+      }
+
+    } catch (error) {
+      //print(error);
+    }
+  }
 
 }

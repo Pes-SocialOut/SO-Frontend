@@ -21,7 +21,7 @@ class PolicyWidget extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: policyTextSize),
             text: "Terms of Services",
             recognizer: TapGestureRecognizer()..onTap = () async {
-              final Uri uri = Uri(scheme: 'https', host: 'www.google.com');
+              final Uri uri = Uri(scheme: 'https', host: 'pages.flycricket.io', path:'socialout-0/terms');
               await launchUrl(uri);
               //cant launch at the moment, because emualtor has no internet
               /*
@@ -42,7 +42,7 @@ class PolicyWidget extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: policyTextSize),
             text: "Privacy",
             recognizer: TapGestureRecognizer()..onTap = () async {
-              final Uri uri = Uri(scheme: 'https', host: 'www.github.com');
+              final Uri uri = Uri(scheme: 'https', host: 'pages.flycricket.io', path:'socialout/privacy');
               await launchUrl(uri);
               //cant launch at the moment, because emualtor has no internet
               /*
@@ -63,7 +63,7 @@ class PolicyWidget extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: policyTextSize),
             text: "Cookie Policy",
             recognizer: TapGestureRecognizer()..onTap = () async {
-              final Uri uri = Uri(scheme: 'https', host: 'www.youtube.com');
+              final Uri uri = Uri(scheme: 'https', host: 'pages.flycricket.io', path:'socialout/privacy');
               await launchUrl(uri);
               //cant launch at the moment, because emualtor has no internet
               /*
