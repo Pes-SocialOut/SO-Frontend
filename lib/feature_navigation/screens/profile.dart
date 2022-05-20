@@ -20,26 +20,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   APICalls ac = APICalls();
 
-  String getCurrentUser() {
-    return ac.getCurrentUser();
-  }
-
   Map user = {};
   String idProfile = '0';
-
-  /*Future<void> getUser(String idProfile) async {
-    final response = await ac.getItem("/v1/users/:0", [idProfile]);
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      setState(() {
-        user = json.decode(response.body);
-      });
-    }
-  }*/
 
   @override
   void initState() {
     super.initState();
-    //getUser(widget.id);
     idProfile = widget.id;
   }
 
@@ -79,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
           ),
         ),
-        endDrawer: const Settings(),
+        endDrawer: Settings(id: idProfile),
         body: FutureBuilder(
             future: ac.getItem('v2/users/:0', [idProfile]),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -115,13 +101,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           style: creatorStyle)
                                     ],
                                   ),
-                                  Column(
+                                  /*Column(
                                     children: [
-                                      //Image.asset('assets(logo.png'),
-                                      Image.asset('assets(google.png'),
-                                      Image.asset('assets(facebook.png'),
+                                      Image.asset('assets/logo.png'),
+                                      Image.asset('assets/google.png'),
+                                      Image.asset('assets/facebook.png'),
                                     ],
-                                  ),
+                                  ),*/
                                 ]),
                                 const Divider(indent: 50, endIndent: 50),
                                 Row(children: [

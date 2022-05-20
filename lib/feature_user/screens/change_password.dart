@@ -199,13 +199,14 @@ class _ChangePassword extends State<ChangePassword> {
                                               Navigator.pop(context),
                                         )
                                       ]))
-                          : (newPassword1Controller.text.length <= 6)
+                          : (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+                                  .hasMatch(newPassword1Controller.text))
                               ? showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
                                           title: const Text('Error'),
                                           content: const Text(
-                                              'The password must be at least 6 characters long and contain one number and one of the following symbols =, *, <, > or !.'),
+                                              'Enter valid password: min8caracters(numeric,UpperCase,LowerCase)'),
                                           actions: [
                                             TextButton(
                                               child: const Text('OK'),
@@ -213,31 +214,14 @@ class _ChangePassword extends State<ChangePassword> {
                                                   Navigator.pop(context),
                                             )
                                           ]))
-                              : (!newPassword1Controller.text.contains('0') &&
-                                      !newPassword1Controller.text
-                                          .contains('1') &&
-                                      !newPassword1Controller.text
-                                          .contains('2') &&
-                                      !newPassword1Controller.text
-                                          .contains('3') &&
-                                      !newPassword1Controller.text
-                                          .contains('4') &&
-                                      !newPassword1Controller.text
-                                          .contains('5') &&
-                                      !newPassword1Controller.text
-                                          .contains('6') &&
-                                      !newPassword1Controller.text
-                                          .contains('7') &&
-                                      !newPassword1Controller.text
-                                          .contains('8') &&
-                                      !newPassword1Controller.text
-                                          .contains('9'))
+                              : (newPassword1Controller.text !=
+                                      newPassword2Controller.text)
                                   ? showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
                                               title: const Text('Error'),
                                               content: const Text(
-                                                  'The password must be at least 6 characters long and contain one number and one of the following symbols =, *, <, > or !.'),
+                                                  'Botch passwords must match'),
                                               actions: [
                                                 TextButton(
                                                   child: const Text('OK'),
@@ -245,22 +229,13 @@ class _ChangePassword extends State<ChangePassword> {
                                                       Navigator.pop(context),
                                                 )
                                               ]))
-                                  : (!newPassword1Controller.text
-                                              .contains('=') &&
-                                          !newPassword1Controller.text
-                                              .contains('*') &&
-                                          !newPassword1Controller.text
-                                              .contains('<') &&
-                                          !newPassword1Controller.text
-                                              .contains('>') &&
-                                          !newPassword1Controller.text
-                                              .contains('!'))
+                                  : (!correctChange())
                                       ? showDialog(
                                           context: context,
                                           builder: (context) => AlertDialog(
                                                   title: const Text('Error'),
                                                   content: const Text(
-                                                      'The password must be at least 6 characters long and contain one number and one of the following symbols =, *, <, > or !.'),
+                                                      'Incorrect old password'),
                                                   actions: [
                                                     TextButton(
                                                       child: const Text('OK'),
@@ -269,54 +244,20 @@ class _ChangePassword extends State<ChangePassword> {
                                                               context),
                                                     )
                                                   ]))
-                                      : (newPassword2Controller.text !=
-                                              newPassword1Controller.text)
-                                          ? showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  AlertDialog(title: const Text('Error'), content: const Text('Botch passwords must match'), actions: [
+                                      : showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                                  title: const Text('Correct'),
+                                                  content: const Text(
+                                                      'Password changed correctly'),
+                                                  actions: [
                                                     TextButton(
                                                       child: const Text('OK'),
                                                       onPressed: () =>
                                                           Navigator.pop(
                                                               context),
                                                     )
-                                                  ]))
-                                          : (newPassword2Controller.text == oldPasswordController.text)
-                                              ? showDialog(
-                                                  context: context,
-                                                  builder: (context) => AlertDialog(title: const Text('Error'), content: const Text('New password must be different from old password'), actions: [
-                                                        TextButton(
-                                                          child:
-                                                              const Text('OK'),
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  context),
-                                                        )
-                                                      ]))
-                                              : (!correctChange())
-                                                  ? showDialog(
-                                                      context: context,
-                                                      builder: (context) => AlertDialog(title: const Text('Error'), content: const Text('Incorrect wrong password'), actions: [
-                                                            TextButton(
-                                                              child: const Text(
-                                                                  'OK'),
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      context),
-                                                            )
-                                                          ]))
-                                                  : showDialog(
-                                                      context: context,
-                                                      builder: (context) => AlertDialog(title: const Text('Correct'), content: const Text('Password changed correctly'), actions: [
-                                                            TextButton(
-                                                              child: const Text(
-                                                                  'OK'),
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      context),
-                                                            )
-                                                          ]));
+                                                  ]));
                     },
                     child: const Text(
                       'Update',
