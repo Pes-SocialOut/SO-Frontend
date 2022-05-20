@@ -19,7 +19,7 @@ class UserAPI {
     );
   }
 }
-  /*ºPOST “API_URL/v1/users/:id/pw”
+  /*POST “API_URL/v1/users/:id/pw”
   Header Authorization: Bearer ”token”
   Body (json):
   {

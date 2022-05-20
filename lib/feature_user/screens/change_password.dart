@@ -1,8 +1,7 @@
 import 'dart:core';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import 'package:so_frontend/feature_navigation/screens/profile.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -23,6 +22,25 @@ class _ChangePassword extends State<ChangePassword> {
 
   String getCurrentUser() {
     return ac.getCurrentUser();
+  }
+
+  bool pass = false;
+  void postPassword(String idProfile) async {
+    final response = await ac.getItem("/v1/users/:0/pw", [idProfile]);
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      pass = true;
+      String accessToken = json.decode(response.body)['access_token'];
+      String userID = json.decode(response.body)['id'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
+      ac.initialize(userID, accessToken, refreshToken, true);
+    } else if (response.statusCode == 400) {
+      pass = false;
+    }
+  }
+
+  bool correctChange() {
+    postPassword(getCurrentUser());
+    return pass;
   }
 
   @override
@@ -251,17 +269,9 @@ class _ChangePassword extends State<ChangePassword> {
                                                               context),
                                                     )
                                                   ]))
-                                      : (newPassword2Controller.text ==
+                                      : (newPassword2Controller.text !=
                                               newPassword1Controller.text)
-                                          ? Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfileScreen(
-                                                  id: getCurrentUser(),
-                                                ),
-                                              ))
-                                          : showDialog(
+                                          ? showDialog(
                                               context: context,
                                               builder: (context) =>
                                                   AlertDialog(title: const Text('Error'), content: const Text('Botch passwords must match'), actions: [
@@ -271,7 +281,42 @@ class _ChangePassword extends State<ChangePassword> {
                                                           Navigator.pop(
                                                               context),
                                                     )
-                                                  ]));
+                                                  ]))
+                                          : (newPassword2Controller.text == oldPasswordController.text)
+                                              ? showDialog(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(title: const Text('Error'), content: const Text('New password must be different from old password'), actions: [
+                                                        TextButton(
+                                                          child:
+                                                              const Text('OK'),
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                        )
+                                                      ]))
+                                              : (!correctChange())
+                                                  ? showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(title: const Text('Error'), content: const Text('Incorrect wrong password'), actions: [
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'OK'),
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                            )
+                                                          ]))
+                                                  : showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(title: const Text('Correct'), content: const Text('Password changed correctly'), actions: [
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'OK'),
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                            )
+                                                          ]));
                     },
                     child: const Text(
                       'Update',
@@ -290,3 +335,5 @@ class _ChangePassword extends State<ChangePassword> {
     );
   }
 }
+
+//(ac.postItem('v2/users/:0/pw', [getCurrentUser()], {"old": oldPasswordController.text, "new": newPassword1Controller.text}));
