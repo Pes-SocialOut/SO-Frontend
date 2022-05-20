@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        cardColor: Colors.white,
         primaryColor: Colors.green,
         tabBarTheme:  TabBarTheme(
           labelColor: Theme.of(context).colorScheme.secondary,
