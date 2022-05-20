@@ -63,9 +63,12 @@ class LinkScreenState extends State<LinkScreen> {
             const SizedBox(height: 50),
             if (widget.type == 'socialout') codiVerification(),
             //else if(widget.type == 'google'){},
-            if (widget.type == 'socialout') linkButton("socialout")
-            else if (widget.type == 'google') linkButton("google")
-            else if (widget.type == 'facebook') linkButton("facebook"),
+            if (widget.type == 'socialout')
+              linkButton("socialout")
+            else if (widget.type == 'google')
+              linkButton("google")
+            else if (widget.type == 'facebook')
+              linkButton("facebook"),
             cancelButton(),
           ]),
         ),
@@ -109,8 +112,8 @@ class LinkScreenState extends State<LinkScreen> {
         onPressed: () async {
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
-            int linkacount = await uapi.linkRegistrerAndLogin(widget.email,
-                widget.password, verification, s, widget.token);
+            int linkacount = await uapi.linkRegistrerAndLogin(
+                widget.email, widget.password, verification, s, widget.token);
             if (linkacount == 200) {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/home', (route) => false);

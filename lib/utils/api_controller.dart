@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -63,6 +63,7 @@ class APICalls {
 
   Future<dynamic> getItem(String endpoint, List<String> pathParams) async {
     final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
     final response = await http.get(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
@@ -105,7 +106,8 @@ class APICalls {
   Future<dynamic> putItem(String endpoint, List<String> pathParams,
       Map<String, dynamic>? bodyData) async {
     final uri = buildUri(endpoint, pathParams, {});
-    final response = await http.put(uri, body: bodyData, headers: {
+    print("uri: " + uri.toString());
+    final response = await http.put(uri, body: jsonEncode(bodyData), headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });

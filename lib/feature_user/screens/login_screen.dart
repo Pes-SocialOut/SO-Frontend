@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
@@ -9,7 +11,6 @@ import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/feature_user/services/signIn_facebook.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../services/signIn_google.dart';
 
@@ -21,21 +22,65 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
+  final formKey2 = GlobalKey<FormState>();
+  final formKey3 = GlobalKey<FormState>();
   final userAPI uapi = userAPI();
   late String email;
   late String password;
   late String verification;
+  late String newPassword;
+  late String codeVerification;
   double borderradius = 10.0;
   double widthButton = 300.0;
   double heightButton = 40.0;
   double policyTextSize = 14;
+  bool incorrectPassword = false;
+  bool incorrectCodeVerification = false;
+  bool google = false;
+  bool facebook = false;
+  bool googFace = false;
+  late String message;
+
+  Widget crearMensajeError(String type, String mensaje) {
+    if (type == "googFace") {
+      setState(() {
+        incorrectCodeVerification = false;
+        google = false;
+        facebook = false;
+      });
+    } else if (type == "google") {
+      setState(() {
+        incorrectCodeVerification = false;
+        googFace = false;
+        facebook = false;
+      });
+    } else if (type == "facebook") {
+      setState(() {
+        incorrectCodeVerification = false;
+        googFace = false;
+        google = false;
+      });
+    } else if (type == "incorrectCodeVerification") {
+      setState(() {
+        facebook = false;
+        googFace = false;
+        google = false;
+      });
+    }
+    return Center(
+      child: Text(
+        mensaje,
+        style: const TextStyle(color: Colors.red),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: const Color(0x00c8c8c8),
-            title: const Text('Hello Agian!')),
+            title: const Text('Hello Again!')),
         body: Form(
           key: formKey,
           child: Padding(
@@ -60,27 +105,30 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "Log in with Facebook",
-                    onPressed: () =>_handleLoginFacebook(context),
+                    onPressed: () => _handleLoginFacebook(context),
                   ),
                 ),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                        hintText: "Enter email", labelText: "Email"),
-                    validator: (value) {
-                      if (value!.isEmpty ||
-                          !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                              .hasMatch(value)) {
-                        return "a valid email is required";
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      email = value.toString();
-                    },
+                  child: Form(
+                    key: formKey3,
+                    child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                          hintText: "Enter email", labelText: "Email"),
+                      validator: (value) {
+                        if (value!.isEmpty ||
+                            !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(value)) {
+                          return "a valid email is required";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        email = value.toString();
+                      },
+                    ),
                   ),
                 ),
                 Container(
@@ -111,6 +159,11 @@ class LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
+                if (incorrectPassword)
+                  crearMensajeError("incorrectPassword", message),
+                if (google) crearMensajeError("google", message),
+                if (facebook) crearMensajeError("facebook", message),
+                if (googFace) crearMensajeError("googFace", message),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -122,17 +175,10 @@ class LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(borderradius)),
                         minimumSize: Size(widthButton, heightButton)),
                     onPressed: () async {
-                      /*  Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LinkScreen(
-                                  "zjqtlwj@gmail.com",
-                                  "XIEqiaochu0829",
-                                  "socialout",
-                                  "")),
-                          (route) => false); */
-                      if (formKey.currentState!.validate()) {
+                      if (formKey3.currentState!.validate() &
+                          formKey.currentState!.validate()) {
                         formKey.currentState!.save();
+                        formKey3.currentState!.save();
                         Map<String, dynamic> ap =
                             await uapi.checkloginSocialOut(email);
                         if (ap["action"] == "continue") {
@@ -140,6 +186,11 @@ class LoginScreenState extends State<LoginScreen> {
                           if (aux == 200) {
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/home', (route) => false);
+                          } else if (aux == 400) {
+                            setState(() {
+                              incorrectPassword = true;
+                              message = "Incorrect Password";
+                            });
                           }
                         } else if (ap["action"] == "link_auth") {
                           Navigator.pushAndRemoveUntil(
@@ -175,6 +226,7 @@ class LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+                //FORGET PASSWORD?
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -186,9 +238,159 @@ class LoginScreenState extends State<LoginScreen> {
                             fontSize: policyTextSize),
                       ),
                       onTap: () async {
-                        final Uri uri =
-                            Uri(scheme: 'https', host: 'www.github.com');
-                        await launchUrl(uri);
+                        if (formKey3.currentState!.validate()) {
+                          formKey3.currentState!.save();
+                          print(email);
+                          Map<String, dynamic> aux =
+                              await uapi.checkEmailForNewPassword(email);
+                          if (aux["action"] == "continue") {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => AlertDialog(
+                                title:
+                                    const Text("We send a code to your email"),
+                                content: Form(
+                                  key: formKey2,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      TextFormField(
+                                        decoration: const InputDecoration(
+                                          labelText: "New Password",
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(29))),
+                                        ),
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return "a password is required";
+                                          } else {
+                                            RegExp regex = RegExp(
+                                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
+                                            if (!regex.hasMatch(value)) {
+                                              return 'min 8 caracters(numeric,UpperCase,LowerCase)';
+                                            } else {
+                                              return null;
+                                            }
+                                          }
+                                        },
+                                        onSaved: (value) {
+                                          newPassword = value.toString();
+                                        },
+                                      ),
+                                      const SizedBox(height: 15),
+                                      TextFormField(
+                                        decoration: const InputDecoration(
+                                          labelText: "Verification Code",
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(29))),
+                                        ),
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Please enter verification code';
+                                          }
+                                          return null;
+                                        },
+                                        onSaved: (value) {
+                                          codeVerification = value.toString();
+                                        },
+                                      ),
+                                      incorrectCodeVerification
+                                          ? const Text(
+                                              "error code verification",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          : const Text("welcome"),
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8, right: 30),
+                                    child: TextButton(
+                                      onPressed: () async {
+                                        if (formKey2.currentState!.validate()) {
+                                          formKey2.currentState!.save();
+                                          int ap =
+                                              await uapi.finalPasswordRecovery(
+                                                  email,
+                                                  newPassword,
+                                                  codeVerification);
+                                          print("statusCode" + ap.toString());
+                                          if (ap == 200) {
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                                    '/home', (route) => false);
+                                          } else if (ap == 403) {
+                                            print("ENTRO A IF ap == 403");
+                                            super.reassemble();
+                                            super.setState(() {
+                                              incorrectCodeVerification = true;
+                                              print(
+                                                  "INCORRECTCODEVERIFITACION=TRUE");
+                                            });
+                                          }
+                                        }
+                                      },
+                                      child: const Text(
+                                        "Ok",
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 30,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 40, right: 8),
+                                    child: TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: const Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 15,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else if (aux["action"] == "no_auth") {
+                            if (aux["alternative_auths"]
+                                .contains("google", "facebook")) {
+                              setState(() {
+                                message = "google and facebook registered";
+                                incorrectPassword = true;
+                              });
+                            } else if (aux["alternative_auths"]
+                                .contains("google")) {
+                              setState(() {
+                                message = "google registered";
+                                incorrectPassword = true;
+                              });
+                            } else {
+                              setState(() {
+                                message = "facebook registered";
+                                incorrectPassword = true;
+                              });
+                            }
+                          }
+                        }
                       }),
                 ),
                 Container(
@@ -223,13 +425,11 @@ class LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-
-  void _handleLogIn(
-      BuildContext context, Response response, String accessToken, String type) {
+  void _handleLogIn(BuildContext context, Response response, String accessToken,
+      String type) {
     String? auxToken = accessToken;
     if (response.statusCode == 200) {
-      Navigator.of(context)
-              .pushNamedAndRemoveUntil('/home', (route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
     } else if (response.statusCode == 400) {
       String errorMessage = json.decode(response.body)['error_message'];
       if (errorMessage == "User does not exist") {
@@ -242,8 +442,8 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    if(type == "google") GoogleSignInApi.logout2();
-                    if(type == "facebook")FacebookSignInApi.logout();
+                    if (type == "google") GoogleSignInApi.logout2();
+                    if (type == "facebook") FacebookSignInApi.logout();
                     Navigator.of(context).pushNamed('/signup');
                   },
                   child: const Text("Ok")),
@@ -266,23 +466,25 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
-                    if(type == "google"){
-                      Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              LinkScreen("", "", "google", auxToken)),
-                      (route) => false),
-                    }
-                    else if(type == "facebook"){
-                      Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              LinkScreen("", "", "facebook", auxToken)),
-                      (route) => false),
-                    }
-                  },
+                        if (type == "google")
+                          {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        LinkScreen("", "", "google", auxToken)),
+                                (route) => false),
+                          }
+                        else if (type == "facebook")
+                          {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LinkScreen(
+                                        "", "", "facebook", auxToken)),
+                                (route) => false),
+                          }
+                      },
                   //Navigator.of(context).pushNamed('/welcome'),
                   child: const Text("Yes")),
               TextButton(
@@ -293,10 +495,11 @@ class LoginScreenState extends State<LoginScreen> {
         );
         //Navigator.of(context).pushNamed('/login');
 
-      } else if (errorMessage == "Google token was invalid" || errorMessage == "Facebook token was invalid") {
+      } else if (errorMessage == "Google token was invalid" ||
+          errorMessage == "Facebook token was invalid") {
         Navigator.of(context).pushNamed('/login');
       }
-    } 
+    }
   }
 
   Future<void> _handleLoginGoogle(BuildContext context) async {
@@ -313,20 +516,17 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  
                   child: const Text("Ok")),
-              
             ],
           ),
         );
-
       } else {
         GoogleSignInAuthentication googleSignInAuthentication =
             await user.authentication;
         Response response = await uapi
             .logInGoogle(googleSignInAuthentication.accessToken.toString());
         _handleLogIn(context, response,
-            googleSignInAuthentication.accessToken.toString(),"google");
+            googleSignInAuthentication.accessToken.toString(), "google");
         GoogleSignInApi.logout2();
         //Navigator.of(context).pushNamed('/home');
 
@@ -346,20 +546,17 @@ class LoginScreenState extends State<LoginScreen> {
 
   Future<void> _handleLoginFacebook(BuildContext context) async {
     try {
-      final LoginResult result = await FacebookAuth.i.login(
-        permissions:['public_profile', 'email']
-      );
-      
-      if(result.status == LoginStatus.success){
+      final LoginResult result =
+          await FacebookAuth.i.login(permissions: ['public_profile', 'email']);
+
+      if (result.status == LoginStatus.success) {
         final accessTokenFacebook = result.accessToken?.token.toString();
-        Response response = await uapi
-            .logInFacebook(accessTokenFacebook.toString());
-        _handleLogIn(context, response,
-            accessTokenFacebook.toString(),"facebook");
+        Response response =
+            await uapi.logInFacebook(accessTokenFacebook.toString());
+        _handleLogIn(
+            context, response, accessTokenFacebook.toString(), "facebook");
         FacebookSignInApi.logout();
-      }
-      else{
-      }
+      } else {}
       FacebookSignInApi.logout();
     } catch (error) {
       //print(error);
