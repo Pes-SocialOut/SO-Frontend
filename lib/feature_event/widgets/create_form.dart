@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_event/screens/creation_sucess.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:so_frontend/feature_event/services/create.dart';
+import 'package:so_frontend/utils/api_controller.dart';
+import 'dart:convert';
 
 class CreateEventForm extends StatefulWidget {
   const CreateEventForm({ Key? key }) : super(key: key);
@@ -13,13 +14,52 @@ class CreateEventForm extends StatefulWidget {
 
 class _CreateEventFormState extends State<CreateEventForm> {
 
-  CreateEventsAPI api = CreateEventsAPI();
+  APICalls api = APICalls();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DateTime _selectedTime = DateTime.now();
+  DateTime _selectedStartedTime = DateTime.now();
+  TimeOfDay _startedtime = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+
+
+  DateTime _selectedEndTime = DateTime.now();
+  TimeOfDay _endtime = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute + 1);
 
   List event = [];
+
+  TextEditingController _name =  TextEditingController(text: '');
+  TextEditingController _description =  TextEditingController(text: '');
+  TextEditingController _latitude =  TextEditingController(text: '');
+  TextEditingController _longitude =  TextEditingController(text: '');
+  TextEditingController _max_participants =  TextEditingController(text: '');
+  TextEditingController _image = TextEditingController(text: '');
+
+
+  void _selectTime() async {
+    TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: _startedtime,
+    );
+    if (newTime != null) {
+      setState(() {
+        _startedtime = newTime;
+        _endtime = newTime;
+      });
+    }
+  }
+
+  void _selectEndTime() async {
+    TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: _endtime,
+    );
+    if (newTime != null) {
+      setState(() {
+        _endtime = newTime;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,50 +108,108 @@ class _CreateEventFormState extends State<CreateEventForm> {
               children: [
                 Text('Title', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
                 TextFormField(
+                  controller: _name,
                   decoration: const InputDecoration(
                     hintText: 'What are we creating today?'
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text('Date and time', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
-                TextButton(
+                Text('Date and time at which the event starts', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
+                Row(
+                  children: [
+                    TextButton(
                   
                   onPressed: () {
                     DatePicker.showDatePicker(context,
                       showTitleActions: true,
-                      minTime: DateTime(2018, 3, 5),
-                      maxTime: DateTime.now(),
+                      maxTime: DateTime(2100, 1, 1),
+                      minTime: DateTime.now(),
                       onChanged: (date) {
                         
                       }, 
                       onConfirm: (date) {
                         setState((){
-                          _selectedTime = date;
+                          _selectedStartedTime = date;
+                          _selectedEndTime = date;
                         });
                       }, 
                       currentTime: DateTime.now(), locale: LocaleType.en);
                   },
                   child: Text(
-                      ('' + _selectedTime.year.toString() + '/' + _selectedTime.month.toString() + '/' + _selectedTime.day.toString()),
+                      ('' + _selectedStartedTime.year.toString() + '/' + _selectedStartedTime.month.toString() + '/' + _selectedStartedTime.day.toString()),
                       style: TextStyle(color: Theme.of(context).colorScheme.secondary),
                   )),
+                  const SizedBox(width: 40),
+                  TextButton(
+                  
+                  onPressed: _selectTime,
+                  child: Text(
+                      _startedtime.hour.toString() + ':' + _startedtime.minute.toString(),
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  )),
+                  ]
+                ),
                 const SizedBox(height: 20),
-                Text('Duration', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'How long will your event last?'
-                  ),
+                Text('Date and time at which the event ends', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
+                Row(
+                  children: [
+                    TextButton(
+                  
+                  onPressed: () {
+                    DatePicker.showDatePicker(context,
+                      showTitleActions: true,
+                      maxTime: DateTime(2100, 1, 1),
+                      minTime: DateTime.now(),
+                      onChanged: (date) {
+                        
+                      }, 
+                      onConfirm: (date) {
+                        setState((){
+                          _selectedEndTime = date;
+                        });
+                      }, 
+                      currentTime: DateTime.now(), locale: LocaleType.en);
+                  },
+                  child: Text(
+                      ('' + _selectedEndTime.year.toString() + '/' + _selectedEndTime.month.toString() + '/' + _selectedEndTime.day.toString()),
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  )),
+                  const SizedBox(width: 40),
+                  TextButton(
+                  onPressed: _selectEndTime,
+                  child: Text(
+                      _endtime.hour.toString() + ':' + _endtime.minute.toString(),
+                      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  )),
+                  ]
                 ),
                 const SizedBox(height: 40),
                 Text('Location', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Where will your event take place?'
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _longitude,
+                        decoration: const InputDecoration(
+                          hintText: 'Longitude'
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 30),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _latitude,
+                        decoration: const InputDecoration(
+                          hintText: 'Latitude'
+                        ),
+                      ),
+                    ),
+                  ]
                 ),
                 const SizedBox(height: 20),
                 Text('Max Participants', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
                 TextFormField(
+                  controller: _max_participants,
                   decoration: const InputDecoration(
                     hintText: 'How many people will attend?'
                   ),
@@ -119,6 +217,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                 const SizedBox(height: 20),
                 Text('Description', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
                 TextFormField(
+                  controller: _description,
                   decoration: const InputDecoration(
                     hintText: 'Let your attendees know what to expect...'
                   ),
@@ -126,6 +225,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                 const SizedBox(height: 40),
                 Text('Image', style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w600, fontSize: 16)),
                 TextFormField(
+                  controller: _image,
                   decoration: const InputDecoration(
                     hintText: 'Add an image which represents your event'
                   ),
@@ -150,11 +250,49 @@ class _CreateEventFormState extends State<CreateEventForm> {
             textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           onPressed: () async {
-            await api.postEvent(event);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CreationSucess())
-            );
+            Map<String, dynamic> body = {
+              "name": _name.text,
+              "description": _description.text,
+              "date_started": _selectedStartedTime.year.toString()+'-'+_selectedStartedTime.month.toString()+'-'+_selectedStartedTime.day.toString()+' '+_startedtime.hour.toString()+':'+_startedtime.minute.toString()+':00',
+              "date_end": _selectedEndTime.year.toString()+'-'+_selectedEndTime.month.toString()+'-'+_selectedEndTime.day.toString()+' '+_endtime.hour.toString()+':'+_endtime.minute.toString()+':00',
+              "user_creator": api.getCurrentUser(),
+              "longitud": double.parse(_longitude.text),
+              "latitude": double.parse(_latitude.text),
+              "max_participants": int.parse(_max_participants.text),
+              "event_image_uri": _image.text
+            };
+
+            print(body);
+            var response = await api.postItem('/v3/events/', [], body);
+            print(api.getCurrentAccess());
+            print(response.body);
+            var snackBar;
+            if (response.statusCode == 201) {
+                snackBar = SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                content: const Text('Your event has been created successfully!'),
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  CreationSucess(image: _image.text))
+              );
+            } else if (response.statusCode == 400) {
+                snackBar = SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                content: Text('Bad Request! ' + json.decode(response.body)["error_message"]),
+              );
+            } else {
+              snackBar = SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                content: const Text('Something went wrong! Try again later'),
+              );
+            }
+
+
+            // // Find the ScaffoldMessenger in the widget tree
+            // // and use it to show a SnackBar.
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            
           },
           child: const Text('Create'),
         ),
@@ -163,3 +301,4 @@ class _CreateEventFormState extends State<CreateEventForm> {
     );
   }
 }
+

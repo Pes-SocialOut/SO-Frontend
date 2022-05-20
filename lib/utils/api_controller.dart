@@ -62,7 +62,8 @@ class APICalls {
   }
 
   Future<dynamic> getItem(String endpoint, List<String> pathParams) async {
-    final uri = buildUri(endpoint, pathParams, {});
+    final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
     final response = await http.get(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
@@ -88,77 +89,53 @@ class APICalls {
     return response;
   }
 
-  void postItem(
+  Future<dynamic> postItem(
       String endpoint,
       List<String> pathParams,
-      Map<String, dynamic> bodyData,
-      Function onSuccess,
-      Function onError) async {
-    final uri = buildUri(endpoint, pathParams, {});
-    final response = await http.post(uri, body: bodyData, headers: {
+      Map<String, dynamic>? bodyData) async {
+    final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
+    final response = await http.post(uri, body: jsonEncode(bodyData), headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(
-          () => postItem(endpoint, pathParams, bodyData, onSuccess, onError),
+      return _refresh(
+          () => postItem(endpoint, pathParams, bodyData),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
-    }
+    } 
+    return response;
   }
 
-  void putItem(
+  Future<dynamic> putItem(
       String endpoint,
       List<String> pathParams,
-      Map<String, dynamic> bodyData,
-      Function onSuccess,
-      Function onError) async {
+      Map<String, dynamic>? bodyData) async {
     final uri = buildUri(endpoint, pathParams, {});
     final response = await http.put(uri, body: bodyData, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(
-          () => putItem(endpoint, pathParams, bodyData, onSuccess, onError),
+      return _refresh(
+          () => putItem(endpoint, pathParams, bodyData),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
-    }
+    } 
+    return response;
   }
 
-  void deleteItem(String endpoint, List<String> pathParams, Function onSuccess,
-      Function onError) async {
-    final uri = buildUri(endpoint, pathParams, {});
+  Future<dynamic> deleteItem(String endpoint, List<String> pathParams) async {
+    final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
     final response = await http.post(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(() => deleteItem(endpoint, pathParams, onSuccess, onError),
+      return _refresh(() => deleteItem(endpoint, pathParams),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
-    }
+    } 
+    return response;
   }
 
   void logOut() async {
