@@ -94,21 +94,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(children: [
-                                  Column(
-                                    children: [
-                                      Text("${user["username"]}",
-                                          style: creatorStyle)
-                                    ],
-                                  ),
-                                  /*Column(
-                                    children: [
-                                      Image.asset('assets/logo.png'),
-                                      Image.asset('assets/google.png'),
-                                      Image.asset('assets/facebook.png'),
-                                    ],
-                                  ),*/
-                                ]),
+                                Row(
+                                  children: [
+                                    Text("${user["username"]}",
+                                        style: creatorStyle),
+                                    const Divider(indent: 5, endIndent: 5),
+                                    Container(
+                                        height: 23.0,
+                                        width: 25.0,
+                                        decoration: BoxDecoration(
+                                          image: (user["auth_methods"]
+                                                  .contains("socialout"))
+                                              ? const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/logo.png'),
+                                                  fit: BoxFit.fill,
+                                                )
+                                              : const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/logo.png'),
+                                                  fit: BoxFit.fill,
+                                                  colorFilter: ColorFilter.mode(
+                                                      Color.fromARGB(
+                                                          255, 143, 141, 141),
+                                                      BlendMode.color)),
+                                        )),
+                                    const Divider(indent: 5, endIndent: 5),
+                                    Container(
+                                        height: 23.0,
+                                        width: 25.0,
+                                        decoration: BoxDecoration(
+                                          image: (user["auth_methods"]
+                                                  .contains("google"))
+                                              ? const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/google.png'),
+                                                  fit: BoxFit.fill,
+                                                )
+                                              : const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/google.png'),
+                                                  fit: BoxFit.fill,
+                                                  colorFilter: ColorFilter.mode(
+                                                      Color.fromARGB(
+                                                          255, 143, 141, 141),
+                                                      BlendMode.color)),
+                                        )),
+                                    const Divider(indent: 5, endIndent: 5),
+                                    Container(
+                                        height: 23.0,
+                                        width: 25.0,
+                                        decoration: BoxDecoration(
+                                          image: (user["auth_methods"]
+                                                  .contains("facebook"))
+                                              ? const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/facebook.png'),
+                                                  fit: BoxFit.fill,
+                                                )
+                                              : const DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/facebook.png'),
+                                                  fit: BoxFit.fill,
+                                                  colorFilter: ColorFilter.mode(
+                                                      Color.fromARGB(
+                                                          255, 143, 141, 141),
+                                                      BlendMode.color)),
+                                        )),
+                                  ],
+                                ),
                                 const Divider(indent: 50, endIndent: 50),
                                 Row(children: [
                                   Container(
