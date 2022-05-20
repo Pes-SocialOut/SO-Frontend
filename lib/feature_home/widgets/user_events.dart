@@ -59,7 +59,7 @@ class _UserEventsListState extends State<UserEventsList> {
                                 height: 115,
                                 width: 100,
                                 child: ClipRRect(
-                                  child: FittedBox(child: Image.network(_events[index]["event_image_uri"]), fit: BoxFit.fill),
+                                  child: FittedBox(child: Image.network(_events[index]["event_image_uri"]), fit: BoxFit.cover),
                                   borderRadius: BorderRadius.circular(10)
                                 ),
                               ),

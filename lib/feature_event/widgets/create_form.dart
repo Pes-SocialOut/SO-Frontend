@@ -274,7 +274,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
               );
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CreationSucess())
+                MaterialPageRoute(builder: (context) =>  CreationSucess(image: _image.text))
               );
             } else if (response.statusCode == 400) {
                 snackBar = SnackBar(
