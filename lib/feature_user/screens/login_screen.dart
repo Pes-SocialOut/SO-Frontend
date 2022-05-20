@@ -1,9 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:so_frontend/feature_user/screens/link_user.dart';
@@ -11,7 +11,6 @@ import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/feature_user/services/signIn_facebook.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../services/signIn_google.dart';
 
