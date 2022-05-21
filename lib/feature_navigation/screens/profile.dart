@@ -64,6 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Navigator.pop(context);
             },
           ),
+          iconTheme:
+              const IconThemeData(color: Color.fromARGB(255, 17, 92, 153)),
         ),
         endDrawer: Settings(id: idProfile),
         body: FutureBuilder(
