@@ -256,44 +256,40 @@ class _ChangePassword extends State<ChangePassword> {
                                       ]));
                           return;
                         }
-                        postPassword(getCurrentUser())
-                            .then((pass) => {
-                                  if (!pass)
-                                    {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                                  title: const Text('Error'),
-                                                  content: const Text(
-                                                      'Incorrect old password'),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: const Text('OK'),
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                    )
-                                                  ]))
-                                    }
-                                  else
-                                    {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                                  title: const Text('Correct'),
-                                                  content: const Text(
-                                                      'Password changed correctly'),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: const Text('OK'),
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                    )
-                                                  ]))
-                                    }
-                                })
-                            .catchError((error) => print(error));
+                        postPassword(getCurrentUser()).then((pass) => {
+                              if (!pass)
+                                {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: const Text('Error'),
+                                              content: const Text(
+                                                  'Incorrect old password'),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                )
+                                              ]))
+                                }
+                              else
+                                {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: const Text('Correct'),
+                                              content: const Text(
+                                                  'Password changed correctly'),
+                                              actions: [
+                                                TextButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                )
+                                              ]))
+                                }
+                            });
                       },
                       child: const Text(
                         'Update',
