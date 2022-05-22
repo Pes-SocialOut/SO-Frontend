@@ -33,10 +33,7 @@ class _ChangePassword extends State<ChangePassword> {
       "old": oldPasswordController.text,
       "new": newPassword1Controller.text
     });
-    print(response.body);
-    print("status ${response.statusCode}");
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      print("estoy en el if");
       String accessToken = json.decode(response.body)['access_token'];
       String userID = json.decode(response.body)['id'];
       String refreshToken = json.decode(response.body)['refresh_token'];
