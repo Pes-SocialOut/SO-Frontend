@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_calendar/screens/calendar.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    APICalls().tryInitializeFromPreferences();
+    //APICalls().tryInitializeFromPreferences();
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'SocialOut',
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
             surface: Colors.black,
             onSurface: HexColor('767676'),
           )),
-      initialRoute: '/welcome',
+      initialRoute: '/calendar',
       home: const WelcomeScreen(),
       routes: {
         '/welcome': (_) => const WelcomeScreen(),
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
         '/profile': (_) => const ProfileScreen(id: "0"),
         '/edit_profile': (_) => const EditarProfile(),
         '/change_password': (_) => const ChangePassword(),
+        '/calendar': (_) => const CalendarScreen(),
       },
     );
   }

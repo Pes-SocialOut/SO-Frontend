@@ -50,7 +50,7 @@ dependencies:
   flutter_facebook_auth_web: ^3.1.2
   flutter_facebook_auth: ^4.3.3
   flutter_facebook_keyhash: ^0.0.4
-
+  add_2_calendar: ^2.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
