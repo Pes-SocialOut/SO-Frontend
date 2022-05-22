@@ -287,6 +287,7 @@ class _EventState extends State<Event> {
                                 ++i;
                               }
                               if (!found) {
+                                  
                                   return InkWell(
                                     onTap: () {
                                       setState(() {
@@ -294,6 +295,11 @@ class _EventState extends State<Event> {
                                       });
                                       final bodyData = {"user_id": api.getCurrentUser()};
                                       joinEvent(_event[0]["id"], bodyData);
+                                      var snackBar = SnackBar(
+                                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                                        content: const Text('You have joined the event successfully!')
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -322,6 +328,11 @@ class _EventState extends State<Event> {
                                     setState(() {
                                       found = false;
                                     });
+                                    var snackBar = SnackBar(
+                                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                                      content: const Text('You have left the event successfully!')
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
