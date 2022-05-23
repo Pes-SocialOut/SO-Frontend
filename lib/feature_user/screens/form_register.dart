@@ -77,14 +77,6 @@ class _FormRegisterState extends State<FormRegister> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            "preferred languages: ",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                color: Color.fromARGB(255, 112, 108, 108)),
-          ),
-          const SizedBox(width: 15),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 primary: primary,
@@ -245,6 +237,16 @@ class _FormRegisterState extends State<FormRegister> {
                 const SizedBox(height: 15),
                 _buildVerification(),
                 const SizedBox(height: 15),
+                const Center(
+                  child: Text(
+                    "preferred languages: ",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                        color: Color.fromARGB(255, 112, 108, 108)),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 _buildLanguages(),
                 const SizedBox(height: 55),
 

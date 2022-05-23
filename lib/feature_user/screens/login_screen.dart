@@ -35,38 +35,13 @@ class LoginScreenState extends State<LoginScreen> {
   double heightButton = 40.0;
   double policyTextSize = 14;
   bool incorrectPassword = false;
-  bool incorrectCodeVerification = false;
   bool google = false;
   bool facebook = false;
   bool googFace = false;
   late String message;
+  String mensaje2 = "";
 
-  Widget crearMensajeError(String type, String mensaje) {
-    if (type == "googFace") {
-      setState(() {
-        incorrectCodeVerification = false;
-        google = false;
-        facebook = false;
-      });
-    } else if (type == "google") {
-      setState(() {
-        incorrectCodeVerification = false;
-        googFace = false;
-        facebook = false;
-      });
-    } else if (type == "facebook") {
-      setState(() {
-        incorrectCodeVerification = false;
-        googFace = false;
-        google = false;
-      });
-    } else if (type == "incorrectCodeVerification") {
-      setState(() {
-        facebook = false;
-        googFace = false;
-        google = false;
-      });
-    }
+  Widget crearMensajeError(String mensaje) {
     return Center(
       child: Text(
         mensaje,
@@ -79,13 +54,23 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: const Color(0x00c8c8c8),
-            title: const Text('Hello Again!')),
+          backgroundColor: const Color(0x00c8c8c8),
+          title: const Text('Hello Again!'),
+          leading: IconButton(
+            iconSize: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+            icon: const Icon(Icons.arrow_back_ios_new_sharp),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/welcome');
+            },
+          ),
+        ),
         body: Form(
           key: formKey,
           child: Padding(
               padding: const EdgeInsets.all(10),
               child: ListView(children: <Widget>[
+                // LOGIN WITH GOOGLE
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -97,6 +82,7 @@ class LoginScreenState extends State<LoginScreen> {
                     onPressed: () => _handleLoginGoogle(context),
                   ),
                 ),
+                // LOGIN WITH FACEBOOK
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -108,6 +94,7 @@ class LoginScreenState extends State<LoginScreen> {
                     onPressed: () => _handleLoginFacebook(context),
                   ),
                 ),
+                // EMAIL
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -131,6 +118,7 @@ class LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+                // PASSWORD
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -159,11 +147,8 @@ class LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
-                if (incorrectPassword)
-                  crearMensajeError("incorrectPassword", message),
-                if (google) crearMensajeError("google", message),
-                if (facebook) crearMensajeError("facebook", message),
-                if (googFace) crearMensajeError("googFace", message),
+                if (incorrectPassword) crearMensajeError(message),
+                //BUTTON LOG IN
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -240,7 +225,6 @@ class LoginScreenState extends State<LoginScreen> {
                       onTap: () async {
                         if (formKey3.currentState!.validate()) {
                           formKey3.currentState!.save();
-                          print(email);
                           Map<String, dynamic> aux =
                               await uapi.checkEmailForNewPassword(email);
                           if (aux["action"] == "continue") {
@@ -250,129 +234,129 @@ class LoginScreenState extends State<LoginScreen> {
                               builder: (context) => AlertDialog(
                                 title:
                                     const Text("We send a code to your email"),
-                                content: Form(
-                                  key: formKey2,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      TextFormField(
-                                        decoration: const InputDecoration(
-                                          labelText: "New Password",
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(29))),
-                                        ),
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "a password is required";
-                                          } else {
-                                            RegExp regex = RegExp(
-                                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
-                                            if (!regex.hasMatch(value)) {
-                                              return 'min 8 caracters(numeric,UpperCase,LowerCase)';
+                                content: StatefulBuilder(builder:
+                                    (BuildContext context,
+                                        StateSetter cambiarEstado) {
+                                  return Form(
+                                    key: formKey2,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        TextFormField(
+                                          decoration: const InputDecoration(
+                                            labelText: "New Password",
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(29))),
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return "a password is required";
                                             } else {
-                                              return null;
+                                              RegExp regex = RegExp(
+                                                  r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
+                                              if (!regex.hasMatch(value)) {
+                                                return 'min 8 caracters(numeric,UpperCase,LowerCase)';
+                                              } else {
+                                                return null;
+                                              }
                                             }
-                                          }
-                                        },
-                                        onSaved: (value) {
-                                          newPassword = value.toString();
-                                        },
-                                      ),
-                                      const SizedBox(height: 15),
-                                      TextFormField(
-                                        decoration: const InputDecoration(
-                                          labelText: "Verification Code",
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(29))),
+                                          },
+                                          onSaved: (value) {
+                                            newPassword = value.toString();
+                                          },
                                         ),
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Please enter verification code';
-                                          }
-                                          return null;
-                                        },
-                                        onSaved: (value) {
-                                          codeVerification = value.toString();
-                                        },
-                                      ),
-                                      incorrectCodeVerification
-                                          ? const Text(
-                                              "error code verification",
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
+                                        const SizedBox(height: 15),
+                                        TextFormField(
+                                          decoration: const InputDecoration(
+                                            labelText: "Verification Code",
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(29))),
+                                          ),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Please enter verification code';
+                                            }
+                                            return null;
+                                          },
+                                          onSaved: (value) {
+                                            codeVerification = value.toString();
+                                          },
+                                        ),
+                                        Text(
+                                          mensaje2,
+                                          style: const TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () async {
+                                                if (formKey2.currentState!
+                                                    .validate()) {
+                                                  formKey2.currentState!.save();
+                                                  int ap = await uapi
+                                                      .finalPasswordRecovery(
+                                                          email,
+                                                          newPassword,
+                                                          codeVerification);
+                                                  if (ap == 200) {
+                                                    Navigator.of(context)
+                                                        .pushNamedAndRemoveUntil(
+                                                            '/home',
+                                                            (route) => false);
+                                                  } else if (ap == 403) {
+                                                    cambiarEstado(() {
+                                                      mensaje2 =
+                                                          "Incorrect verification Code";
+                                                    });
+                                                  }
+                                                }
+                                              },
+                                              child: const Text(
+                                                "Ok",
+                                                style: TextStyle(
+                                                  color: Colors.blue,
+                                                  fontSize: 30,
+                                                  fontStyle: FontStyle.normal,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                            )
-                                          : const Text("welcome"),
-                                    ],
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8, right: 30),
-                                    child: TextButton(
-                                      onPressed: () async {
-                                        if (formKey2.currentState!.validate()) {
-                                          formKey2.currentState!.save();
-                                          int ap =
-                                              await uapi.finalPasswordRecovery(
-                                                  email,
-                                                  newPassword,
-                                                  codeVerification);
-                                          print("statusCode" + ap.toString());
-                                          if (ap == 200) {
-                                            Navigator.of(context)
-                                                .pushNamedAndRemoveUntil(
-                                                    '/home', (route) => false);
-                                          } else if (ap == 403) {
-                                            print("ENTRO A IF ap == 403");
-                                            super.reassemble();
-                                            super.setState(() {
-                                              incorrectCodeVerification = true;
-                                              print(
-                                                  "INCORRECTCODEVERIFITACION=TRUE");
-                                            });
-                                          }
-                                        }
-                                      },
-                                      child: const Text(
-                                        "Ok",
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                          fontSize: 30,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.bold,
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                setState(() {
+                                                  incorrectPassword = false;
+                                                });
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text(
+                                                "Cancel",
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 15,
+                                                  fontStyle: FontStyle.normal,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 40, right: 8),
-                                    child: TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
-                                      child: const Text(
-                                        "Cancel",
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 15,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  );
+                                }),
                               ),
                             );
                           } else if (aux["action"] == "no_auth") {
-                            if (aux["alternative_auths"]
-                                .contains("google", "facebook")) {
+                            if (aux["alternative_auths"].contains("facebook") &&
+                                aux["alternative_auths"].contains("google")) {
                               setState(() {
                                 message = "google and facebook registered";
                                 incorrectPassword = true;
@@ -389,6 +373,11 @@ class LoginScreenState extends State<LoginScreen> {
                                 incorrectPassword = true;
                               });
                             }
+                          } else {
+                            setState(() {
+                              message = "Email not found";
+                              incorrectPassword = true;
+                            });
                           }
                         }
                       }),

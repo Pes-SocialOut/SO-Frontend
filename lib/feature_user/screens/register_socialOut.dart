@@ -207,7 +207,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           barrierDismissible: false,
                           builder: (context) => AlertDialog(
                             title: const Text(
-                                "Authentication method not available for this email, existe account with this email"),
+                                "Authentication method not available for this email, exist account with this email"),
                             content: const Text(
                                 "Do you want to connect the account of SocialOut??"),
                             actions: <Widget>[
