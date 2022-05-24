@@ -14,7 +14,6 @@ import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 import 'package:so_frontend/feature_user/screens/change_password.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
@@ -26,7 +25,7 @@ void main() async {
       Locale('ca', 'ES'),
       Locale('en'),
       Locale('es', 'ES')
-    ], path: 'assets/translations', fallbackLocale: Locale('en'), child: MyApp()),
+    ], path: 'translations', fallbackLocale: Locale('en'), child: MyApp()),
   );
 }
 
