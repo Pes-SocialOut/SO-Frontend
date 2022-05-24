@@ -26,7 +26,7 @@ void main() async {
       Locale('ca', 'ES'),
       Locale('en'),
       Locale('es', 'ES')
-    ], path: 'translations', fallbackLocale: Locale('en'), child: MyApp()),
+    ], path: 'assets/translations', fallbackLocale: Locale('en'), child: MyApp()),
   );
 }
 
