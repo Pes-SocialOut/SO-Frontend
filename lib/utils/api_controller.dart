@@ -48,6 +48,7 @@ class APICalls {
     // Esta función se llama al iniciar la aplicación. Determina si el usuario debe hacer login o si ya "se acuerda".
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
     final prefs = await SharedPreferences.getInstance();
+
     final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
     //print(_REFRESH_TOKEN_PREFS.toString());
     //print(refresh_prefs.toString());

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -5,11 +6,10 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     double borderradius = 10.0;
     double widthButton = 300.0;
     double heightButton = 40.0;
-    
+
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -31,35 +31,112 @@ class WelcomeScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width / 1.5,
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Enjoy the day outside',
-                      style: TextStyle(
-                          height: 1.0,
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 300),
+                    const Text("welcome").tr(),
+                    //const SizedBox(height: 300),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).colorScheme.secondary,
                           onPrimary: Colors.white,
-                          shape:  RoundedRectangleBorder(
+                          shape: RoundedRectangleBorder(
                               borderRadius:
-                                   BorderRadius.circular(borderradius)),
+                                  BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
                       onPressed: () async {
                         //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
                         //print(aux);
                         //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
-                                'Unknown platform version';
+                        'Unknown platform version';
+                        //print(key??"");
+                        //FacebookSignInApi.logout2();
+                        /* Navigator.of(context).pushNamed('/signup'); */
+                        // ignore: deprecated_member_use
+                        context.setLocale(const Locale('en'));
+                      },
+                      child: const Text(
+                        'INGLES',
+                        style: TextStyle(
+                            height: 1.0,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).colorScheme.secondary,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(borderradius)),
+                          minimumSize: Size(widthButton, heightButton)),
+                      onPressed: () async {
+                        //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
+                        //print(aux);
+                        //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
+                        'Unknown platform version';
+                        //print(key??"");
+                        //FacebookSignInApi.logout2();
+                        /* Navigator.of(context).pushNamed('/signup'); */
+                        // ignore: deprecated_member_use
+                        context.setLocale(const Locale('ca', 'ES'));
+                      },
+                      child: const Text(
+                        'CATALAN',
+                        style: TextStyle(
+                            height: 1.0,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).colorScheme.secondary,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(borderradius)),
+                          minimumSize: Size(widthButton, heightButton)),
+                      onPressed: () async {
+                        //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
+                        //print(aux);
+                        //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
+                        'Unknown platform version';
+                        //print(key??"");
+                        //FacebookSignInApi.logout2();
+                        /* Navigator.of(context).pushNamed('/signup'); */
+                        context.setLocale(const Locale('es', 'ES'));
+                      },
+                      child: const Text(
+                        'ESPAÑOL',
+                        style: TextStyle(
+                            height: 1.0,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).colorScheme.secondary,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(borderradius)),
+                          minimumSize: Size(widthButton, heightButton)),
+                      onPressed: () async {
+                        //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
+                        //print(aux);
+                        //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
+                        'Unknown platform version';
                         //print(key??"");
                         //FacebookSignInApi.logout2();
                         Navigator.of(context).pushNamed('/signup');
                       },
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(
+                      child: Text(
+                        'signUp'.tr(),
+                        style: const TextStyle(
                             height: 1.0,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
@@ -70,17 +147,16 @@ class WelcomeScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).colorScheme.onSecondary,
                           onPrimary: Colors.black,
-                          shape:  RoundedRectangleBorder(
+                          shape: RoundedRectangleBorder(
                               borderRadius:
-                                   BorderRadius.circular(borderradius)),
+                                  BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
                       onPressed: () async {
-                        
                         Navigator.of(context).pushNamed('/login');
                       },
-                      child: const Text(
-                        'Log In',
-                        style: TextStyle(
+                      child: Text(
+                        'login'.tr(),
+                        style: const TextStyle(
                             height: 1.0,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),

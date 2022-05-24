@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
@@ -10,10 +13,21 @@ import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 import 'package:so_frontend/feature_user/screens/change_password.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  //final prefs = await SharedPreferences.getInstance();
+  runApp(
+    EasyLocalization(supportedLocales: [
+      Locale('ca', 'ES'),
+      Locale('en'),
+      Locale('es', 'ES')
+    ], path: 'translations', fallbackLocale: Locale('en'), child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,8 +36,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    APICalls().tryInitializeFromPreferences();
+    APICalls ap = APICalls();
+    ap.tryInitializeFromPreferences();
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       navigatorKey: navigatorKey,
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
