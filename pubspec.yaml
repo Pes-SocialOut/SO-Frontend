@@ -65,7 +65,7 @@ dev_dependencies:
   build_runner: ^2.1.8
 
 flutter_icons:
-  android: "true"
+  android: "launcher_icon"
   ios: true
   image_path: "assets/logo.png"
 
