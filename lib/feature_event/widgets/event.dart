@@ -18,16 +18,16 @@ class _EventState extends State<Event> {
 
   bool found = false;
 
-  Future<void> joinEvent(String id, Map<String, dynamic> bodyData) async {
+  Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
 
     final response = await api.postItem('/v2/events/:0/:1', [widget.id, 'join'], bodyData);
-    print(response.statusCode);
+    return response;
   }
 
-  Future<void> leaveEvent(String id, Map<String, dynamic> bodyData) async {
+  Future<dynamic> leaveEvent(String id, Map<String, dynamic> bodyData) async {
 
     final response = await api.postItem('/v2/events/:0/:1', [widget.id, 'leave'], bodyData);
-    print(response.statusCode);
+    return response;
   }
 
   @override
@@ -277,7 +277,6 @@ class _EventState extends State<Event> {
                           builder: (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.connectionState == ConnectionState.done) {
                               var participants = json.decode(snapshot.data.body);
-                              print(participants);
                               found = false;
                               int i = 0;
                               while (!found && i < participants.length) {
@@ -288,12 +287,25 @@ class _EventState extends State<Event> {
                               }
                               if (!found) {
                                   return InkWell(
-                                    onTap: () {
+                                    onTap: () async {
+                                      final bodyData = {"user_id": api.getCurrentUser()};
+                                      var response = await joinEvent(_event[0]["id"], bodyData);
+                                      SnackBar snackBar;
+                                      if (response.statusCode == 200) {
+                                        snackBar = SnackBar(
+                                          backgroundColor: Theme.of(context).colorScheme.secondary,
+                                          content: const Text('You are in!'),
+                                        );
+                                      } else {
+                                        snackBar = SnackBar(
+                                          backgroundColor: Theme.of(context).colorScheme.error,
+                                          content: const Text('Something bad happened. Try again later...'),
+                                        );
+                                      }
                                       setState(() {
                                         found = false;
                                       });
-                                      final bodyData = {"user_id": api.getCurrentUser()};
-                                      joinEvent(_event[0]["id"], bodyData);
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -316,12 +328,25 @@ class _EventState extends State<Event> {
                               }
                               else {
                                 return InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     final bodyData = {"user_id": api.getCurrentUser()};
-                                    leaveEvent(_event[0]["id"], bodyData);
+                                    var response = await leaveEvent(_event[0]["id"], bodyData);
                                     setState(() {
                                       found = false;
                                     });
+                                    SnackBar snackBar;
+                                      if (response.statusCode == 200) {
+                                        snackBar = SnackBar(
+                                          backgroundColor: Theme.of(context).colorScheme.secondary,
+                                          content: const Text('You left!'),
+                                        );
+                                      } else {
+                                        snackBar = SnackBar(
+                                          backgroundColor: Theme.of(context).colorScheme.error,
+                                          content: const Text('Something bad happened. Try again later...'),
+                                        );
+                                      }
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
