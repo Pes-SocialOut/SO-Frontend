@@ -10,6 +10,7 @@ import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 import 'package:so_frontend/feature_user/screens/change_password.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+import 'package:so_frontend/utils/go_to.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {

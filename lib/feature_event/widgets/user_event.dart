@@ -231,26 +231,27 @@ class _UserEventState extends State<UserEvent> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            print(api.getCurrentAccess());
-                            var response = await api.deleteItem('/v2/events/:0', [widget.id]);
-                            print(response.body);
+                            var response = await api.deleteItem('/v3/events/:0', [widget.id]);
                             var snackBar;
-                              if (response.statusCode == 201) {
+                              if (response.statusCode == 202) {
                                 snackBar = SnackBar(
                                   backgroundColor: Theme.of(context).colorScheme.secondary,
                                   content: const Text('Your event has been created successfully!'),
                                 );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                 Navigator.pop(context);
                               } else if (response.statusCode == 400) {
                                 snackBar = SnackBar(
                                   backgroundColor: Theme.of(context).colorScheme.error,
                                   content: Text('Bad Request! ' + json.decode(response.body)["error_message"]),
                                 );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               } else {
                                 snackBar = SnackBar(
                                   backgroundColor: Theme.of(context).colorScheme.error,
                                   content: const Text('Something went wrong! Try again later'),
                                 );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               }
                             
                           },

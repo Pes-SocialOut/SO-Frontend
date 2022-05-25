@@ -1,9 +1,11 @@
 // ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/main.dart';
 
 class APICalls {
@@ -105,8 +107,7 @@ class APICalls {
   Future<dynamic> putItem(String endpoint, List<String> pathParams,
       Map<String, dynamic>? bodyData) async {
     final uri = buildUri(endpoint, pathParams, {});
-    print("uri: " + uri.toString());
-    final response = await http.put(uri, body: jsonEncode(bodyData), headers: {
+    final response = await http.put(uri, body: json.encode(bodyData), headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
@@ -121,7 +122,7 @@ class APICalls {
   Future<dynamic> deleteItem(String endpoint, List<String> pathParams) async {
     final uri = buildUri(endpoint, pathParams, null);
     print(uri);
-    final response = await http.post(uri, headers: {
+    final response = await http.delete(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
@@ -183,7 +184,7 @@ class APICalls {
   void _redirectToHomeScreen() {
     // ignore: todo
     // TODO: Navegar a la home screen
-    navigatorKey.currentState!.pushNamed('/home');
+    navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationBottomBar()), (route) => false);
   }
 
   factory APICalls() {
