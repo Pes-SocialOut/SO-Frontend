@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, camel_case_types
+// ignore_for_file: file_names, camel_case_types, avoid_print
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -6,12 +6,22 @@ import 'package:so_frontend/utils/api_controller.dart';
 
 class userAPI {
   final String basicUrl = "https://socialout-develop.herokuapp.com/v1/users/";
+  final String basicUrl2 = "https://socialout-develop.herokuapp.com/v2/users/";
 
   /* Comprobar que un email socialout existe o no en la BD */
   Future<Map<String, dynamic>> checkUserEmail(email) async {
     String _path = 'register/check?type=socialout&email=';
 
     String finalUri = basicUrl + _path + email;
+    final response = await http.get(Uri.parse(finalUri));
+    return json.decode(response.body);
+  }
+
+  /* Comprobar que el email para recuperar contraseña existe */
+  Future<Map<String, dynamic>> checkEmailForNewPassword(email) async {
+    String _path = 'forgot_pw?email=';
+    String finalUri = basicUrl2 + _path + email;
+    print("final_uri: " + finalUri);
     final response = await http.get(Uri.parse(finalUri));
     return json.decode(response.body);
   }
@@ -30,9 +40,9 @@ class userAPI {
   /* Comprobar que un Facebook socialout existe o no en la BD */
   Future<http.Response> checkUserFacebook(ftoken) async {
     String _path = 'register/check?type=facebook&token=';
-  
+
     final response = await http.get(Uri.parse(basicUrl + _path + ftoken));
-    
+
     if (response.statusCode != 200) {
       // return error
     }
@@ -58,7 +68,7 @@ class userAPI {
       String passw,
       String username,
       String description,
-      String languages,
+      List languages,
       String hobbies,
       String codiVeri) async {
     String _path = 'register/socialout';
@@ -95,6 +105,27 @@ class userAPI {
     final response = await http.get(Uri.parse(finalUri));
 
     return json.decode(response.body);
+  }
+
+  /* update password and credentials*/
+  Future<int> finalPasswordRecovery(
+      String email, String passw, String codiVeri) async {
+    String _path = 'forgot_pw';
+    String finalUri = basicUrl2 + _path;
+    var str = {"email": email, "password": passw, "verification": codiVeri};
+    final response = await http.post(Uri.parse(finalUri),
+        body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      String accessToken = json.decode(response.body)['access_token'];
+      String userID = json.decode(response.body)['id'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
+      APICalls a = APICalls();
+      a.initialize(userID, accessToken, refreshToken, true);
+    } else {
+      //print('status code : ' + response.statusCode.toString());
+    }
+    return response.statusCode;
   }
 
   /* login con cuenta socialOut*/
@@ -224,7 +255,6 @@ class userAPI {
     }
     return response.statusCode;
   }
-
 
   Future<http.Response> logInGoogle(
     String tokenGoogle,

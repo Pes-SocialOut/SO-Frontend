@@ -65,7 +65,6 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
-                  //Navigator.of(context).pushNamed('/profile');
                   Navigator.push(
                       context,
                       MaterialPageRoute(

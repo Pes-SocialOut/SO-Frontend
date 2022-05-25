@@ -20,6 +20,20 @@ class RegisterScreenState extends State<RegisterScreen> {
   late String email;
   late String password;
   late String confirm;
+  bool showPassword1 = true;
+  bool isPasswordTextField1 = true;
+  bool showPassword2 = true;
+  bool isPasswordTextField2 = true;
+  bool incorrectConfirm = false;
+
+  Widget crearMensajeError() {
+    return const Center(
+      child: Text(
+        "password and confirm password do not match",
+        style: TextStyle(color: Colors.red),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +87,22 @@ class RegisterScreenState extends State<RegisterScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextFormField(
                 keyboardType: TextInputType.text,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
+                obscureText: isPasswordTextField1 ? showPassword1 : false,
+                decoration: InputDecoration(
+                  suffixIcon: isPasswordTextField1
+                      ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword1 = !showPassword1;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        )
+                      : null,
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
                   hintText: "Enter password",
@@ -100,7 +127,48 @@ class RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
 
-            const SizedBox(height: 30),
+            //CONFIRM PASSWORD
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(horizontal: 40),
+              child: TextFormField(
+                keyboardType: TextInputType.text,
+                obscureText: isPasswordTextField2 ? showPassword2 : false,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(29)),
+                  ),
+                  suffixIcon: isPasswordTextField2
+                      ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword2 = !showPassword2;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        )
+                      : null,
+                  hintText: "Enter Confirm password",
+                  labelText: "Confirm password",
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "a confirm password is required";
+                  } else {
+                    return null;
+                  }
+                },
+                onSaved: (value) {
+                  confirm = value.toString();
+                },
+              ),
+            ),
+            if (incorrectConfirm) crearMensajeError(),
+            const SizedBox(height: 10),
             //REGISTER BUTTON
             Container(
               alignment: Alignment.center,
@@ -117,58 +185,66 @@ class RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
-                    Map<String, dynamic> ap = await uapi.checkUserEmail(email);
-                    
-                    if (ap["action"] == "continue") {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  FormRegister(email, password)),
-                          (route) => false);
-                    } else if (ap["action"] == "link_auth") {
-                      //enlazar cuentas
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => AlertDialog(
-                          title: const Text(
-                              "Authentication method not available for this email, existe account with this email"),
-                          content:
-                              const Text("Do you want to connect the account of SocialOut??"),
-                          actions: <Widget>[
-                            TextButton(
-                                onPressed: () => {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LinkScreen(
-                                            email, password, "socialout", "")),
-                                    (route) => false)
-                                },
-                                //Navigator.of(context).pushNamed('/welcome'),
-                                child: const Text("Yes")),
-                            TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text("No")),
-                          ],
-                        ),
-                      );
+                    if (confirm != password) {
+                      setState(() {
+                        incorrectConfirm = true;
+                      });
                     } else {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Fail register"),
-                          content: const Text("Account already exists"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text("Ok"),
-                            ),
-                          ],
-                        ),
-                      );
+                      Map<String, dynamic> ap =
+                          await uapi.checkUserEmail(email);
+
+                      if (ap["action"] == "continue") {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FormRegister(email, password)),
+                            (route) => false);
+                      } else if (ap["action"] == "link_auth") {
+                        //enlazar cuentas
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => AlertDialog(
+                            title: const Text(
+                                "Authentication method not available for this email, existe account with this email"),
+                            content: const Text(
+                                "Do you want to connect the account of SocialOut??"),
+                            actions: <Widget>[
+                              TextButton(
+                                  onPressed: () => {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LinkScreen(email, password,
+                                                        "socialout", "")),
+                                            (route) => false)
+                                      },
+                                  //Navigator.of(context).pushNamed('/welcome'),
+                                  child: const Text("Yes")),
+                              TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text("No")),
+                            ],
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Fail register"),
+                            content: const Text("Account already exists"),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text("Ok"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   }
                 },
