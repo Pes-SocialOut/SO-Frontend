@@ -255,7 +255,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'LOGROS',
+                              'ACHIEVEMENTS',
                               style: titleStyle,
                               textAlign: TextAlign.center,
                             ),
@@ -272,7 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'AMIGOS',
+                              'FRIENDS',
                               style: titleStyle,
                               textAlign: TextAlign.center,
                             ),
@@ -289,79 +289,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     MediaQuery.of(context).size.height * 0.47,
                                 width: MediaQuery.of(context).size.width * 0.42,
                                 child: ListView(children: <Widget>[
-                                  for (var i = 0; i < 5; i++)
-                                    ListTile(
-                                      leading: const CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'assets/achievements/ambassador.png'),
-                                      ),
-                                      title: const Text('Creador'),
-                                      subtitle: Row(
-                                        children: <Widget>[
-                                          for (var i = 0; i < 3; ++i)
-                                            Icon(Icons.brightness_1,
-                                                size: 14,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary),
-                                          for (var i = 0; i < 2; ++i)
-                                            Icon(Icons.brightness_1_outlined,
-                                                size: 14,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                                    title:
-                                                        const Text('Creador'),
-                                                    content: const Text(
-                                                        'El usuario ha creado 5 eventos'),
-                                                    actions: [
-                                                      TextButton(
-                                                        child: const Text('OK'),
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                      )
-                                                    ]));
-                                      },
-                                    ),
-                                ])
-
-                                /*child: ListView(children: <Widget>[
                                   for (var i = 0;
                                       i < user["achievements"].length;
                                       i++)
                                     ListTile(
                                       leading: CircleAvatar(
                                         backgroundImage: AssetImage(
-                                            'assets/achievements/social_bug.png'),
+                                            'assets/achievements/' +
+                                                user["achievements"][i]["id"] +
+                                                '.png'),
                                       ),
                                       title: Text(
                                           user["achievements"][i]["title"]),
                                       subtitle: Row(
                                         children: <Widget>[
-                                          for (var i = 0;
-                                              i <
+                                          for (var j = 0;
+                                              j <
                                                   user["achievements"][i]
                                                       ["progress"];
-                                              ++i)
-                                            const Icon(Icons.brightness_1,
-                                                size: 14),
-                                          for (var i = 0;
-                                              i <
+                                              ++j)
+                                            Icon(Icons.brightness_1,
+                                                size: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary),
+                                          for (var j = 0;
+                                              j <
                                                   user["achievements"][i]
                                                           ["stages"] -
                                                       user["achievements"][i]
                                                           ["progress"];
-                                              ++i)
-                                            const Icon(
-                                                Icons.brightness_1_outlined,
-                                                size: 14),
+                                              ++j)
+                                            Icon(Icons.brightness_1_outlined,
+                                                size: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary),
                                         ],
                                       ),
                                       onTap: () {
@@ -384,8 +347,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     ]));
                                       },
                                     ),
-                                ])*/
-                                ),
+                                ])),
                           ],
                         ),
                         Column(children: [
