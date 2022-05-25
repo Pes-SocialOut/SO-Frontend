@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
+
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     
+    
     double borderradius = 10.0;
     double widthButton = 300.0;
     double heightButton = 40.0;
     
+
     return Stack(
       children: <Widget>[
         Image.asset(
