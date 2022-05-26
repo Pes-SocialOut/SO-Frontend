@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
+import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/main.dart';
 
 class APICalls {
@@ -178,7 +179,7 @@ class APICalls {
   void _redirectToLogin() {
     // ignore: todo
     // TODO: Navegar a la login screen
-    navigatorKey.currentState!.pushNamed('/welcome');
+    navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const WelcomeScreen()), (route) => false);
   }
 
   void _redirectToHomeScreen() {
