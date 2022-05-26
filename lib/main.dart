@@ -20,11 +20,12 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   //final prefs = await SharedPreferences.getInstance();
   runApp(
-    EasyLocalization(supportedLocales: [
-      Locale('ca', 'ES'),
-      Locale('en'),
-      Locale('es', 'ES')
-    ], path: 'translations', fallbackLocale: Locale('en'), child: MyApp()),
+    EasyLocalization(
+      supportedLocales: [Locale('ca', 'ES'), Locale('en'), Locale('es', 'ES')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      child: MyApp(),
+    ),
   );
 }
 
