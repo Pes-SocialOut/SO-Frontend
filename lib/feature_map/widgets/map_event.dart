@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class EventWidget extends StatefulWidget {
-  const EventWidget({Key? key}) : super(key: key);
+  final Map<String, dynamic> event;
+  const EventWidget({Key? key, required this.event}) : super(key: key);
 
   @override
   State<EventWidget> createState() => _EventWidgetState();
