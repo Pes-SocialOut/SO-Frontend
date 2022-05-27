@@ -1,7 +1,6 @@
 import 'dart:core';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-
 import 'package:so_frontend/utils/api_controller.dart';
 
 class ChangePassword extends StatefulWidget {

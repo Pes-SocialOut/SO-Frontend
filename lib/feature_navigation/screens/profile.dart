@@ -65,10 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(children: const [
                           CircleAvatar(
                             radius: 50,
-                            backgroundImage: /*({user["profile_img_uri"]} != null)
-                        ? AssetImage(user[0]["profile_img_uri"])
-                        :*/
-                                AssetImage("assets/dog.jpg"),
+                            backgroundImage: AssetImage("assets/dog.jpg"),
                           ),
                         ]),
                       ),
@@ -244,9 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.17,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal:
-                                20), //apply padding horizontal or vertical only
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           "${user["description"]}",
                           style: explainStyle,
@@ -254,14 +249,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    //const Divider(indent: 5, endIndent: 5),
                     Row(children: [
                       Column(
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'LOGROS',
+                              'ACHIEVEMENTS',
                               style: titleStyle,
                               textAlign: TextAlign.center,
                             ),
@@ -278,7 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'AMIGOS',
+                              'FRIENDS',
                               style: titleStyle,
                               textAlign: TextAlign.center,
                             ),
@@ -295,22 +289,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     MediaQuery.of(context).size.height * 0.47,
                                 width: MediaQuery.of(context).size.width * 0.42,
                                 child: ListView(children: <Widget>[
-                                  for (var i = 0; i < 5; i++)
+                                  for (var i = 0;
+                                      i < user["achievements"].length;
+                                      i++)
                                     ListTile(
-                                      leading: const CircleAvatar(
+                                      leading: CircleAvatar(
                                         backgroundImage: AssetImage(
-                                            'assets/crear_evento.png'),
+                                            'assets/achievements/' +
+                                                user["achievements"][i]["id"] +
+                                                '.png'),
                                       ),
-                                      title: const Text('Creador'),
+                                      title: Text(
+                                          user["achievements"][i]["title"]),
                                       subtitle: Row(
                                         children: <Widget>[
-                                          for (var i = 0; i < 3; ++i)
+                                          for (var j = 0;
+                                              j <
+                                                  user["achievements"][i]
+                                                      ["progress"];
+                                              ++j)
                                             Icon(Icons.brightness_1,
                                                 size: 14,
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .secondary),
-                                          for (var i = 0; i < 2; ++i)
+                                          for (var j = 0;
+                                              j <
+                                                  user["achievements"][i]
+                                                          ["stages"] -
+                                                      user["achievements"][i]
+                                                          ["progress"];
+                                              ++j)
                                             Icon(Icons.brightness_1_outlined,
                                                 size: 14,
                                                 color: Theme.of(context)
@@ -322,10 +331,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
-                                                    title:
-                                                        const Text('Creador'),
-                                                    content: const Text(
-                                                        'El usuario ha creado 5 eventos'),
+                                                    title: Text(
+                                                        user["achievements"][i]
+                                                            ["title"]),
+                                                    content: Text(
+                                                        user["achievements"][i]
+                                                            ["description"]),
                                                     actions: [
                                                       TextButton(
                                                         child: const Text('OK'),
@@ -336,48 +347,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     ]));
                                       },
                                     ),
-                                ])
-                                /* 
-                                child: ListView(children: <Widget>[
-                                  for (var i = 0; i < user["achievements"].length; i++)
-                                    const ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'assets/' + user["achievements"][i]["id"] + '.png'),
-                                      ),
-                                      title: Text(user["achievements"][i]["title"]),
-                                      subtitle: Row(
-                                          children: <Widget>[
-                                            for (var i = 0; i < user["achievements"][i]["progress"]; ++i)
-                                              const Icon(Icons.brightness_1,
-                                                  size: 14),
-                                            for (var i = 0; i < user["achievements"][i]["stages"]-user["achievements"][i]["progress"]; ++i)
-                                              const Icon(
-                                                  Icons.brightness_1_outlined,
-                                                  size: 14),
-                                          ],
-                                        ),
-                                       onTap: () {
-                                         showDialog(
-                                            context: context,
-                                            builder: (context) => AlertDialog(
-                                                    title:
-                                                        Text(user["achievements"][i]["title"]),
-                                                    content: Text(
-                                                        user["achievements"][i]["description"]),
-                                                    actions: [
-                                                      TextButton(
-                                                        child: const Text('OK'),
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                      )
-                                                    ]));
-                                       },
-                                    ),
-                                ])
-                                */
-                                ),
+                                ])),
                           ],
                         ),
                         Column(children: [
