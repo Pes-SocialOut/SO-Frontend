@@ -106,8 +106,6 @@ class _MapWidgetState extends State<MapWidget> {
                                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                                   if (snapshot.connectionState == ConnectionState.done) {
                                     var color = json.decode(snapshot.data.body);
-                                    print(color);
-                                    print(events[i]["latitude"].toString() + " " + events[i]["longitud"].toString());
                                     return IconButton(
                                       icon: const Icon(Icons.location_on_sharp, size: 40),
                                       onPressed: () => showEvent(events[i]),
