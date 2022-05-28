@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/api_controller.dart';
 
 class chatAPI {
-  final String basicUrl = "https://socialout-develop.herokuapp.com/v1/users/";
+  final String basicUrl = "https://socialout-develop.herokuapp.com/";
 
   /* Crear el chat */
   Future<http.Response> createChat(
@@ -11,18 +11,49 @@ class chatAPI {
     String participantId,
     ) async {
     String _path = 'v1/chat/';
-    String finalUri = basicUrl + _path;
+    //String partEvent = 'event_id='+eventId;
+    //String partPartcipant = '&participant_id='+participantId;
+    //String finalUri = basicUrl + _path+partEvent+partPartcipant;
+    String finalUri = basicUrl+_path;
     var str = {
       "event_id": eventId,
       "participant_id": participantId,
     };
-
     final response = await http.post(Uri.parse(finalUri),
         body: jsonEncode(str), headers: {'Content-Type': 'application/json'});
 
+    if (response.statusCode != 200) {
+      // return error
+    }
+    else{
+
+    }
+    
     return response;
   }
 
+  
+  /* Crear el chat */
+  Future<http.Response> enterChat(
+    String eventId,
+    String participantId,
+    ) async {
+    String _path = 'v1/chat/';
+    String partEvent = 'event_id='+eventId;
+    String partPartcipant = '&participant_id='+participantId;
+    String finalUri = basicUrl + _path+partEvent+partPartcipant;
+    
+    final response = await http.get(Uri.parse(finalUri));
+
+    if (response.statusCode != 200) {
+      // return error
+    }
+    else{
+
+    }
+    
+    return response;
+  }
   /* Crear el mensage */
   Future<http.Response> createMessage(
     String senderId,

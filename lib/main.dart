@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
         '/profile': (_) => const ProfileScreen(id: "0"),
         '/edit_profile': (_) => const EditarProfile(),
         '/change_password': (_) => const ChangePassword(),
-        '/chat': (_) => const ChatScreen(),
+        '/chat': (_) => ChatScreen(),
       },
     );
   }

@@ -29,6 +29,14 @@ class Settings extends StatelessWidget {
             onTap: () => {Navigator.of(context).pushNamed('/change_password')},
           ),
           ListTile(
+            leading: const Icon(Icons.verified_user),
+            title: const Text('Go to chat'),
+            onTap: () => {
+              print(APICalls().getCurrentUser()),  
+              Navigator.of(context).pushNamed('/chat')
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
             onTap: () => {

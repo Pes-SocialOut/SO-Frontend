@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_chat/data_local/data.dart';
+import 'package:so_frontend/feature_chat/services/chat_service.dart';
+import 'package:so_frontend/feature_user/services/login_signUp.dart';
+import 'package:so_frontend/utils/api_controller.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({Key? key}) : super(key: key);
-
-   @override
+   ChatScreen({Key? key}) : super(key: key);
+  final chatAPI cAPI= chatAPI();
+  
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -172,7 +176,10 @@ class ChatScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 15,),
                   FloatingActionButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      String aux_s = APICalls().getCurrentUser();
+                      cAPI.createChat(aux_s, APICalls().getCurrentUser());
+                    },
                     child: Icon(Icons.send, color: Theme.of(context).colorScheme.primary,size: 18,),
                     backgroundColor: Colors.blue,
                     elevation: 0,
