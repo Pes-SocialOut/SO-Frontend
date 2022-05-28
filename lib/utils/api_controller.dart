@@ -1,9 +1,12 @@
 // ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:so_frontend/feature_navigation/screens/navigation.dart';
+import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/main.dart';
 
 class APICalls {
@@ -107,37 +110,30 @@ class APICalls {
   Future<dynamic> putItem(String endpoint, List<String> pathParams,
       Map<String, dynamic>? bodyData) async {
     final uri = buildUri(endpoint, pathParams, {});
-    print("uri: " + uri.toString());
-    final response = await http.put(uri, body: jsonEncode(bodyData), headers: {
+    final response = await http.put(uri, body: json.encode(bodyData), headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      return _refresh(() => putItem(endpoint, pathParams, bodyData),
+      return _refresh(
+          () => putItem(endpoint, pathParams, bodyData),
           () => _redirectToLogin());
-    }
+    } 
     return response;
   }
 
-  void deleteItem(String endpoint, List<String> pathParams, Function onSuccess,
-      Function onError) async {
-    final uri = buildUri(endpoint, pathParams, {});
-    final response = await http.post(uri, headers: {
+  Future<dynamic> deleteItem(String endpoint, List<String> pathParams) async {
+    final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
+    final response = await http.delete(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(() => deleteItem(endpoint, pathParams, onSuccess, onError),
+      return _refresh(() => deleteItem(endpoint, pathParams),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
-    }
+    } 
+    return response;
   }
 
   void logOut() async {
@@ -185,13 +181,13 @@ class APICalls {
   void _redirectToLogin() {
     // ignore: todo
     // TODO: Navegar a la login screen
-    navigatorKey.currentState!.pushNamed('/welcome');
+    navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const WelcomeScreen()), (route) => false);
   }
 
   void _redirectToHomeScreen() {
     // ignore: todo
     // TODO: Navegar a la home screen
-    navigatorKey.currentState!.pushNamed('/home');
+    navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationBottomBar()), (route) => false);
   }
 
   factory APICalls() {

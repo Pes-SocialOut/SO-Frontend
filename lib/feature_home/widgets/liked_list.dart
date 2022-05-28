@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:so_frontend/utils/like_button.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
 
-class JoinedList extends StatefulWidget {
-  const JoinedList({ Key? key }) : super(key: key);
+class LikedList extends StatefulWidget {
+  const LikedList({ Key? key }) : super(key: key);
 
   @override
-  State<JoinedList> createState() => _JoinedListState();
+  State<LikedList> createState() => _LikedListState();
 }
 
-class _JoinedListState extends State<JoinedList> {
+class _LikedListState extends State<LikedList> {
 
-  
   APICalls api = APICalls();
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +23,11 @@ class _JoinedListState extends State<JoinedList> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: FutureBuilder(
-        future: api.getCollection('/v2/events/:0/:1', ['joined', api.getCurrentUser()], null),
+        future: api.getCollection('/v2/events/:0/:1', ['like', api.getCurrentUser()], null),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var _joined = json.decode(snapshot.data.body);
-            if (_joined.isEmpty) return const Center(child: Text('You have not joined any event!'));
+            if (_joined.isEmpty) return const Center(child: Text('You have not liked any event!'));
             return ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,

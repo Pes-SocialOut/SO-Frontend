@@ -24,7 +24,7 @@ class EditEventScreen extends StatelessWidget {
           },
         ),
       ),
-      body: const EditEventForm(id: "")
+      body: EditEventForm(id: id)
     );
   }
 }

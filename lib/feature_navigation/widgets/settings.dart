@@ -94,8 +94,9 @@ class _SettingsState extends State<Settings> {
                       showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                  title: Text('Signoff').tr(),
-                                  content: Text('sureout').tr(),
+                                  title: const Text('Log out'),
+                                  content: const Text(
+                                      'Are you sure you want to log out?'),
                                   actions: [
                                     TextButton(
                                       child: Text('Cancel').tr(),

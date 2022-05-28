@@ -13,8 +13,8 @@ import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 import 'package:so_frontend/feature_user/screens/change_password.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
-
 import 'feature_user/screens/languages.dart';
+import 'package:so_frontend/utils/go_to.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          cardColor: Colors.white,
           primaryColor: Colors.green,
           tabBarTheme: TabBarTheme(
             labelColor: Theme.of(context).colorScheme.secondary,
@@ -60,13 +61,6 @@ class MyApp extends StatelessWidget {
                 // color for indicator (underline)
                 borderSide: BorderSide(
                     width: 2, color: Theme.of(context).colorScheme.primary)),
-            unselectedLabelColor:
-                Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-            unselectedLabelStyle: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-                color:
-                    Theme.of(context).colorScheme.secondary), // color for text
           ),
           colorScheme: ColorScheme(
             brightness: Brightness.light,
