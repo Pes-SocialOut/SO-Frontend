@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 
 import 'package:so_frontend/utils/like_button.dart';
@@ -46,9 +47,23 @@ class _EventWidgetState extends State<EventWidget> {
     }
   ];
 
+  APICalls api = APICalls();
+
   //Temporalmente hardcoded
   String eventPhoto = 'assets/gato.jpg';
   String creatorPhoto = 'assets/dog.jpg';
+
+  Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
+
+    final response = await api.postItem('/v2/events/:0/:1', [widget.event["id"], 'join'], bodyData);
+    return response;
+  }
+
+  Future<dynamic> leaveEvent(String id, Map<String, dynamic> bodyData) async {
+
+    final response = await api.postItem('/v2/events/:0/:1', [widget.event["id"], 'leave'], bodyData);
+    return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,40 +192,113 @@ class _EventWidgetState extends State<EventWidget> {
                   size: 30.0, color: Color.fromARGB(255, 110, 108, 108)),
               onPressed: () {}),
           const Divider(endIndent: 30),
-          ElevatedButton(
-            child: const Text('    JOIN NOW    '),
-            style: TextButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: Colors.green,
-            ),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                          title: const Text('Joined!'),
-                          content: const Text(
-                              'You have joined the event! Now you will recieve notifications about it.\nYou can change this on settings.'),
-                          actions: [
-                            TextButton(
-                              child: const Text('Aceptar'),
-                              onPressed: () => Navigator.pop(context),
+          FutureBuilder(
+            future: api.getCollection('/v2/events/participants',[],{"eventid":widget.event["id"]}),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var participants = json.decode(snapshot.data.body);
+                print(participants);
+                var found = false;
+                int i = 0;
+                while (!found && i < participants.length) {
+                  if (participants[i] == api.getCurrentUser()) {
+                    found = true;
+                  }
+                  ++i;
+                }
+                if (!found) {
+                    
+                    return InkWell(
+                      onTap: () async {
+                        final bodyData = {"user_id": api.getCurrentUser()};
+                        var response = await joinEvent(_event[0]["id"], bodyData);
+                        SnackBar snackBar;
+                        if (response.statusCode == 200) {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.secondary,
+                            content: const Text('You are in!'),
+                          );
+                        } else {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.error,
+                            content: const Text('Something bad happened. Try again later...'),
+                          );
+                        }
+                        setState(() {
+                          found = false;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Theme.of(context).colorScheme.secondary,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3), // changes position of shadow
                             ),
-                          ]));
-            },
+                          ],
+                        ),
+                        width: 150,
+                        height: 40,
+                        child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                      ),
+                    );
+                }
+                else {
+                  return InkWell(
+                    onTap: () async {
+                      final bodyData = {"user_id": api.getCurrentUser()};
+                      var response = await leaveEvent(_event[0]["id"], bodyData);
+                      setState(() {
+                        found = false;
+                      });
+                      SnackBar snackBar;
+                        if (response.statusCode == 200) {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.secondary,
+                            content: const Text('You left!'),
+                          );
+                        } else {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.error,
+                            content: const Text('Something bad happened. Try again later...'),
+                          );
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Theme.of(context).colorScheme.error,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.error.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      width: 150,
+                      height: 40,
+                      child: Center(child: Text('LEAVE', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                      
+                    ),
+                  );
+                }
+                
+              }
+              else {
+                return const CircularProgressIndicator();
+              }
+            }
           ),
           const Divider(indent: 30),
           LikeButton(id: widget.event["id"])
-          // IconButton(
-          //     icon: Icon(Icons.favorite,
-          //         size: 30.0,
-          //         color: (isFavourite == true)
-          //             ? Colors.red
-          //             : const Color.fromARGB(255, 114, 113, 113)),
-          //     onPressed: () {
-          //       setState(() {
-          //         isFavourite = !isFavourite;
-          //       });
-          //     })
         ]),
       ]),
     );
