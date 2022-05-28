@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
 
@@ -17,12 +20,9 @@ class _FormRegisterState extends State<FormRegister> {
   late String password = widget.password;
   late String username;
   late String description;
-  late String languages;
   late String hobbies;
   late String verification;
-  String spanish = "spanish";
-  String english = "english";
-  String catalan = "catalan";
+  bool incorrectCode = false;
   List<String> idiomas = [];
   bool colorInit = true;
   bool colorInit2 = true;
@@ -36,14 +36,14 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildUsername() {
     return TextFormField(
-      decoration: const InputDecoration(
-        labelText: "Username",
+      decoration: InputDecoration(
+        labelText: "Username".tr(),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(29))),
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Please enter some Username';
+          return 'enterUsername'.tr();
         }
         return null;
       },
@@ -55,14 +55,14 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildDescription() {
     return TextFormField(
-      decoration: const InputDecoration(
-        labelText: "Description",
+      decoration: InputDecoration(
+        labelText: "Description".tr(),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(29))),
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Please enter some Description';
+          return 'enterDescription'.tr();
         }
         return null;
       },
@@ -74,101 +74,106 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildLanguages() {
     return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                primary: primary,
-                onPrimary: secundary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                minimumSize: const Size(100, 50)),
-            onPressed: () {
-              colorInit = !colorInit;
-              if (!colorInit) {
-                idiomas.add(spanish);
-              } else {
-                idiomas.remove(spanish);
-              }
-              setState(() {
-                primary = nuevoColor(colorInit, "primary");
-                secundary = nuevoColor(colorInit, "secondary");
-              });
-            },
-            child: Text(
-              spanish,
-              style: const TextStyle(
-                  height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+      child: Container(
+        alignment: Alignment.center,
+        height: 50,
+        width: 260,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: primary,
+                  onPrimary: secundary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(80, 50)),
+              onPressed: () {
+                colorInit = !colorInit;
+                if (!colorInit) {
+                  idiomas.add("spanish");
+                } else {
+                  idiomas.remove("spanish");
+                }
+                setState(() {
+                  primary = nuevoColor(colorInit, "primary");
+                  secundary = nuevoColor(colorInit, "secondary");
+                });
+              },
+              child: Text(
+                "Spanish".tr(),
+                style: const TextStyle(
+                    height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          const SizedBox(width: 15),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                primary: primary2,
-                onPrimary: secundary2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                minimumSize: const Size(100, 50)),
-            onPressed: () {
-              colorInit2 = !colorInit2;
-              if (!colorInit2) {
-                idiomas.add(english);
-              } else {
-                idiomas.remove(english);
-              }
-              setState(() {
-                primary2 = nuevoColor(colorInit2, "primary");
-                secundary2 = nuevoColor(colorInit2, "secondary");
-              });
-            },
-            child: Text(
-              english,
-              style: const TextStyle(
-                  height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+            const SizedBox(width: 5),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: primary2,
+                  onPrimary: secundary2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(80, 50)),
+              onPressed: () {
+                colorInit2 = !colorInit2;
+                if (!colorInit2) {
+                  idiomas.add("english");
+                } else {
+                  idiomas.remove("english");
+                }
+                setState(() {
+                  primary2 = nuevoColor(colorInit2, "primary");
+                  secundary2 = nuevoColor(colorInit2, "secondary");
+                });
+              },
+              child: Text(
+                "English".tr(),
+                style: const TextStyle(
+                    height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          const SizedBox(width: 15),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                primary: primary3,
-                onPrimary: secundary3,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                minimumSize: const Size(100, 50)),
-            onPressed: () {
-              colorInit3 = !colorInit3;
-              if (!colorInit3) {
-                idiomas.add(catalan);
-              } else {
-                idiomas.remove(catalan);
-              }
-              setState(() {
-                primary3 = nuevoColor(colorInit3, "primary");
-                secundary3 = nuevoColor(colorInit3, "secondary");
-              });
-            },
-            child: Text(
-              catalan,
-              style: const TextStyle(
-                  height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+            const SizedBox(width: 5),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: primary3,
+                  onPrimary: secundary3,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  minimumSize: const Size(80, 50)),
+              onPressed: () {
+                colorInit3 = !colorInit3;
+                if (!colorInit3) {
+                  idiomas.add("catalan");
+                } else {
+                  idiomas.remove("catalan");
+                }
+                setState(() {
+                  primary3 = nuevoColor(colorInit3, "primary");
+                  secundary3 = nuevoColor(colorInit3, "secondary");
+                });
+              },
+              child: Text(
+                "Catalan".tr(),
+                style: const TextStyle(
+                    height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildHobbies() {
     return TextFormField(
-      decoration: const InputDecoration(
-        labelText: "hobbies",
+      decoration: InputDecoration(
+        labelText: "hobbies".tr(),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(29))),
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Please enter some hobbie';
+          return 'enterhobbie'.tr();
         }
         return null;
       },
@@ -180,14 +185,14 @@ class _FormRegisterState extends State<FormRegister> {
 
   Widget _buildVerification() {
     return TextFormField(
-      decoration: const InputDecoration(
-        labelText: "Verification Code",
+      decoration: InputDecoration(
+        labelText: "VerificationCode".tr(),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(29))),
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Please enter verification code';
+          return 'enterVeriCode'.tr();
         }
         return null;
       },
@@ -215,15 +220,30 @@ class _FormRegisterState extends State<FormRegister> {
     return colorRetorno;
   }
 
+  SnackBar mensajeMuestra(String mensaje) {
+    return SnackBar(
+      content: Text(mensaje),
+    );
+  }
+
+  Widget crearMensajeError(String mensaje) {
+    return Center(
+      child: Text(
+        mensaje,
+        style: const TextStyle(color: Colors.red),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("User register"),
+        title: Text("Userregister").tr(),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Container(
-          margin: const EdgeInsets.all(24),
+      body: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Form(
             key: formKey,
             child: ListView(
@@ -236,15 +256,15 @@ class _FormRegisterState extends State<FormRegister> {
                 _buildHobbies(),
                 const SizedBox(height: 15),
                 _buildVerification(),
-                const SizedBox(height: 15),
-                const Center(
-                  child: Text(
-                    "preferred languages: ",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                        color: Color.fromARGB(255, 112, 108, 108)),
-                  ),
+                if (incorrectCode) crearMensajeError("incorrectVeriCode".tr()),
+                const SizedBox(height: 10),
+                Text(
+                  "preferredlanguages".tr(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                      color: Color.fromARGB(255, 112, 108, 108)),
                 ),
                 const SizedBox(height: 10),
                 _buildLanguages(),
@@ -264,22 +284,34 @@ class _FormRegisterState extends State<FormRegister> {
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
-                        int ap = await uapi.finalRegistrer(
-                            email,
-                            password,
-                            username,
-                            description,
-                            idiomas,
-                            hobbies,
-                            verification);
-                        if (ap == 200) {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/home', (route) => false);
+                        if (idiomas == []) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              mensajeMuestra("languageneeded".tr()));
+                          setState(() {
+                            incorrectCode = false;
+                          });
+                        } else {
+                          int ap = await uapi.finalRegistrer(
+                              email,
+                              password,
+                              username,
+                              description,
+                              idiomas,
+                              hobbies,
+                              verification);
+                          if (ap == 200) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/home', (route) => false);
+                          } else {
+                            setState(() {
+                              incorrectCode = true;
+                            });
+                          }
                         }
                       }
                     },
-                    child: const Text(
-                      'Submit',
+                    child: Text(
+                      'Submit'.tr(),
                       style: TextStyle(
                           height: 1.0,
                           fontSize: 20,
@@ -304,23 +336,22 @@ class _FormRegisterState extends State<FormRegister> {
                         context: context,
                         barrierDismissible: false,
                         builder: (context) => AlertDialog(
-                          title: const Text("cancel subscription"),
-                          content:
-                              const Text("want to cancel the subscription?"),
+                          title: Text("cancelsubscription").tr(),
+                          content: Text("cancelSubscr").tr(),
                           actions: <Widget>[
                             TextButton(
                                 onPressed: () =>
                                     Navigator.of(context).pushNamed('/welcome'),
-                                child: const Text("Ok")),
+                                child: Text("Ok").tr()),
                             TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: const Text("cancel")),
+                                child: Text("Cancel").tr()),
                           ],
                         ),
                       );
                     },
-                    child: const Text(
-                      'cancelar',
+                    child: Text(
+                      'Cancel'.tr(),
                       style: TextStyle(
                           height: 1.0,
                           fontSize: 20,

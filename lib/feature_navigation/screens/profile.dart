@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
@@ -35,8 +38,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text('Profile',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface, fontSize: 16)),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 16))
+              .tr(),
           backgroundColor: Theme.of(context).colorScheme.background,
           leading: IconButton(
             iconSize: 24,
@@ -261,10 +266,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'LOGROS',
+                              'Logros',
                               style: titleStyle,
                               textAlign: TextAlign.center,
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -278,10 +283,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'AMIGOS',
+                              'Amigos',
                               style: titleStyle,
                               textAlign: TextAlign.center,
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -301,7 +306,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         backgroundImage: AssetImage(
                                             'assets/crear_evento.png'),
                                       ),
-                                      title: const Text('Creador'),
+                                      title: Text('Creador').tr(),
                                       subtitle: Row(
                                         children: <Widget>[
                                           for (var i = 0; i < 3; ++i)
@@ -322,13 +327,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
-                                                    title:
-                                                        const Text('Creador'),
-                                                    content: const Text(
-                                                        'El usuario ha creado 5 eventos'),
+                                                    title: Text('Creador').tr(),
+                                                    content:
+                                                        Text('usuario5eventos')
+                                                            .tr(),
                                                     actions: [
                                                       TextButton(
-                                                        child: const Text('OK'),
+                                                        child: Text('Ok').tr(),
                                                         onPressed: () =>
                                                             Navigator.pop(
                                                                 context),
@@ -416,8 +421,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           },
                                         )
                                     ])
-                                  : const Text(
-                                      'You can only see your own friends :C'),
+                                  : Text('onlyseeyourfriends').tr(),
                             ),
                           ],
                         )

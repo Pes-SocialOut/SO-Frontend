@@ -194,7 +194,7 @@ class userAPI {
     String tokenGoogle,
     String username,
     String description,
-    String languages,
+    List languages,
     String hobbies,
   ) async {
     String _path = 'register/google';
@@ -227,7 +227,7 @@ class userAPI {
     String tokenFacebook,
     String username,
     String description,
-    String languages,
+    List languages,
     String hobbies,
   ) async {
     String _path = 'register/facebook';

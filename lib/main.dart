@@ -14,6 +14,8 @@ import 'package:so_frontend/feature_user/screens/change_password.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'feature_user/screens/languages.dart';
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +26,7 @@ void main() async {
       supportedLocales: [Locale('ca', 'ES'), Locale('en'), Locale('es', 'ES')],
       path: 'assets/translations',
       fallbackLocale: Locale('en'),
+      saveLocale: true,
       child: MyApp(),
     ),
   );
@@ -90,6 +93,7 @@ class MyApp extends StatelessWidget {
         '/profile': (_) => const ProfileScreen(id: "0"),
         '/edit_profile': (_) => const EditarProfile(),
         '/change_password': (_) => const ChangePassword(),
+        '/languages': (_) => const LanguagesOptions(),
       },
     );
   }

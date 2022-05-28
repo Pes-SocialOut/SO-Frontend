@@ -1,7 +1,7 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_const_constructors
 
 import 'dart:convert';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -55,7 +55,7 @@ class LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0x00c8c8c8),
-          title: const Text('Hello Again!'),
+          title: Text('hello').tr(),
           leading: IconButton(
             iconSize: 24,
             color: Theme.of(context).colorScheme.onSurface,
@@ -68,29 +68,29 @@ class LoginScreenState extends State<LoginScreen> {
         body: Form(
           key: formKey,
           child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20),
               child: ListView(children: <Widget>[
                 // LOGIN WITH GOOGLE
                 Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
                   child: SignInButton(
                     Buttons.Google,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Log in with Google",
+                    text: "LoginwithGoogle".tr(),
                     onPressed: () => _handleLoginGoogle(context),
                   ),
                 ),
                 // LOGIN WITH FACEBOOK
                 Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
                   child: SignInButton(
                     Buttons.Facebook,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Log in with Facebook",
+                    text: "LoginwithFacebook".tr(),
                     onPressed: () => _handleLoginFacebook(context),
                   ),
                 ),
@@ -102,13 +102,13 @@ class LoginScreenState extends State<LoginScreen> {
                     key: formKey3,
                     child: TextFormField(
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                          hintText: "Enter email", labelText: "Email"),
+                      decoration: InputDecoration(
+                          hintText: "Enteremail".tr(), labelText: "Email".tr()),
                       validator: (value) {
                         if (value!.isEmpty ||
                             !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                 .hasMatch(value)) {
-                          return "a valid email is required";
+                          return "validemail".tr();
                         }
                         return null;
                       },
@@ -125,18 +125,18 @@ class LoginScreenState extends State<LoginScreen> {
                   child: TextFormField(
                     keyboardType: TextInputType.text,
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: "Enter password",
-                      labelText: "Password",
+                    decoration: InputDecoration(
+                      hintText: "Enterpassword".tr(),
+                      labelText: "Password".tr(),
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "a password is required";
+                        return "passwordrequired".tr();
                       } else {
                         RegExp regex = RegExp(
                             r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
                         if (!regex.hasMatch(value)) {
-                          return 'Enter valid password: min8caracters(numeric,UpperCase,LowerCase)';
+                          return 'validpassword'.tr();
                         } else {
                           return null;
                         }
@@ -174,7 +174,7 @@ class LoginScreenState extends State<LoginScreen> {
                           } else if (aux == 400) {
                             setState(() {
                               incorrectPassword = true;
-                              message = "Incorrect Password";
+                              message = "IncorrectPassword".tr();
                             });
                           }
                         } else if (ap["action"] == "link_auth") {
@@ -189,12 +189,12 @@ class LoginScreenState extends State<LoginScreen> {
                             context: context,
                             barrierDismissible: false,
                             builder: (context) => AlertDialog(
-                              title: const Text("Fail Login"),
-                              content: const Text("Account does not exist"),
+                              title: Text("FailLogin").tr(),
+                              content: Text("Accountdoesnotexist").tr(),
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text("Ok"),
+                                  child: Text("Ok").tr(),
                                 ),
                               ],
                             ),
@@ -202,13 +202,13 @@ class LoginScreenState extends State<LoginScreen> {
                         }
                       }
                     },
-                    child: const Text(
-                      'Log In',
+                    child: Text(
+                      'login',
                       style: TextStyle(
                           height: 1.0,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
-                    ),
+                    ).tr(),
                   ),
                 ),
                 //FORGET PASSWORD?
@@ -217,11 +217,11 @@ class LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.all(10),
                   child: InkWell(
                       child: Text(
-                        'Forget password?',
+                        'Forgetpassword',
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                             fontSize: policyTextSize),
-                      ),
+                      ).tr(),
                       onTap: () async {
                         if (formKey3.currentState!.validate()) {
                           formKey3.currentState!.save();
@@ -232,123 +232,128 @@ class LoginScreenState extends State<LoginScreen> {
                               context: context,
                               barrierDismissible: false,
                               builder: (context) => AlertDialog(
-                                title:
-                                    const Text("We send a code to your email"),
+                                title: Text("sendcode").tr(),
                                 content: StatefulBuilder(builder:
                                     (BuildContext context,
                                         StateSetter cambiarEstado) {
                                   return Form(
                                     key: formKey2,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        TextFormField(
-                                          decoration: const InputDecoration(
-                                            labelText: "New Password",
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(29))),
-                                          ),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return "a password is required";
-                                            } else {
-                                              RegExp regex = RegExp(
-                                                  r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
-                                              if (!regex.hasMatch(value)) {
-                                                return 'min 8 caracters(numeric,UpperCase,LowerCase)';
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          TextFormField(
+                                            decoration: InputDecoration(
+                                              labelText: "NewPassword".tr(),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(29))),
+                                            ),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return "passwordrequired".tr();
                                               } else {
-                                                return null;
-                                              }
-                                            }
-                                          },
-                                          onSaved: (value) {
-                                            newPassword = value.toString();
-                                          },
-                                        ),
-                                        const SizedBox(height: 15),
-                                        TextFormField(
-                                          decoration: const InputDecoration(
-                                            labelText: "Verification Code",
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(29))),
-                                          ),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Please enter verification code';
-                                            }
-                                            return null;
-                                          },
-                                          onSaved: (value) {
-                                            codeVerification = value.toString();
-                                          },
-                                        ),
-                                        Text(
-                                          mensaje2,
-                                          style: const TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () async {
-                                                if (formKey2.currentState!
-                                                    .validate()) {
-                                                  formKey2.currentState!.save();
-                                                  int ap = await uapi
-                                                      .finalPasswordRecovery(
-                                                          email,
-                                                          newPassword,
-                                                          codeVerification);
-                                                  if (ap == 200) {
-                                                    Navigator.of(context)
-                                                        .pushNamedAndRemoveUntil(
-                                                            '/home',
-                                                            (route) => false);
-                                                  } else if (ap == 403) {
-                                                    cambiarEstado(() {
-                                                      mensaje2 =
-                                                          "Incorrect verification Code";
-                                                    });
-                                                  }
+                                                RegExp regex = RegExp(
+                                                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
+                                                if (!regex.hasMatch(value)) {
+                                                  return 'validpass2'.tr();
+                                                } else {
+                                                  return null;
                                                 }
-                                              },
-                                              child: const Text(
-                                                "Ok",
-                                                style: TextStyle(
-                                                  color: Colors.blue,
-                                                  fontSize: 30,
-                                                  fontStyle: FontStyle.normal,
-                                                  fontWeight: FontWeight.bold,
+                                              }
+                                            },
+                                            onSaved: (value) {
+                                              newPassword = value.toString();
+                                            },
+                                          ),
+                                          const SizedBox(height: 15),
+                                          TextFormField(
+                                            decoration: InputDecoration(
+                                              labelText:
+                                                  "VerificationCode".tr(),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(29))),
+                                            ),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'enterVeriCode'.tr();
+                                              }
+                                              return null;
+                                            },
+                                            onSaved: (value) {
+                                              codeVerification =
+                                                  value.toString();
+                                            },
+                                          ),
+                                          Text(
+                                            mensaje2,
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () async {
+                                                  if (formKey2.currentState!
+                                                      .validate()) {
+                                                    formKey2.currentState!
+                                                        .save();
+                                                    int ap = await uapi
+                                                        .finalPasswordRecovery(
+                                                            email,
+                                                            newPassword,
+                                                            codeVerification);
+                                                    if (ap == 200) {
+                                                      Navigator.of(context)
+                                                          .pushNamedAndRemoveUntil(
+                                                              '/home',
+                                                              (route) => false);
+                                                    } else if (ap == 403) {
+                                                      cambiarEstado(() {
+                                                        mensaje2 =
+                                                            "incorrectVeriCode"
+                                                                .tr();
+                                                      });
+                                                    }
+                                                  }
+                                                },
+                                                child: Text(
+                                                  "Ok".tr(),
+                                                  style: TextStyle(
+                                                    color: Colors.blue,
+                                                    fontSize: 30,
+                                                    fontStyle: FontStyle.normal,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                setState(() {
-                                                  incorrectPassword = false;
-                                                });
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text(
-                                                "Cancel",
-                                                style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 15,
-                                                  fontStyle: FontStyle.normal,
-                                                  fontWeight: FontWeight.bold,
+                                              TextButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    incorrectPassword = false;
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(
+                                                  "Cancel".tr(),
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 15,
+                                                    fontStyle: FontStyle.normal,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 }),
@@ -358,24 +363,24 @@ class LoginScreenState extends State<LoginScreen> {
                             if (aux["alternative_auths"].contains("facebook") &&
                                 aux["alternative_auths"].contains("google")) {
                               setState(() {
-                                message = "google and facebook registered";
+                                message = "gooFaceRegister".tr();
                                 incorrectPassword = true;
                               });
                             } else if (aux["alternative_auths"]
                                 .contains("google")) {
                               setState(() {
-                                message = "google registered";
+                                message = "googRegis".tr();
                                 incorrectPassword = true;
                               });
                             } else {
                               setState(() {
-                                message = "facebook registered";
+                                message = "faceRegis".tr();
                                 incorrectPassword = true;
                               });
                             }
                           } else {
                             setState(() {
-                              message = "Email not found";
+                              message = "Emailnotfound".tr();
                               incorrectPassword = true;
                             });
                           }
@@ -391,12 +396,12 @@ class LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.surface,
                               fontSize: policyTextSize),
-                          text: "Don't haven an account? "),
+                          text: "noAccount".tr()),
                       TextSpan(
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: policyTextSize),
-                          text: "Sign up",
+                          text: "signUp".tr(),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.of(context).pushNamed('/signup');
@@ -404,7 +409,7 @@ class LoginScreenState extends State<LoginScreen> {
                     ]),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
@@ -426,8 +431,8 @@ class LoginScreenState extends State<LoginScreen> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text("User does not exist"),
-            content: const Text("Do you want to sign up now?"),
+            title: Text("userNotExist").tr(),
+            content: Text("wantSign").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -435,10 +440,10 @@ class LoginScreenState extends State<LoginScreen> {
                     if (type == "facebook") FacebookSignInApi.logout();
                     Navigator.of(context).pushNamed('/signup');
                   },
-                  child: const Text("Ok")),
+                  child: Text("Ok").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("cancel")),
+                  child: Text("Cancel").tr()),
             ],
           ),
         );
@@ -448,10 +453,8 @@ class LoginScreenState extends State<LoginScreen> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text(
-                "Authentication method not available for this email, existe account with this email"),
-            content:
-                const Text("Do you want to connect the account of SocialOut?"),
+            title: Text("authNotExistAccount").tr(),
+            content: Text("wantConnec").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
@@ -475,10 +478,10 @@ class LoginScreenState extends State<LoginScreen> {
                           }
                       },
                   //Navigator.of(context).pushNamed('/welcome'),
-                  child: const Text("Yes")),
+                  child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("No")),
+                  child: Text("No").tr()),
             ],
           ),
         );
@@ -500,12 +503,12 @@ class LoginScreenState extends State<LoginScreen> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text('Sign in Failed'),
-            content: const Text("Please try again"),
+            title: Text('SigninFailed').tr(),
+            content: Text("tryAgain").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Ok")),
+                  child: Text("Ok").tr()),
             ],
           ),
         );

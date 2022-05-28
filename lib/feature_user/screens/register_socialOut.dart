@@ -1,5 +1,6 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/screens/link_user.dart';
@@ -27,11 +28,11 @@ class RegisterScreenState extends State<RegisterScreen> {
   bool incorrectConfirm = false;
 
   Widget crearMensajeError() {
-    return const Center(
+    return Center(
       child: Text(
-        "password and confirm password do not match",
+        "passwordconfirmnotmatch",
         style: TextStyle(color: Colors.red),
-      ),
+      ).tr(),
     );
   }
 
@@ -40,7 +41,7 @@ class RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0x00c8c8c8),
-        title: const Text('Register!'),
+        title: Text('Registerso').tr(),
       ),
       body: Form(
         key: formKey,
@@ -60,18 +61,21 @@ class RegisterScreenState extends State<RegisterScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  hintText: "Enter email",
-                  labelText: "Email",
+                  hintText: "Enteremail".tr(),
+                  labelText: "Email".tr(),
                 ),
                 validator: (value) {
                   if (value!.isEmpty ||
                       !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(value)) {
-                    return "a valid email is required";
+                    setState(() {
+                      incorrectConfirm = false;
+                    });
+                    return "validemail".tr();
                   }
                   return null;
                 },
@@ -105,17 +109,23 @@ class RegisterScreenState extends State<RegisterScreen> {
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  hintText: "Enter password",
-                  labelText: "Password",
+                  hintText: "Enterpassword".tr(),
+                  labelText: "Password".tr(),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "a password is required";
+                    setState(() {
+                      incorrectConfirm = false;
+                    });
+                    return "passwordrequired".tr();
                   } else {
                     RegExp regex =
                         RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
                     if (!regex.hasMatch(value)) {
-                      return 'Enter valid password: min8caracters(numeric,UpperCase,LowerCase)';
+                      setState(() {
+                        incorrectConfirm = false;
+                      });
+                      return 'validpassword'.tr();
                     } else {
                       return null;
                     }
@@ -152,12 +162,15 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                         )
                       : null,
-                  hintText: "Enter Confirm password",
-                  labelText: "Confirm password",
+                  hintText: "EnterConfirmpassword".tr(),
+                  labelText: "Confirmpassword".tr(),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "a confirm password is required";
+                    setState(() {
+                      incorrectConfirm = false;
+                    });
+                    return "Confirmrequired".tr();
                   } else {
                     return null;
                   }
@@ -206,10 +219,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                           context: context,
                           barrierDismissible: false,
                           builder: (context) => AlertDialog(
-                            title: const Text(
-                                "Authentication method not available for this email, exist account with this email"),
-                            content: const Text(
-                                "Do you want to connect the account of SocialOut??"),
+                            title: Text("methodnotavailableemail").tr(),
+                            content: Text("wantConnect").tr(),
                             actions: <Widget>[
                               TextButton(
                                   onPressed: () => {
@@ -222,10 +233,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                                             (route) => false)
                                       },
                                   //Navigator.of(context).pushNamed('/welcome'),
-                                  child: const Text("Yes")),
+                                  child: Text("Yes").tr()),
                               TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text("No")),
+                                  child: Text("No").tr()),
                             ],
                           ),
                         );
@@ -234,12 +245,12 @@ class RegisterScreenState extends State<RegisterScreen> {
                           context: context,
                           barrierDismissible: false,
                           builder: (context) => AlertDialog(
-                            title: const Text("Fail register"),
-                            content: const Text("Account already exists"),
+                            title: Text("Failregister").tr(),
+                            content: Text("Accountalreadyexists").tr(),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: const Text("Ok"),
+                                child: Text("Ok").tr(),
                               ),
                             ],
                           ),
@@ -248,11 +259,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                     }
                   }
                 },
-                child: const Text(
-                  'Register',
+                child: Text(
+                  'RegisterButton',
                   style: TextStyle(
                       height: 1.0, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+                ).tr(),
               ),
             ),
             Container(
@@ -266,14 +277,14 @@ class RegisterScreenState extends State<RegisterScreen> {
                         color: Theme.of(context).colorScheme.surface,
                         fontSize: 14,
                       ),
-                      text: "Do you already have an account? ",
+                      text: "alreadyhaveaccount".tr(),
                     ),
                     TextSpan(
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 14,
                       ),
-                      text: "Login",
+                      text: "login".tr(),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Navigator.of(context).pushNamed('/login');

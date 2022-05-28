@@ -31,92 +31,16 @@ class WelcomeScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width / 1.5,
                     ),
                     const SizedBox(height: 20),
-                    const Text("welcome").tr(),
-                    //const SizedBox(height: 300),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).colorScheme.secondary,
-                          onPrimary: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(borderradius)),
-                          minimumSize: Size(widthButton, heightButton)),
-                      onPressed: () async {
-                        //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
-                        //print(aux);
-                        //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
-                        'Unknown platform version';
-                        //print(key??"");
-                        //FacebookSignInApi.logout2();
-                        /* Navigator.of(context).pushNamed('/signup'); */
-                        // ignore: deprecated_member_use
-                        context.setLocale(const Locale('en'));
-                      },
-                      child: const Text(
-                        'INGLES',
-                        style: TextStyle(
-                            height: 1.0,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).colorScheme.secondary,
-                          onPrimary: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(borderradius)),
-                          minimumSize: Size(widthButton, heightButton)),
-                      onPressed: () async {
-                        //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
-                        //print(aux);
-                        //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
-                        'Unknown platform version';
-                        //print(key??"");
-                        //FacebookSignInApi.logout2();
-                        /* Navigator.of(context).pushNamed('/signup'); */
-                        // ignore: deprecated_member_use
-                        context.setLocale(const Locale('ca', 'ES'));
-                      },
-                      child: const Text(
-                        'CATALAN',
-                        style: TextStyle(
-                            height: 1.0,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Theme.of(context).colorScheme.secondary,
-                          onPrimary: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(borderradius)),
-                          minimumSize: Size(widthButton, heightButton)),
-                      onPressed: () async {
-                        //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
-                        //print(aux);
-                        //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
-                        'Unknown platform version';
-                        //print(key??"");
-                        //FacebookSignInApi.logout2();
-                        /* Navigator.of(context).pushNamed('/signup'); */
-                        context.setLocale(const Locale('es', 'ES'));
-                      },
-                      child: const Text(
-                        'ESPAÑOL',
-                        style: TextStyle(
-                            height: 1.0,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+                    const Text(
+                      'welcome',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          height: 1.0,
+                          fontSize: 30,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ).tr(),
+                    const SizedBox(height: 300),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).colorScheme.secondary,
@@ -134,13 +58,13 @@ class WelcomeScreen extends StatelessWidget {
                         //FacebookSignInApi.logout2();
                         Navigator.of(context).pushNamed('/signup');
                       },
-                      child: Text(
-                        'signUp'.tr(),
-                        style: const TextStyle(
+                      child: const Text(
+                        'signUp',
+                        style: TextStyle(
                             height: 1.0,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
-                      ),
+                      ).tr(),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
@@ -154,13 +78,13 @@ class WelcomeScreen extends StatelessWidget {
                       onPressed: () async {
                         Navigator.of(context).pushNamed('/login');
                       },
-                      child: Text(
-                        'login'.tr(),
-                        style: const TextStyle(
+                      child: const Text(
+                        'login',
+                        style: TextStyle(
                             height: 1.0,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
-                      ),
+                      ).tr(),
                     )
                   ]),
             ))
