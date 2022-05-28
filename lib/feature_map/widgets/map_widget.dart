@@ -65,7 +65,7 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getCollection('/v3/events/', [], null),
+      future: api.getCollection('/v2/events/', [], null),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var events = json.decode(snapshot.data.body);

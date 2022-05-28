@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
-
+import 'package:so_frontend/utils/share.dart';
 import 'package:so_frontend/utils/like_button.dart';
 
 class EventWidget extends StatefulWidget {
@@ -190,14 +190,13 @@ class _EventWidgetState extends State<EventWidget> {
           IconButton(
               icon: const Icon(Icons.share,
                   size: 30.0, color: Color.fromARGB(255, 110, 108, 108)),
-              onPressed: () {}),
+              onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + widget.event["id"], context)),
           const Divider(endIndent: 30),
           FutureBuilder(
             future: api.getCollection('/v2/events/participants',[],{"eventid":widget.event["id"]}),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 var participants = json.decode(snapshot.data.body);
-                print(participants);
                 var found = false;
                 int i = 0;
                 while (!found && i < participants.length) {

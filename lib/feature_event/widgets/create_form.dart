@@ -18,7 +18,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final DateTime _selectedStartedTime = DateTime.now();
+  DateTime _selectedStartedTime = DateTime.now();
   TimeOfDay _startedtime = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
 
 
@@ -119,7 +119,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                   children: [
                     TextButton(
                   
-                  onPressed: () {/*
+                  onPressed: () {
                     DatePicker.showDatePicker(context,
                       showTitleActions: true,
                       maxTime: DateTime(2100, 1, 1),
@@ -133,7 +133,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                           _selectedEndTime = date;
                         });
                       }, 
-                      currentTime: DateTime.now(), locale: LocaleType.en);*/
+                      currentTime: DateTime.now(), locale: LocaleType.en);
                   },
                   child: Text(
                       ('' + _selectedStartedTime.year.toString() + '/' + _selectedStartedTime.month.toString() + '/' + _selectedStartedTime.day.toString()),
@@ -165,7 +165,11 @@ class _CreateEventFormState extends State<CreateEventForm> {
                       }, 
                       onConfirm: (date) {
                         setState((){
+                          if (_selectedEndTime.isBefore(_selectedStartedTime)) {
+                            _selectedStartedTime = date;
+                          } 
                           _selectedEndTime = date;
+                          
                         });
                       }, 
                       currentTime: DateTime.now(), locale: LocaleType.en);
