@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/event.dart';
 import 'package:so_frontend/utils/api_controller.dart';
-import 'dart:convert';
 
 import 'package:so_frontend/utils/like_button.dart';
 

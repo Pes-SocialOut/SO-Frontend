@@ -18,7 +18,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DateTime _selectedStartedTime = DateTime.now();
+  final DateTime _selectedStartedTime = DateTime.now();
   TimeOfDay _startedtime = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
 
 
@@ -27,12 +27,12 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   List event = [];
 
-  TextEditingController _name =  TextEditingController(text: '');
-  TextEditingController _description =  TextEditingController(text: '');
-  TextEditingController _latitude =  TextEditingController(text: '');
-  TextEditingController _longitude =  TextEditingController(text: '');
-  TextEditingController _max_participants =  TextEditingController(text: '');
-  TextEditingController _image = TextEditingController(text: '');
+  final TextEditingController _name =  TextEditingController(text: '');
+  final TextEditingController _description =  TextEditingController(text: '');
+  final TextEditingController _latitude =  TextEditingController(text: '');
+  final TextEditingController _longitude =  TextEditingController(text: '');
+  final TextEditingController _max_participants =  TextEditingController(text: '');
+  final TextEditingController _image = TextEditingController(text: '');
 
 
   void _selectTime() async {
@@ -262,11 +262,8 @@ class _CreateEventFormState extends State<CreateEventForm> {
               "event_image_uri": _image.text
             };
 
-            print(body);
             var response = await api.postItem('/v3/events/', [], body);
-            print(api.getCurrentAccess());
-            print(response.body);
-            var snackBar;
+            SnackBar snackBar;
             if (response.statusCode == 201) {
                 snackBar = SnackBar(
                 backgroundColor: Theme.of(context).colorScheme.secondary,
