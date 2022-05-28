@@ -26,13 +26,13 @@ class _MapWidgetState extends State<MapWidget> {
   List stations = [];
   APICalls api = APICalls();
 
-  showEvent(Map<String, dynamic> event) {
+  showEvent(Map<String, dynamic> event, double pollution) {
     showModalBottomSheet(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         context: context,
         builder: (BuildContext context) {
-          return  EventWidget(event: event);
+          return  EventWidget(event: event, pollution: pollution);
         });
   }
 
@@ -108,7 +108,7 @@ class _MapWidgetState extends State<MapWidget> {
                                     var color = json.decode(snapshot.data.body);
                                     return IconButton(
                                       icon: const Icon(Icons.location_on_sharp, size: 40),
-                                      onPressed: () => showEvent(events[i]),
+                                      onPressed: () => showEvent(events[i], color["pollution"]),
                                       color: (color["pollution"] < 0.15)
                                       ? Colors.green
                                       : (color["pollution"] > 0.3)

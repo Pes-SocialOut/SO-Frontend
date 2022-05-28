@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:so_frontend/utils/like_button.dart';
 
 class EventWidget extends StatefulWidget {
   final Map<String, dynamic> event;
-  const EventWidget({Key? key, required this.event}) : super(key: key);
+  final double pollution;
+  const EventWidget({Key? key, required this.event, required this.pollution}) : super(key: key);
 
   @override
   State<EventWidget> createState() => _EventWidgetState();
@@ -56,7 +61,7 @@ class _EventWidgetState extends State<EventWidget> {
             child: Column(children: [
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage(eventPhoto),
+                backgroundImage: NetworkImage(widget.event["event_image_uri"]),
               ),
             ]),
           ),
@@ -66,12 +71,12 @@ class _EventWidgetState extends State<EventWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(
-                  child: Text(_event[0]["date"], style: dateStyle),
+                  child: Text(widget.event["date_started"], style: dateStyle),
                 ),
               ]),
               Row(children: [
                 Expanded(
-                  child: Text(_event[0]["title"],
+                  child: Text(widget.event["name"],
                       style: eventStyle, textAlign: TextAlign.left),
                 ),
               ]),
@@ -121,7 +126,7 @@ class _EventWidgetState extends State<EventWidget> {
                         color: Colors.green,
                         size: 30.0,
                       ),
-                      Text(_event[0]["numAttendees"], style: participantsStyle)
+                      Text(widget.event["max_participants"].toString(), style: participantsStyle)
                     ]),
                   ),
                 ]),
@@ -130,10 +135,21 @@ class _EventWidgetState extends State<EventWidget> {
           ),
         ]),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            'Created by: ' + _event[0]["creator"] + '  ',
-            style: creatorStyle,
-            textAlign: TextAlign.center,
+          FutureBuilder(
+            future: http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/users/' + widget.event["user_creator"])),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var user = json.decode(snapshot.data.body);
+                return Text(
+                  'Created by: ' + user["username"] + '  ',
+                  style: creatorStyle,
+                  textAlign: TextAlign.center,
+                );
+              }
+              else {
+                return const CircularProgressIndicator();
+              }
+            } 
           ),
           CircleAvatar(
             backgroundImage: AssetImage(creatorPhoto),
@@ -148,7 +164,7 @@ class _EventWidgetState extends State<EventWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              _event[0]["description"],
+              widget.event["description"],
               style: explainStyle,
               textAlign: TextAlign.center,
             ),
@@ -183,17 +199,18 @@ class _EventWidgetState extends State<EventWidget> {
             },
           ),
           const Divider(indent: 30),
-          IconButton(
-              icon: Icon(Icons.favorite,
-                  size: 30.0,
-                  color: (isFavourite == true)
-                      ? Colors.red
-                      : const Color.fromARGB(255, 114, 113, 113)),
-              onPressed: () {
-                setState(() {
-                  isFavourite = !isFavourite;
-                });
-              })
+          LikeButton(id: widget.event["id"])
+          // IconButton(
+          //     icon: Icon(Icons.favorite,
+          //         size: 30.0,
+          //         color: (isFavourite == true)
+          //             ? Colors.red
+          //             : const Color.fromARGB(255, 114, 113, 113)),
+          //     onPressed: () {
+          //       setState(() {
+          //         isFavourite = !isFavourite;
+          //       });
+          //     })
         ]),
       ]),
     );

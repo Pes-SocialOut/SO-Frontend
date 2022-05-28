@@ -24,7 +24,7 @@ class _RecommendedListState extends State<RecommendedList> {
       width: MediaQuery.of(context).size.width,
       height: 280,
       child: FutureBuilder(
-        future: api.getCollection('/v2/events/', [] , null),
+        future: api.getCollection('/v3/events/topten', [] , null),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var _recommendations = json.decode(snapshot.data.body);
