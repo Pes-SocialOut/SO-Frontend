@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
 import 'package:so_frontend/utils/like_button.dart';
+import 'package:so_frontend/utils/share.dart';
 
 class RecentlyAdded extends StatefulWidget {
   const RecentlyAdded({ Key? key }) : super(key: key);
@@ -137,9 +138,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                             iconSize: 20,
                                             color: Theme.of(context).colorScheme.onSurface,
                                             icon: const Icon(Icons.share),
-                                            onPressed: () {
-                                              
-                                            }
+                                            onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + recommendations[index]["id"], context)
                                           ),
                                           const SizedBox(width: 10),
                                           LikeButton(id: recommendations[index]["id"])

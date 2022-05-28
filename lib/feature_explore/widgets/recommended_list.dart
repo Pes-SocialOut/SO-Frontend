@@ -4,6 +4,7 @@ import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/like_button.dart';
+import 'package:so_frontend/utils/share.dart';
 
 class RecommendedList extends StatefulWidget {
   const RecommendedList({ Key? key }) : super(key: key);
@@ -140,9 +141,7 @@ class _RecommendedListState extends State<RecommendedList> {
                                           iconSize: 20,
                                           color: Theme.of(context).colorScheme.onSurface,
                                           icon: const Icon(Icons.share),
-                                          onPressed: () {
-                                            
-                                          }
+                                          onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + _recommendations[index]["id"], context)
                                         ),
                                         const SizedBox(width: 10),
                                         LikeButton(id: _recommendations[index]["id"])

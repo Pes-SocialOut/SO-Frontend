@@ -4,6 +4,7 @@ import 'package:so_frontend/utils/like_button.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:so_frontend/utils/share.dart';
 
 class LikedList extends StatefulWidget {
   const LikedList({ Key? key }) : super(key: key);
@@ -119,7 +120,7 @@ class _LikedListState extends State<LikedList> {
                                   iconSize: 20,
                                   color: Theme.of(context).colorScheme.onSurface,
                                   icon: const Icon(Icons.share),
-                                  onPressed: () {}),
+                                  onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + _joined[index]["id"], context)),
                               const SizedBox(width: 10),
                               LikeButton(id: _joined[index]["id"])
                             ],
