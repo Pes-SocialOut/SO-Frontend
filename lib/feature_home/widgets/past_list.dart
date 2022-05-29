@@ -44,7 +44,7 @@ class _PastEventsListState extends State<PastEventsList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(_joined[index]["date_started"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
+                            Text(_joined[index]["date_started"].substring(0, _joined[index]["date_started"].length - 7), style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
                             const SizedBox(height: 15),
                             Text(_joined[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 16, fontWeight: FontWeight.w500)),
                             const SizedBox(height:15),
