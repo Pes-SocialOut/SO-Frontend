@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+import 'package:so_frontend/utils/share.dart';
 import 'dart:convert';
 
 class Settings extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SettingsState extends State<Settings> {
     return ac.getCurrentUser();
   }
 
+  Map url = {};
   Map user = {};
   String idProfile = '0';
 
@@ -47,9 +49,19 @@ class _SettingsState extends State<Settings> {
                   ),
                   ListTile(
                     leading: const Icon(Icons.edit),
-                    title: const Text('Edit profile'),
+                    title: const Text('Add friend'),
                     onTap: () =>
                         {Navigator.of(context).pushNamed('/edit_profile')},
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.share),
+                    title: const Text('Add friend'),
+                    onTap: () async {
+                      final response =
+                          await ac.getItem('v2/users/friend_link', []);
+                      url = json.decode(response.body);
+                      showShareMenuFriend(url['invite_link'], context);
+                    },
                   ),
                   (user["auth_methods"].contains("socialout"))
                       ? ListTile(
