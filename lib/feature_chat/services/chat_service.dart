@@ -5,6 +5,7 @@ import 'package:so_frontend/utils/api_controller.dart';
 class chatAPI {
   final String basicUrl = "https://socialout-develop.herokuapp.com/";
 
+
   /* Crear el chat */
   Future<http.Response> createChat(
     String eventId,
@@ -32,8 +33,26 @@ class chatAPI {
     return response;
   }
 
+  /* Get el todos los eventos en los que el usuario participa */
+  Future<http.Response> getEvents(
+    String participantId,
+    ) async {
+    String _path = 'v2/events/joined/';
+    String finalUri = basicUrl + _path+participantId;
+    
+    final response = await http.get(Uri.parse(finalUri));
+
+    if (response.statusCode != 200) {
+      // return error
+    }
+    else{
+
+    }
+    
+    return response;
+  }
   
-  /* Crear el chat */
+  /* entrar el chat */
   Future<http.Response> enterChat(
     String eventId,
     String participantId,

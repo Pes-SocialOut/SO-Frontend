@@ -177,7 +177,13 @@ class ChatScreen extends StatelessWidget {
                   SizedBox(width: 15,),
                   FloatingActionButton(
                     onPressed: (){
+                      APICalls api = APICalls();
+                      future: api.getCollection('/v2/events/:0/:1', ['joined', api.getCurrentUser()], null);
                       String aux_s = APICalls().getCurrentUser();
+                      String accessToken = APICalls().getCurrentAccess();
+                      cAPI.getEvents(aux_s);
+                      print(accessToken);
+                      
                       cAPI.createChat(aux_s, APICalls().getCurrentUser());
                     },
                     child: Icon(Icons.send, color: Theme.of(context).colorScheme.primary,size: 18,),
