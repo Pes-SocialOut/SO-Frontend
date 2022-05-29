@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_chat/data_local/data.dart';
 import 'package:so_frontend/feature_chat/services/chat_service.dart';
+import 'package:so_frontend/feature_chat/widgets/chat_widget.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
@@ -188,54 +189,7 @@ class ChatScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                    padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                    height: 60,
-                    width: double.infinity,
-                    color: Colors.white,
-                    child: Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText: "Write message...",
-                                hintStyle: TextStyle(color: Colors.black54),
-                                border: InputBorder.none),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        FloatingActionButton(
-                          onPressed: () {
-                            APICalls api = APICalls();
-                            future:
-                            api.getCollection('/v2/events/:0/:1',
-                                ['joined', api.getCurrentUser()], null);
-                            String aux_s = APICalls().getCurrentUser();
-                            String accessToken = APICalls().getCurrentAccess();
-                            cAPI.getEvents(aux_s);
-                            print(accessToken);
-
-                            cAPI.createChat(aux_s, APICalls().getCurrentUser());
-                          },
-                          child: Icon(
-                            Icons.send,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 18,
-                          ),
-                          backgroundColor: Colors.blue,
-                          elevation: 0,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                SendWidget(),
               ],
             )),
         /*
