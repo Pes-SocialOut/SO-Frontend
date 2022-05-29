@@ -6,9 +6,9 @@ import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
 class ChatScreen extends StatelessWidget {
-   ChatScreen({Key? key}) : super(key: key);
+  ChatScreen({Key? key}) : super(key: key);
   final chatAPI cAPI= chatAPI();
-  
+  DateTime _lastQuitTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,8 +23,20 @@ class ChatScreen extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 IconButton(
-                  onPressed: (){
-                    Navigator.pop(context);
+                  onPressed: ()async{
+                    final difference = DateTime.now().difference(_lastQuitTime);
+                    final isExitWarning = difference >= Duration(seconds:2);
+
+                    _lastQuitTime = DateTime.now();
+
+                    if(isExitWarning){
+                      final message = 'Press back again to quit chat';
+                      print('Press back again to exit');
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                    }
+                    else{
+                      Navigator.pop(context);
+                    }
                   },
                   icon: Icon(Icons.arrow_back,color: Theme.of(context).colorScheme.primary,),
                 ),
@@ -52,9 +64,164 @@ class ChatScreen extends StatelessWidget {
         ),
       ),
       
-      body: Stack(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         
-        alignment: Alignment.topRight,
+        child: WillPopScope(
+          onWillPop: ()async {
+            final difference = DateTime.now().difference(_lastQuitTime);
+            final isExitWarning = difference >= Duration(seconds:2);
+
+            _lastQuitTime = DateTime.now();
+
+            if(isExitWarning){
+              final message = 'Press back again to quit chat';
+              print('Press back again to exit');
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+              return false;
+            }
+            else{
+              return true;
+            }
+              
+            
+          },
+          child: Stack(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height-140,
+                child: ListView.builder(
+            
+                itemCount: messages.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.only(
+                  top: 10,
+                  bottom: 10
+                ),
+                
+                physics: AlwaysScrollableScrollPhysics(),
+                
+                itemBuilder: (context, index){
+              
+              //for each message
+              double paddingSelf = 30;
+              double paddingOther = 10;
+              //hardcode
+              bool messageMine = messages[index].senderID == "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f";
+              return Container(//icon+message
+                alignment: messageMine?Alignment.centerRight:Alignment.centerLeft,
+                padding: EdgeInsets.only(
+                  left: messageMine?paddingSelf:paddingOther,
+                  right: messageMine?paddingOther:paddingSelf,
+                  top: 10,
+                  bottom: 10
+                ),
+                child: Align(
+                  alignment: (
+                    messageMine
+                    ?Alignment.topRight:Alignment.topLeft
+                  ),
+                  child: Row(
+                    mainAxisAlignment: messageMine?MainAxisAlignment.end:MainAxisAlignment.start,
+                    children: <Widget>[
+                        if(!messageMine)
+                          CircleAvatar(
+                            backgroundImage: AssetImage('assets/gato.jpg') as ImageProvider,
+                            //sender's icon
+                            maxRadius: 20,
+                          ),
+                        Flexible(
+                          
+                          child: Container(
+                            
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: messageMine?Radius.circular(20):Radius.circular(0),
+                                topRight: messageMine?Radius.circular(0):Radius.circular(20),
+                                bottomLeft: Radius.circular(20), 
+                                bottomRight: Radius.circular(20)
+                              ),//BorderRadius.circular(20),
+                              color: (
+                                messageMine
+                                //?Theme.of(context).colorScheme.secondary:Theme.of(context).colorScheme.onSecondary
+                                ?HexColor('80ED99'):Colors.white
+                              ),
+                            ),
+                            padding: EdgeInsets.all(12),
+                            
+                            child: Text(
+                              messages[index].messageContent, 
+                              style: TextStyle(fontSize: 15),
+                            ),
+                        
+                        ),
+                          
+                        ), 
+                        
+                        if(messageMine)
+                          CircleAvatar(
+                            backgroundImage: AssetImage('assets/dog.jpg') as ImageProvider,
+                            //user's icon
+                            //backgroundImage: NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
+                            maxRadius: 20,
+                          ),
+                    ],
+                  )
+                 
+                ),
+                
+              );
+              
+            },
+          ),
+              ),
+              Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              padding: EdgeInsets.only(left: 10,bottom: 10,top: 10),
+              height: 60,
+              width: double.infinity,
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  
+                  SizedBox(width: 15,),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Write message...",
+                        hintStyle: TextStyle(color: Colors.black54),
+                        border: InputBorder.none
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 15,),
+                  FloatingActionButton(
+                    onPressed: (){
+                      APICalls api = APICalls();
+                      future: api.getCollection('/v2/events/:0/:1', ['joined', api.getCurrentUser()], null);
+                      String aux_s = APICalls().getCurrentUser();
+                      String accessToken = APICalls().getCurrentAccess();
+                      cAPI.getEvents(aux_s);
+                      print(accessToken);
+                      
+                      cAPI.createChat(aux_s, APICalls().getCurrentUser());
+                    },
+                    child: Icon(Icons.send, color: Theme.of(context).colorScheme.primary,size: 18,),
+                    backgroundColor: Colors.blue,
+                    elevation: 0,
+                  ),
+                ],
+                
+              ),
+            ),
+          ),
+              
+            ],
+          )
+          ),
+          /*
         children: <Widget>[
           
           ListView.builder(
@@ -150,20 +317,7 @@ class ChatScreen extends StatelessWidget {
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: (){
-                    },
-                    child: Container(
-                      
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary, size: 20, ),
-                    ),
-                  ),
+                  
                   SizedBox(width: 15,),
                   Expanded(
                     child: TextField(
@@ -195,7 +349,7 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
           ),
-        ],
+        ],*/
       ),
     );
   }
