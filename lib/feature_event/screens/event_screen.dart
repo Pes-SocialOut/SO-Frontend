@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/event.dart';
 import 'package:so_frontend/utils/api_controller.dart';
-
+import 'package:so_frontend/utils/share.dart';
 import 'package:so_frontend/utils/like_button.dart';
 
 class EventScreen extends StatefulWidget {
@@ -33,7 +33,7 @@ class _EventScreenState extends State<EventScreen> {
                   iconSize: 24,
                   color: Theme.of(context).colorScheme.onSurface,
                   icon: const Icon(Icons.share),
-                  onPressed: () {}),
+                  onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + widget.id, context)),
               LikeButton(id: widget.id)
             ],
             leading: IconButton(

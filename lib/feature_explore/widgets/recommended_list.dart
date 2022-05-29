@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:so_frontend/utils/air_tag.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/like_button.dart';
+import 'package:so_frontend/utils/share.dart';
 
 class RecommendedList extends StatefulWidget {
   const RecommendedList({ Key? key }) : super(key: key);
@@ -113,36 +115,13 @@ class _RecommendedListState extends State<RecommendedList> {
                                     Text(_recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
                                     Row(
                                       children: [
-                                        FutureBuilder(
-                                          future: http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/air/location?long=' + _recommendations[index]["longitud"].toString()+ '&lat=' + _recommendations[index]["latitude"].toString())),
-                                          builder: (BuildContext context, AsyncSnapshot snapshot) {
-                                            if (snapshot.connectionState == ConnectionState.done) {
-                                              var _airQuality = [json.decode(snapshot.data.body)];
-                                              return Container(
-                                                decoration: BoxDecoration(
-                                                  color: _airQuality[0]["pollution"] < 0.15 ? Theme.of(context).colorScheme.secondary : _airQuality[0]["pollution"] < 0.3 ? Theme.of(context).colorScheme.onError : Theme.of(context).colorScheme.error,
-                                                  borderRadius: const BorderRadius.all(Radius.circular(25))
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(2.0),
-                                                  child:  _airQuality[0]["pollution"] < 0.15 ? Text("GOOD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : _airQuality[0]["pollution"] < 0.3 ? Text("MODERATE", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)) : Text("BAD", style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold)), 
-                                                ),
-                                                
-                                              );
-                                            }
-                                            else {
-                                              return const CircularProgressIndicator();
-                                            }
-                                          }
-                                        ),
+                                        AirTag(id: _recommendations[index]["id"], latitude: _recommendations[index]["latitude"].toString(), longitud: _recommendations[index]["longitud"].toString()),
                                         const Expanded(child: SizedBox()),
                                         IconButton(
                                           iconSize: 20,
                                           color: Theme.of(context).colorScheme.onSurface,
                                           icon: const Icon(Icons.share),
-                                          onPressed: () {
-                                            
-                                          }
+                                          onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + _recommendations[index]["id"], context)
                                         ),
                                         const SizedBox(width: 10),
                                         LikeButton(id: _recommendations[index]["id"])

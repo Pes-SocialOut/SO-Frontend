@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
-import 'package:so_frontend/utils/like_button.dart';
 import 'dart:convert';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
-import 'package:so_frontend/utils/share.dart';
-import 'package:so_frontend/utils/air_tag.dart';
+import 'package:so_frontend/utils/review.dart';
 
-class LikedList extends StatefulWidget {
-  const LikedList({ Key? key }) : super(key: key);
+class PastEventsList extends StatefulWidget {
+  const PastEventsList({ Key? key }) : super(key: key);
 
   @override
-  State<LikedList> createState() => _LikedListState();
+  State<PastEventsList> createState() => _PastEventsListState();
 }
 
-class _LikedListState extends State<LikedList> {
+class _PastEventsListState extends State<PastEventsList> {
 
   APICalls api = APICalls();
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +39,7 @@ class _LikedListState extends State<LikedList> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => EventScreen(id: _joined[index]["id"]))
-                            );
-                        },
+                        onTap: () => showReviewMenu(_joined[index]["id"], context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,26 +48,6 @@ class _LikedListState extends State<LikedList> {
                             const SizedBox(height: 15),
                             Text(_joined[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 16, fontWeight: FontWeight.w500)),
                             const SizedBox(height:15),
-                            Row(
-                              children: [
-                                FutureBuilder(
-                                  future: api.getCollection('/v2/events/participants', [], {"eventid":_joined[index]["id"]}),
-                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.done) {
-                                      var participants = json.decode(snapshot.data.body);
-                                      return Text(participants.length.toString() + " are going", style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 14));
-                                    } 
-                                    else {
-                                      return const CircularProgressIndicator();
-                                    }
-                      
-                                  }
-                                ),
-                                const SizedBox(width: 20),
-                                AirTag(id: _joined[index]["id"], latitude: _joined[index]["latitude"].toString(), longitud: _joined[index]["longitud"].toString()),
-                              ]
-                            )
-                                
                           ]
                         ),
                       ),
@@ -94,17 +66,6 @@ class _LikedListState extends State<LikedList> {
                               )
                             )
                           ),
-                          Row(
-                            children: [
-                              IconButton(
-                                  iconSize: 20,
-                                  color: Theme.of(context).colorScheme.onSurface,
-                                  icon: const Icon(Icons.share),
-                                  onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + _joined[index]["id"], context)),
-                              const SizedBox(width: 10),
-                              LikeButton(id: _joined[index]["id"])
-                            ],
-                          )
                         ]
                       )
                     ],

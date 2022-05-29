@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/widgets/joined_list.dart';
 import 'package:so_frontend/feature_home/widgets/liked_list.dart';
+import 'package:so_frontend/feature_home/widgets/past_list.dart';
 
 
 class EventsTabMenu extends StatefulWidget {
@@ -19,7 +20,7 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
         height: MediaQuery.of(context).size.height,
         child: DefaultTabController(
           
-          length: 2,
+          length: 3,
           child: Column(
             children:  const [
                TabBar(
@@ -29,6 +30,9 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
                   ),
                   Tab(
                     text: "LIKED"
+                  ),
+                  Tab(
+                    text: 'PAST'
                   )
                 ]
               ),
@@ -37,7 +41,7 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
                   children: [
                     JoinedList(),
                     LikedList(),
-              
+                    PastEventsList()
                   ],
                 ),
               )
