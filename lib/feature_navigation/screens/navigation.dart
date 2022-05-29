@@ -7,6 +7,8 @@ import 'package:uni_links/uni_links.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:async';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class NavigationBottomBar extends StatefulWidget {
   const NavigationBottomBar({Key? key}) : super(key: key);
@@ -26,6 +28,7 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
 
   APICalls ac = APICalls();
 
+
   String getCurrentUser() {
     return ac.getCurrentUser();
   }
@@ -36,7 +39,7 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
     // ... check initialLink
 
     // Attach a listener to the stream
-    _sub = linkStream.listen((String? link) {
+    _sub = linkStream.listen((String? link) async {
       // Parse the link and warn the user, if it is not correct
       
       if (link != null) {
@@ -44,17 +47,17 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
         // https://socialout-develop.herokuapp.com/v2/users/new_friend?code=xxx
         var uri = Uri.parse(link);
         var type = uri.pathSegments[1];
-
-        // TODO: Check CurrentAccess
         switch (type) {
           case "events":
             var id = uri.pathSegments[2];
-            if (id.isNotEmpty) {
+            if (id != '') {
               Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen(id: id)));
             }
             break;
           case "users":
-            
+            var response = await APICalls().getCollection('/v2/users/new_friend', [], {"code": uri.queryParameters["code"]!});
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: json.decode(response.body)["id"])));
+            break;
           default:
         }
         
