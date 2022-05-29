@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
+import 'package:so_frontend/utils/review.dart';
 
 class PastEventsList extends StatefulWidget {
   const PastEventsList({ Key? key }) : super(key: key);
@@ -38,12 +39,7 @@ class _PastEventsListState extends State<PastEventsList> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => EventScreen(id: _joined[index]["id"]))
-                          );
-                        },
+                        onTap: () => showReviewMenu(_joined[index]["id"], context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
