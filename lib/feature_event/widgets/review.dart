@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/utils/api_controller.dart';
 
 class ReviewMenu extends StatefulWidget {
   final String id;
@@ -12,6 +13,7 @@ class _ReviewMenuState extends State<ReviewMenu> {
 
   double _rating = 3;
   TextEditingController _comment = TextEditingController(text: '');
+  APICalls api = APICalls();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,28 @@ class _ReviewMenuState extends State<ReviewMenu> {
           ),
           const SizedBox(height: 60),
           InkWell(
-            onTap: () {
+            onTap: () async {
+              var  bodyData = {
+                "event_id": widget.id,
+                "user_id": api.getCurrentUser(),
+                "rating": _rating.toInt(),
+                "comment": _comment.text
+              };
+              var response = await api.postItem('/v3/events/:0', ["review"], bodyData);
+              print(response.body);
+              SnackBar snackBar;
+              if (response.statusCode == 200) {
+                snackBar = SnackBar(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  content: const Text('Your event has been created successfully!'),
+                );
+              } else {
+                snackBar = SnackBar(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  content: const Text('Something bad happened! Try again later...'),
+                );
+              }
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
               Navigator.pop(context);
             },
             child: Container(
