@@ -94,6 +94,12 @@ class _SettingsState extends State<Settings> {
                           },
                         ),
                   ListTile(
+                    leading: const Icon(Icons.language),
+                    title: Text('Languages').tr(),
+                    onTap: () =>
+                        {Navigator.of(context).pushNamed('/languages')},
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.exit_to_app),
                     title: Text('Logout').tr(),
                     onTap: () => {
