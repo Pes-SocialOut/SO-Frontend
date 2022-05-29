@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/screens/create_event.dart';
 import 'package:so_frontend/feature_explore/screens/home.dart';
@@ -138,15 +139,15 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
                 icon: const Icon(Icons.home),
-                label: 'Home',
+                label: 'Home'.tr(),
                 backgroundColor: Theme.of(context).colorScheme.primary),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.search_rounded),
-                label: 'Explore',
+                label: 'Explore'.tr(),
                 backgroundColor: Theme.of(context).colorScheme.primary),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.add),
-                label: 'Create',
+                label: 'Create'.tr(),
                 backgroundColor: Theme.of(context).colorScheme.primary),
           ],
           currentIndex: _index,

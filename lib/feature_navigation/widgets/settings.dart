@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:so_frontend/utils/share.dart';
@@ -39,23 +42,24 @@ class _SettingsState extends State<Settings> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-                  const DrawerHeader(
+                  DrawerHeader(
                     child: Text('Settings',
-                        style: TextStyle(color: Colors.white, fontSize: 28),
-                        textAlign: TextAlign.center),
+                            style: TextStyle(color: Colors.white, fontSize: 28),
+                            textAlign: TextAlign.center)
+                        .tr(),
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 102, 150, 171),
                     ),
                   ),
                   ListTile(
                     leading: const Icon(Icons.edit),
-                    title: const Text('Add friend'),
+                    title: Text('editprofile').tr(),
                     onTap: () =>
                         {Navigator.of(context).pushNamed('/edit_profile')},
                   ),
                   ListTile(
                     leading: const Icon(Icons.share),
-                    title: const Text('Add friend'),
+                    title: Text('Add friend'),
                     onTap: () async {
                       final response =
                           await ac.getItem('v2/users/friend_link', []);
@@ -66,24 +70,23 @@ class _SettingsState extends State<Settings> {
                   (user["auth_methods"].contains("socialout"))
                       ? ListTile(
                           leading: const Icon(Icons.verified_user),
-                          title: const Text('Change password'),
+                          title: Text('Changepassword').tr(),
                           onTap: () => {
                             Navigator.of(context).pushNamed('/change_password')
                           },
                         )
                       : ListTile(
                           leading: const Icon(Icons.verified_user),
-                          title: const Text('Change password'),
+                          title: Text('Changepassword').tr(),
                           onTap: () => {
                             showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                        title: const Text('Change password'),
-                                        content: const Text(
-                                            'You can not change your password if you do not have a Social Out account'),
+                                        title: Text('Change password').tr(),
+                                        content: Text('notchangepassword').tr(),
                                         actions: [
                                           TextButton(
-                                            child: const Text('OK'),
+                                            child: Text('Ok').tr(),
                                             onPressed: () =>
                                                 Navigator.pop(context),
                                           ),
@@ -92,7 +95,7 @@ class _SettingsState extends State<Settings> {
                         ),
                   ListTile(
                     leading: const Icon(Icons.exit_to_app),
-                    title: const Text('Logout'),
+                    title: Text('Logout').tr(),
                     onTap: () => {
                       showDialog(
                           context: context,
@@ -102,11 +105,11 @@ class _SettingsState extends State<Settings> {
                                       'Are you sure you want to log out?'),
                                   actions: [
                                     TextButton(
-                                      child: const Text('CANCEL'),
+                                      child: Text('Cancel').tr(),
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                     TextButton(
-                                        child: const Text('YES'),
+                                        child: Text('Yes').tr(),
                                         onPressed: () => APICalls().logOut())
                                   ]))
                     },

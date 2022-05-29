@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/widgets/user_events.dart';
 import 'package:so_frontend/feature_home/widgets/events_tab_menu.dart';
@@ -15,23 +16,21 @@ class MainHomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('My events',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.surface,
-              fontWeight: FontWeight.bold,
-              fontSize: 18
-            )
-          ),
+          Text('Myevents',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18))
+              .tr(),
           const SizedBox(height: 20),
           const UserEventsList(),
           const SizedBox(height: 20),
-          Text('Your calendar',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.surface,
-              fontWeight: FontWeight.bold,
-              fontSize: 18
-            )
-          ),
+          Text('Yourcalendar',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18))
+              .tr(),
           const SizedBox(height: 20),
           const EventsTabMenu()
         ],
