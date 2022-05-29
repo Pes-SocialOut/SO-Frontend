@@ -2,10 +2,14 @@
 
 import 'dart:convert';
 import 'dart:core';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/feature_user/screens/change_image_profile.dart';
+import 'package:so_frontend/feature_user/services/externalService.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+
+//import '../services/sharedPreferencesHelper.dart';
 
 class EditarProfile extends StatefulWidget {
   const EditarProfile({Key? key}) : super(key: key);
@@ -19,6 +23,7 @@ class _EditarProfileState extends State<EditarProfile> {
   late String username;
   late String description;
   late String hobbies;
+  late String idUsuar;
   List<dynamic> idiomas = [];
   bool colorInit = false;
   bool colorInit2 = false;
@@ -31,7 +36,9 @@ class _EditarProfileState extends State<EditarProfile> {
   Color secundary3 = Colors.black;
   Map user = {};
   String idProfile = "0";
+  String urlProfilePhoto = "";
   APICalls ac = APICalls();
+  final ExternServicePhoto es = ExternServicePhoto();
 
   String getCurrentUser() {
     return ac.getCurrentUser();
@@ -51,7 +58,21 @@ class _EditarProfileState extends State<EditarProfile> {
       username = user["username"];
       description = user["description"];
       hobbies = user["hobbies"];
+      idUsuar = user["id"];
     });
+    getProfilePhoto(idUsuar);
+    print(json.decode(response.body));
+  }
+
+  Future<void> getProfilePhoto(String idUsuar) async {
+    final response = await es.getAPhoto(idUsuar);
+    if (response != 'Fail') {
+      print("ENTRO A FAIL");
+      setState(() {
+        urlProfilePhoto = response;
+      });
+    }
+    print(response);
   }
 
   @override
@@ -259,7 +280,13 @@ class _EditarProfileState extends State<EditarProfile> {
             color: Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.arrow_back_ios_new_sharp),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                      id: idUsuar,
+                    ),
+                  ));
             },
           ),
         ),
@@ -294,9 +321,12 @@ class _EditarProfileState extends State<EditarProfile> {
                                 offset: const Offset(0, 10))
                           ],
                           shape: BoxShape.circle,
-                          image: const DecorationImage(
+                          image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/dog.jpg'),
+                            image: (urlProfilePhoto == "")
+                                ? AssetImage('assets/noProfileImage.png')
+                                : NetworkImage(urlProfilePhoto)
+                                    as ImageProvider,
                           ),
                         ),
                       ),
@@ -310,8 +340,12 @@ class _EditarProfileState extends State<EditarProfile> {
                             color: Theme.of(context).colorScheme.primary,
                             size: 30,
                           ),
-                          onPressed: () {
-                            // editar foto de perfil
+                          onPressed: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PerfilImage(idUser: idUsuar)));
                           },
                         ),
                       ),
