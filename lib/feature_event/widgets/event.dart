@@ -147,7 +147,7 @@ class _EventState extends State<Event> {
                                                 const Expanded(
                                                   child: SizedBox()
                                                 ),
-                                                AirTag(latitude: _event[0]["latitude"].toString(), longitud: _event[0]["longitud"].toString())
+                                                AirTag(id: _event[0]["id"], latitude: _event[0]["latitude"].toString(), longitud: _event[0]["longitud"].toString())
                                               ]
                                             ),
                                             const SizedBox(height:20),

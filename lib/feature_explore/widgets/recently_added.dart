@@ -113,7 +113,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                       Text(recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
                                       Row(
                                         children: [
-                                          AirTag(latitude: recommendations[index]["latitude"].toString(), longitud: recommendations[index]["longitud"].toString()),
+                                          AirTag(id: recommendations[index]["id"], latitude: recommendations[index]["latitude"].toString(), longitud: recommendations[index]["longitud"].toString()),
                                           const Expanded(child: SizedBox()),
                                           IconButton(
                                             iconSize: 20,

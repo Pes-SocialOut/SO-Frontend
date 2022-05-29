@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:so_frontend/utils/like_button.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
 import 'package:so_frontend/utils/share.dart';
 import 'package:so_frontend/utils/air_tag.dart';
@@ -73,7 +72,7 @@ class _LikedListState extends State<LikedList> {
                                   }
                                 ),
                                 const SizedBox(width: 20),
-                                AirTag(latitude: _joined[index]["latitude"].toString(), longitud: _joined[index]["longitud"].toString()),
+                                AirTag(id: _joined[index]["id"], latitude: _joined[index]["latitude"].toString(), longitud: _joined[index]["longitud"].toString()),
                               ]
                             )
                                 

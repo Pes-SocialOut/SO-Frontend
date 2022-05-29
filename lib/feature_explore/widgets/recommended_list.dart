@@ -115,7 +115,7 @@ class _RecommendedListState extends State<RecommendedList> {
                                     Text(_recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
                                     Row(
                                       children: [
-                                        AirTag(latitude: _recommendations[index]["latitude"].toString(), longitud: _recommendations[index]["longitud"].toString()),
+                                        AirTag(id: _recommendations[index]["id"], latitude: _recommendations[index]["latitude"].toString(), longitud: _recommendations[index]["longitud"].toString()),
                                         const Expanded(child: SizedBox()),
                                         IconButton(
                                           iconSize: 20,

@@ -3,7 +3,6 @@ import 'package:so_frontend/feature_event/widgets/event_map.dart';
 import 'package:so_frontend/utils/air_tag.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class UserEvent extends StatefulWidget {
   final String id;
@@ -135,7 +134,7 @@ class _UserEventState extends State<UserEvent> {
                                                 const Expanded(
                                                   child: SizedBox()
                                                 ),
-                                                AirTag(latitude: _event[0]["latitude"].toString(), longitud: _event[0]["longitud"].toString()),
+                                                AirTag(id: _event[0]["id"], latitude: _event[0]["latitude"].toString(), longitud: _event[0]["longitud"].toString()),
                                               ]
                                             ),
                                             const SizedBox(height:20),
