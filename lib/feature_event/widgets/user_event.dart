@@ -21,7 +21,7 @@ class _UserEventState extends State<UserEvent> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getItem('/v2/events/:0', [widget.id]),
+      future: api.getItem('/v3/events/:0', [widget.id]),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var _event = [json.decode(snapshot.data.body)];

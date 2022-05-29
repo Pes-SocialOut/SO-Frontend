@@ -30,7 +30,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getCollection('/v2/events/:0', [pathParam], null),
+      future: api.getCollection('/v3/events/:0', [pathParam], null),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var recommendations = json.decode(snapshot.data.body);

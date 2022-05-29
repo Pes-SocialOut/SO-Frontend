@@ -24,7 +24,7 @@ class _LikedListState extends State<LikedList> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: FutureBuilder(
-        future: api.getCollection('/v2/events/:0/:1', ['like', api.getCurrentUser()], null),
+        future: api.getCollection('/v3/events/:0/:1', ['like', api.getCurrentUser()], null),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var _joined = json.decode(snapshot.data.body);
