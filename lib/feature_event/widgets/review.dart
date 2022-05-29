@@ -78,9 +78,8 @@ class _ReviewMenuState extends State<ReviewMenu> {
                 "comment": _comment.text
               };
               var response = await api.postItem('/v3/events/:0', ["review"], bodyData);
-              print(response.body);
               SnackBar snackBar;
-              if (response.statusCode == 200) {
+              if (response.statusCode == 201) {
                 snackBar = SnackBar(
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   content: const Text('Your event has been created successfully!'),
