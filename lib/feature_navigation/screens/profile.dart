@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 import 'package:so_frontend/feature_navigation/widgets/settings.dart';
+import 'package:so_frontend/feature_user/services/externalService.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String id;
@@ -22,11 +23,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Map user = {};
   String idProfile = '0';
+  String urlProfilePhoto = "";
+  final ExternServicePhoto es = ExternServicePhoto();
+
+  Future<void> getProfilePhoto(String idUsuar) async {
+    final response = await es.getAPhoto(idUsuar);
+    if (response != 'Fail') {
+      setState(() {
+        urlProfilePhoto = response;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     idProfile = widget.id;
+    getProfilePhoto(idProfile);
   }
 
   @override
@@ -43,7 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.arrow_back_ios_new_sharp),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/home', (route) => false);
             },
           ),
           iconTheme:
@@ -62,10 +76,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.14,
                         width: MediaQuery.of(context).size.width * 0.3,
-                        child: Column(children: const [
+                        child: Column(children: [
                           CircleAvatar(
                             radius: 50,
-                            backgroundImage: AssetImage("assets/dog.jpg"),
+                            backgroundImage: (urlProfilePhoto == "")
+                                ? const AssetImage('assets/noProfileImage.png')
+                                : NetworkImage(urlProfilePhoto)
+                                    as ImageProvider,
                           ),
                         ]),
                       ),

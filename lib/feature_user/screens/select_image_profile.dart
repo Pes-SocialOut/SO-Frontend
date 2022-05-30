@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_user/screens/edit_profile.dart';
 import 'package:so_frontend/feature_user/services/externalService.dart';
 
 class ImagePage extends StatefulWidget {
@@ -39,10 +38,11 @@ class ImagePageState extends State<ImagePage> {
               minimumSize: const Size(250, 50),
             ),
             onPressed: () async {
-              print("SELECT");
               var resposta = await es.postAPhoto(widget.idUser, widget.url);
               if (resposta['resposta'] == 1) {
-                Navigator.of(context).pushNamed('/edit_profile');
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/edit_profile', (route) => false);
+                //Navigator.of(context).pushNamed('/edit_profile');
               }
             },
             child: const Text(
