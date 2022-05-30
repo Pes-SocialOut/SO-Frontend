@@ -154,7 +154,6 @@ class _RecommendedListState extends State<RecommendedList> {
                       child: SkeletonParagraph(
                         style: SkeletonParagraphStyle(
                           lines: 1,
-                          spacing: 2,
                           lineStyle: SkeletonLineStyle(
                             width: 250,
                             height: 250,

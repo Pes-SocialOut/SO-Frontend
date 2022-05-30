@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:so_frontend/feature_event/screens/map_event_screen.dart';
+import 'package:so_frontend/feature_event/screens/event_location.dart';
 
 class EventMapButton extends StatelessWidget {
   final double lat, lng;
@@ -16,7 +16,7 @@ class EventMapButton extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context, 
-              MaterialPageRoute(builder: (context) =>  MapEventScreen(lat: lat, lng: lng))
+              MaterialPageRoute(builder: (context) =>  EventLocationScreen(lat: lat, lng: lng))
             );
           },
           child: Container(

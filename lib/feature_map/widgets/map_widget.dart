@@ -12,7 +12,8 @@ import 'package:http/http.dart' as http;
 
 class MapWidget extends StatefulWidget {
   double lat, long;
-  MapWidget({Key? key, required this.lat, required this.long})
+  bool isEvent;
+  MapWidget({Key? key, required this.lat, required this.long, required this.isEvent})
       : super(key: key);
 
   @override
@@ -87,15 +88,16 @@ class _MapWidgetState extends State<MapWidget> {
                     ),
                     MarkerLayerOptions(
                       markers: [
-                        Marker(
+                        !widget.isEvent ? Marker(
                             width: 40.0,
                             height: 40.0,
                             point: LatLng(widget.lat, widget.long),
                             builder: (context) => Icon(
-                                  Icons.circle,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 40,
-                                )),
+                              Icons.circle,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 40,
+                            )
+                          ) : Marker(point:LatLng(widget.lat, widget.long), builder: (context) =>  const SizedBox()),
                         for (var i = 0; i < events.length; i++)
                           Marker(
                               width: 40.0,
