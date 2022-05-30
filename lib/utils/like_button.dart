@@ -15,7 +15,7 @@ class _LikeButtonState extends State<LikeButton> {
 
   APICalls api = APICalls();
 
-  
+  bool _liked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,24 +24,25 @@ class _LikeButtonState extends State<LikeButton> {
       builder:(BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var response = [json.decode(snapshot.data.body)];
-          var _liked = response[0]["message"] == "Le ha dado like";
+          _liked = response[0]["message"] == "Le ha dado like";
           return IconButton(
             iconSize:20,
             color: _liked ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.favorite),
-            onPressed: () {
+            onPressed: ()  {
               if (_liked) {
-                setState((){
-                  _liked = false;
+                api.postItem('/v3/events/:0/:1', [widget.id, 'dislike'], {"user_id":api.getCurrentUser()}).then((value) => {
+                  setState(() {
+                    _liked = false;
+                  })
                 });
-                api.postItem('/v3/events/:0/:1', [widget.id, 'dislike'], {"user_id":api.getCurrentUser()});
-                
               }
               else {
-                setState((){
-                  _liked = true;
+                api.postItem('/v3/events/:0/:1', [widget.id, 'like'], {"user_id":api.getCurrentUser()}).then((value) => {
+                  setState(() {
+                    _liked = true;
+                  })
                 });
-                api.postItem('/v3/events/:0/:1', [widget.id, 'like'], {"user_id":api.getCurrentUser()});
               }
             });
         }
