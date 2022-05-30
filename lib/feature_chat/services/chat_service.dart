@@ -50,16 +50,18 @@ class chatAPI {
     String eventId,
     String participantId,
   ) async {
-    String _path = 'v1/chat/Message/';
-    String finalUri = basicUrl + _path;
+    String _path = '/v1/chat/Message/';
     String aux = "socialout-develop.herokuapp.com";
-    var str = {"participant_id": participantId, "event_id": eventId};
-    final uri = Uri.http(aux, _path, str);
+
+    final queryParameters = {
+      'participant_id': participantId,
+      'event_id': eventId,
+    };
+
+    final uri = Uri.https(aux, _path, queryParameters);
 
     final response = await http.get(uri,
         headers: {'Authorization': 'Bearer ' + APICalls().getCurrentAccess()});
-
-    String a = "";
 
     if (response.statusCode != 200) {
       // return error
@@ -71,14 +73,14 @@ class chatAPI {
   /* Crear el mensage */
   Future<http.Response> createMessage(
     String senderId,
-    String chatId,
+    String eventId,
     String text,
   ) async {
     String _path = '/v1/chat/Message';
     String finalUri = basicUrl + _path;
     var str = {
       "participant_id": senderId,
-      "event_id": chatId,
+      "event_id": eventId,
       "text": text,
     };
 
@@ -87,6 +89,7 @@ class chatAPI {
       'Authorization': 'Bearer ' + APICalls().getCurrentAccess(),
       'Content-Type': 'application/json'
     });
+    String s = '';
 
     return response;
   }
@@ -114,7 +117,12 @@ class chatAPI {
     String _path = 'v1/chat/';
     String finalUri = basicUrl + _path + creatorId;
 
-    final response = await http.get(Uri.parse(finalUri));
+    final response = await http.get(Uri.parse(finalUri),
+        headers: {'Authorization': 'Bearer ' + APICalls().getCurrentAccess()});
+
+    if (response.statusCode != 200) {
+      // return error
+    } else {}
 
     return response;
   }

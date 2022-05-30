@@ -1,11 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:so_frontend/feature_chat/services/chat_service.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SendWidget extends StatelessWidget {
   SendWidget({Key? key}) : super(key: key);
+  String eventId = "f6a92275-7e03-4d3c-a152-2247e68dd047";
   final chatAPI cAPI = chatAPI();
   final messageTextController = TextEditingController();
   @override
@@ -35,37 +37,43 @@ class SendWidget extends StatelessWidget {
               width: 15,
             ),
             FloatingActionButton(
-              onPressed: () {
+              onPressed: () async {
                 APICalls api = APICalls();
-                future:
-                api.getCollection(
-                    '/v2/events/:0/:1', ['joined', api.getCurrentUser()], null);
-                String aux_s = APICalls().getCurrentUser();
+
+                String currentUserId = APICalls().getCurrentUser();
                 String accessToken = APICalls().getCurrentAccess();
-                cAPI.getEvents(aux_s);
+                cAPI.getEvents(currentUserId);
+
                 print("accessToken:" + accessToken);
                 print(messageTextController.text);
+
+                Response resp = await cAPI.createMessage(
+                    currentUserId,
+                    eventId, //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
+                    messageTextController.text);
+                messageTextController.clear();
                 /*
-                cAPI.createChat("f6a92275-7e03-4d3c-a152-2247e68dd047",
-                    "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
-                    */
+                Response resp = await cAPI.createChat(
+                    "eventId", currentUserId);
+          */
                 /*
                 cAPI.createMessage(
                     "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f",
-                    "f6a92275-7e03-4d3c-a152-2247e68dd047", //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
+                    eventId, //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
                     "hola del f01e9aaa-f0a9-42f0-98f3-0011f2c07d74");
                     */
                 /*
-                cAPI.enterChat("f6a92275-7e03-4d3c-a152-2247e68dd047",
+                cAPI.enterChat(eventId,
                     "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
                 */
                 /*
-                 */
-
-                /*
-                cAPI.openSession("f6a92275-7e03-4d3c-a152-2247e68dd047",
+                cAPI.openSession(eventId,
                     "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
                  */
+                /*
+                cAPI.getListChat("fee03319-2742-4ef5-8317-677cb6445eda");
+                */
+                String a = '0';
               },
               child: Icon(
                 Icons.send,

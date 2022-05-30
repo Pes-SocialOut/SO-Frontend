@@ -7,9 +7,31 @@ class ChatMessage {
 }
 
 class Message {
-  String messageContent;
-  String senderID;
-  Message({required this.messageContent, required this.senderID});
+  String chat_id;
+  String created_at;
+  String id;
+  String sender_id;
+  String text;
+  Message(
+      {required this.chat_id,
+      required this.created_at,
+      required this.id,
+      required this.sender_id,
+      required this.text});
+  Message.fromJson(Map<String, dynamic> json)
+      : chat_id = json['chat_id'],
+        created_at = json['created_at'],
+        id = json['id'],
+        sender_id = json['sender_id'],
+        text = json['text'];
+
+  Map<String, dynamic> toJson() => {
+        'chat_id': chat_id,
+        'created_at': created_at,
+        'id': id,
+        'sender_id': sender_id,
+        'text': text,
+      };
 }
 
 /*
