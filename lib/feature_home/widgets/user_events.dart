@@ -102,7 +102,7 @@ class _UserEventsListState extends State<UserEventsList> {
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                separatorBuilder: (context, index) => const SizedBox(width: 20),
+                separatorBuilder: (context, index) => const SizedBox(width: 5),
                 itemCount: 5,
                 itemBuilder: (BuildContext context, int index) {
                   return Center(
@@ -110,7 +110,6 @@ class _UserEventsListState extends State<UserEventsList> {
                       child: SkeletonParagraph(
                         style: SkeletonParagraphStyle(
                           lines: 1,
-                          spacing: 4,
                           lineStyle: SkeletonLineStyle(
                             width: 100,
                             height: 115,
