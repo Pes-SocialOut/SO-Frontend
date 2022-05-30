@@ -3,6 +3,8 @@ import 'package:so_frontend/feature_event/widgets/event_map.dart';
 import 'package:so_frontend/utils/air_tag.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
+import 'package:skeletons/skeletons.dart';
+import 'package:so_frontend/feature_navigation/screens/profile.dart';
 
 class UserEvent extends StatefulWidget {
   final String id;
@@ -89,10 +91,18 @@ class _UserEventState extends State<UserEvent> {
                                               return  Text('Created by: ' + _user[0]["username"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500));
                                             }
                                             else {
-                                              return const SizedBox(
-                                                width: 25,
-                                                height: 5,
-                                                child: LinearProgressIndicator()
+                                              return SkeletonItem(
+                                                child: SkeletonParagraph(
+                                                  style: SkeletonParagraphStyle(
+                                                    lines: 1,
+                                                    spacing: 2,
+                                                    lineStyle: SkeletonLineStyle(
+                                                      width: 40,
+                                                      height: 20,
+                                                      borderRadius: BorderRadius.circular(10)
+                                                    )
+                                                  )
+                                                )
                                               );
                                             }
                                           }
@@ -153,22 +163,49 @@ class _UserEventState extends State<UserEvent> {
                                             SizedBox(
                                               height: 80,
                                               width: MediaQuery.of(context).size.width,
-                                              child: ListView.separated(
-                                                shrinkWrap: true,
-                                                scrollDirection: Axis.horizontal,
-                                                separatorBuilder: (context, index) => const SizedBox(width: 20),
-                                                itemCount: attendees.length,
-                                                itemBuilder: (BuildContext context, int index)  {
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      Navigator.of(context).pushNamed('/profile');
-                                                    },
-                                                      child: CircleAvatar(
-                                                        radius: 40,
-                                                        backgroundImage: AssetImage(attendees[index]["image"]),
-                                                      )
+                                              child: FutureBuilder(
+                                                future: api.getCollection('/v2/events/participants',[],{"eventid":_event[0]["id"]}),
+                                                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                                  if (snapshot.connectionState == ConnectionState.done) {
+                                                    var attendees = json.decode(snapshot.data.body);
+                                                    return ListView.separated(
+                                                      shrinkWrap: true,
+                                                      scrollDirection: Axis.horizontal,
+                                                      separatorBuilder: (context, index) => const SizedBox(width: 20),
+                                                      itemCount: attendees.length,
+                                                      itemBuilder: (BuildContext context, int index)  {
+                                                        return InkWell(
+                                                          onTap: () {
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: attendees[index])));
+                                                          },
+                                                            child: CircleAvatar(
+                                                              radius: 40,
+                                                              backgroundImage: NetworkImage(_event[0]['event_image_uri']),
+                                                            )
+                                                          );
+                                                      }
                                                     );
-                                                }
+                                                  }
+                                                  else {
+                                                    return ListView.separated(
+                                                      physics: const NeverScrollableScrollPhysics(),
+                                                      scrollDirection: Axis.horizontal,
+                                                      shrinkWrap: true,
+                                                      separatorBuilder: (context, index) => const SizedBox(width: 20),
+                                                      itemCount: 5,
+                                                      itemBuilder: (BuildContext context, int index) {
+                                                        return const Center(
+                                                          child: SkeletonItem(
+                                                            child: SkeletonAvatar(
+                                                              style: SkeletonAvatarStyle(
+                                                                  shape: BoxShape.circle, width: 80, height: 80),
+                                                            )
+                                                          ),
+                                                        );
+                                                      }
+                                                    );
+                                                  }
+                                                } 
                                               )
                                             ),
                                             const SizedBox(height: 20),
@@ -212,7 +249,7 @@ class _UserEventState extends State<UserEvent> {
                         InkWell(
                           onTap: () async {
                             var response = await api.deleteItem('/v3/events/:0', [widget.id]);
-                            var snackBar;
+                            SnackBar snackBar;
                               if (response.statusCode == 202) {
                                 snackBar = SnackBar(
                                   backgroundColor: Theme.of(context).colorScheme.secondary,

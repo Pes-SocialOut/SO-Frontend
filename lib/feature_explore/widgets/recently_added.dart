@@ -6,6 +6,7 @@ import 'package:so_frontend/utils/api_controller.dart';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
 import 'package:so_frontend/utils/like_button.dart';
 import 'package:so_frontend/utils/share.dart';
+import 'package:skeletons/skeletons.dart';
 
 class RecentlyAdded extends StatefulWidget {
   const RecentlyAdded({ Key? key }) : super(key: key);
@@ -29,15 +30,15 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: api.getCollection('/v3/events/:0', [pathParam], null),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          var recommendations = json.decode(snapshot.data.body);
-          return SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 280,
-            child: ListView.separated(
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: 280,
+      child: FutureBuilder(
+        future: api.getCollection('/v3/events/:0', [pathParam], null),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var recommendations = json.decode(snapshot.data.body);
+            return ListView.separated(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               separatorBuilder: (context, index) => const SizedBox(width: 4),
@@ -137,19 +138,36 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                   ),
                 );
               },
-            ),
+            );
+          }
+          else {
+            return ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              separatorBuilder: (context, index) => const SizedBox(width: 20),
+              itemCount: 5,
+              itemBuilder: (BuildContext context, int index) {
+                return Center(
+                  child: SkeletonItem(
+                    child: SkeletonParagraph(
+                      style: SkeletonParagraphStyle(
+                        lines: 1,
+                        lineStyle: SkeletonLineStyle(
+                          width: 250,
+                          height: 250,
+                          borderRadius: BorderRadius.circular(10)
+                        )
+                      )
+                    )
+                  ),
+                );
+              }
           );
+          }
         }
-        else {
-          return const SizedBox(
-            height: 280,
-            child: Center(
-              child: CircularProgressIndicator()
-            )
-          );
-        }
-      }
-      
+        
+      ),
     );
   }
 }

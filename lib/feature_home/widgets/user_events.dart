@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:so_frontend/feature_event/screens/user_event_screen.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
@@ -97,9 +98,29 @@ class _UserEventsListState extends State<UserEventsList> {
             );
             }
             else {
-              return const Center(
-                child: CircularProgressIndicator()
-              );
+              return ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => const SizedBox(width: 5),
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return Center(
+                    child: SkeletonItem(
+                      child: SkeletonParagraph(
+                        style: SkeletonParagraphStyle(
+                          lines: 1,
+                          lineStyle: SkeletonLineStyle(
+                            width: 100,
+                            height: 115,
+                            borderRadius: BorderRadius.circular(10)
+                          )
+                        )
+                      )
+                    ),
+                  );
+                }
+            );
             }
           } 
         ),

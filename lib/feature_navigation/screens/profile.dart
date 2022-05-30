@@ -21,6 +21,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   APICalls ac = APICalls();
 
+  String getCurrentUser() {
+    return ac.getCurrentUser();
+  }
+
   Map user = {};
   String idProfile = '0';
   String urlProfilePhoto = "";
@@ -63,7 +67,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           iconTheme:
               const IconThemeData(color: Color.fromARGB(255, 17, 92, 153)),
         ),
-        endDrawer: Settings(id: idProfile),
+        endDrawer:
+            idProfile == getCurrentUser() ? Settings(id: idProfile) : null,
         body: FutureBuilder(
             future: ac.getItem('v2/users/:0', [idProfile]),
             builder: (BuildContext context, AsyncSnapshot snapshot) {

@@ -12,7 +12,8 @@ import 'package:http/http.dart' as http;
 
 class MapWidget extends StatefulWidget {
   double lat, long;
-  MapWidget({Key? key, required this.lat, required this.long})
+  bool isEvent;
+  MapWidget({Key? key, required this.lat, required this.long, required this.isEvent})
       : super(key: key);
 
   @override
@@ -65,7 +66,7 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getCollection('/v2/events/', [], null),
+      future: api.getCollection('/v3/events/', [], null),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var events = json.decode(snapshot.data.body);
@@ -87,15 +88,16 @@ class _MapWidgetState extends State<MapWidget> {
                     ),
                     MarkerLayerOptions(
                       markers: [
-                        Marker(
+                        !widget.isEvent ? Marker(
                             width: 40.0,
                             height: 40.0,
                             point: LatLng(widget.lat, widget.long),
                             builder: (context) => Icon(
-                                  Icons.circle,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 40,
-                                )),
+                              Icons.circle,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 40,
+                            )
+                          ) : Marker(point:LatLng(widget.lat, widget.long), builder: (context) =>  const SizedBox()),
                         for (var i = 0; i < events.length; i++)
                           Marker(
                               width: 40.0,
@@ -108,13 +110,26 @@ class _MapWidgetState extends State<MapWidget> {
                                     var color = json.decode(snapshot.data.body);
                                     return IconButton(
                                       icon: const Icon(Icons.location_on_sharp, size: 40),
-                                      onPressed: () => showEvent(events[i], color["pollution"]),
-                                      color: (color["pollution"] < 0.15)
-                                      ? Colors.green
-                                      : (color["pollution"] > 0.3)
-                                          ? Colors.red
-                                          : Colors.yellow,
-                                    );
+                                      onPressed: () => showEvent(
+                                        events[i],
+                                        color["pollution"]),
+                                    color: Color.lerp(
+                                        Colors.green,
+                                        Color.lerp(
+                                            Colors.yellow,
+                                            Colors.red,
+                                            
+                                        color['pollution'] < 0.15
+                                            ? 0
+                                            : (color['pollution'] >
+                                                    0.3
+                                                ? 1
+                                                : (color['pollution'] -
+                                                        0.15) /
+                                                    0.15)), color['pollution'] > 0.15
+                                                ? 1
+                                                : color['pollution'] /
+                                                    0.15),);
                                   } 
                                   else {
                                     return IconButton(
@@ -126,18 +141,30 @@ class _MapWidgetState extends State<MapWidget> {
                                 } 
                               )),
                         for (var i = 0; i < stations.length; i++)
-                          Marker(
+                          stations[i]["lat"] != null && stations[i]["long"] != null && stations[i]["pollution"] != null  ? Marker(
                               width: 35.0,
                               height: 35.0,
                               point: LatLng(stations[i]["lat"], stations[i]["long"]),
                               builder: (context) => IconButton(
                                   icon: const Icon(Icons.device_thermostat, size: 30),
                                   onPressed: () => showStation(stations[i]["id"]),
-                                  color: (stations[i]["pollution"] < 0.15)
-                                      ? Colors.green
-                                      : (stations[i]["pollution"] > 0.3)
-                                          ? Colors.red
-                                          : Colors.yellow))
+                                  color: Color.lerp(
+                                        Colors.green,
+                                        Color.lerp(
+                                            Colors.yellow,
+                                            Colors.red,
+                                            
+                                        stations[i]['pollution'] < 0.15
+                                            ? 0
+                                            : (stations[i]['pollution'] >
+                                                    0.3
+                                                ? 1
+                                                : (stations[i]['pollution'] -
+                                                        0.15) /
+                                                    0.15)), stations[i]['pollution'] > 0.15
+                                                ? 1
+                                                : stations[i]['pollution'] /
+                                                    0.15))) : Marker(point: LatLng(0.0, 0.0), builder: (context) => const SizedBox())
                       ],
                     ),
                   ],

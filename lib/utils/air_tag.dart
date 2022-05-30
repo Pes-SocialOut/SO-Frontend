@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/ml_predictions.dart';
-
+import 'package:skeletons/skeletons.dart';
 
 class AirTag extends StatefulWidget {
   final String longitud;
@@ -41,7 +41,19 @@ class _AirTagState extends State<AirTag> {
           );
         }
         else {
-          return const CircularProgressIndicator();
+          return SkeletonItem(
+            child:  SkeletonParagraph(
+              style: SkeletonParagraphStyle(
+                lines: 1,
+                spacing: 4,
+                lineStyle: SkeletonLineStyle(
+                  width: 40,
+                  height: 20,
+                  borderRadius: BorderRadius.circular(10)
+                )
+              )
+            )
+          );
         }
       }
     );

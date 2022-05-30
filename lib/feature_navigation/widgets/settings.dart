@@ -17,10 +17,6 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   APICalls ac = APICalls();
 
-  String getCurrentUser() {
-    return ac.getCurrentUser();
-  }
-
   Map url = {};
   Map user = {};
   String idProfile = '0';

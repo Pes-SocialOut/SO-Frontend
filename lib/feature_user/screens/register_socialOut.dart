@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/screens/link_user.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
+import 'package:so_frontend/utils/go_to.dart';
 
 import 'form_register.dart';
 
@@ -287,7 +288,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                       text: "login".tr(),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.of(context).pushNamed('/login');
+                          Navigator.pushNamed(context, '/login', arguments: GoTo(
+                            () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
+                          ),);
                         },
                     ),
                   ],

@@ -3,6 +3,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
+import 'package:so_frontend/utils/go_to.dart';
 
 class LinkScreen extends StatefulWidget {
   final String email;
@@ -167,7 +168,9 @@ class LinkScreenState extends State<LinkScreen> {
             ),
             minimumSize: const Size(200, 40)),
         onPressed: () {
-          Navigator.of(context).pushNamed('/login');
+          Navigator.pushNamed(context, '/login', arguments: GoTo(
+            () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
+          ));
         },
         child: Text(
           'Cancel',

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/event_map.dart';
+import 'package:so_frontend/feature_navigation/screens/profile.dart';
 import 'package:so_frontend/utils/air_tag.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:skeletons/skeletons.dart';
 
 class Event extends StatefulWidget {
   final String id;
@@ -103,10 +104,18 @@ class _EventState extends State<Event> {
                                               return  Text('Created by: ' + _user[0]["username"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500));
                                             }
                                             else {
-                                              return const SizedBox(
-                                                width: 25,
-                                                height: 5,
-                                                child: LinearProgressIndicator()
+                                              return SkeletonItem(
+                                                child: SkeletonParagraph(
+                                                  style: SkeletonParagraphStyle(
+                                                    lines: 1,
+                                                    spacing: 2,
+                                                    lineStyle: SkeletonLineStyle(
+                                                      width: 40,
+                                                      height: 20,
+                                                      borderRadius: BorderRadius.circular(10)
+                                                    )
+                                                  )
+                                                )
                                               );
                                             }
                                           }
@@ -171,6 +180,7 @@ class _EventState extends State<Event> {
                                                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                                                   if (snapshot.connectionState == ConnectionState.done) {
                                                     var attendees = json.decode(snapshot.data.body);
+                                                    print(attendees);
                                                     return ListView.separated(
                                                       shrinkWrap: true,
                                                       scrollDirection: Axis.horizontal,
@@ -179,7 +189,7 @@ class _EventState extends State<Event> {
                                                       itemBuilder: (BuildContext context, int index)  {
                                                         return InkWell(
                                                           onTap: () {
-                                                            Navigator.of(context).pushNamed('/profile');
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: attendees[index])));
                                                           },
                                                             child: CircleAvatar(
                                                               radius: 40,
@@ -190,7 +200,23 @@ class _EventState extends State<Event> {
                                                     );
                                                   }
                                                   else {
-                                                    return const CircularProgressIndicator();
+                                                    return ListView.separated(
+                                                      physics: const NeverScrollableScrollPhysics(),
+                                                      scrollDirection: Axis.horizontal,
+                                                      shrinkWrap: true,
+                                                      separatorBuilder: (context, index) => const SizedBox(width: 20),
+                                                      itemCount: 5,
+                                                      itemBuilder: (BuildContext context, int index) {
+                                                        return const Center(
+                                                          child: SkeletonItem(
+                                                            child: SkeletonAvatar(
+                                                              style: SkeletonAvatarStyle(
+                                                                  shape: BoxShape.circle, width: 80, height: 80),
+                                                            )
+                                                          ),
+                                                        );
+                                                      }
+                                                    );
                                                   }
                                                 } 
                                               )
@@ -247,7 +273,18 @@ class _EventState extends State<Event> {
                               return Text(participants.length.toString() +"/" + _event[0]["max_participants"].toString(), style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.w500, fontSize: 16));
                             } 
                             else {
-                              return const CircularProgressIndicator();
+                              return SkeletonItem(
+                                child: SkeletonParagraph(
+                                  style: SkeletonParagraphStyle(
+                                    lines: 1,
+                                    lineStyle: SkeletonLineStyle(
+                                      width: 20,
+                                      height: 20,
+                                      borderRadius: BorderRadius.circular(10)
+                                    )
+                                  )
+                                )
+                              );
                             }
 
                           }
@@ -353,7 +390,21 @@ class _EventState extends State<Event> {
                               
                             }
                             else {
-                              return const CircularProgressIndicator();
+                              return Center(
+                                child: SkeletonItem(
+                                  child: SkeletonParagraph(
+                                    style: SkeletonParagraphStyle(
+                                      lines: 1,
+                                      spacing: 2,
+                                      lineStyle: SkeletonLineStyle(
+                                        width: 150,
+                                        height: 40,
+                                        borderRadius: BorderRadius.circular(10)
+                                      )
+                                    )
+                                  )
+                                ),
+                              );
                             }
                           }
                         )
