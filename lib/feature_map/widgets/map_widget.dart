@@ -141,7 +141,7 @@ class _MapWidgetState extends State<MapWidget> {
                                 } 
                               )),
                         for (var i = 0; i < stations.length; i++)
-                          Marker(
+                          stations[i]["lat"] != null && stations[i]["long"] != null && stations[i]["pollution"] != null  ? Marker(
                               width: 35.0,
                               height: 35.0,
                               point: LatLng(stations[i]["lat"], stations[i]["long"]),
@@ -164,7 +164,7 @@ class _MapWidgetState extends State<MapWidget> {
                                                     0.15)), stations[i]['pollution'] > 0.15
                                                 ? 1
                                                 : stations[i]['pollution'] /
-                                                    0.15)))
+                                                    0.15))) : Marker(point: LatLng(0.0, 0.0), builder: (context) => const SizedBox())
                       ],
                     ),
                   ],
