@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/main.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class APICalls {
   static final APICalls _instance = APICalls._internal();
@@ -50,6 +51,15 @@ class APICalls {
   void tryInitializeFromPreferences() async {
     // Esta función se llama al iniciar la aplicación. Determina si el usuario debe hacer login o si ya "se acuerda".
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
+    final bool couldReadRefreshFromPreferences = await getRefreshFromPreferences();
+    if (couldReadRefreshFromPreferences) {
+      _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
+    } else {
+      _redirectToLogin();
+    }
+  }
+
+  Future<bool> getRefreshFromPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     // ignore: unnecessary_null_comparison
     if (prefs != null) {
@@ -59,11 +69,10 @@ class APICalls {
         // Si hay refresh token, iniciar sesión automáticamente llamando al endpoint de refresh de la API.
         // Si la operación es aceptada redirecciona a la home screen. Si no redirecciona al logIn.
         _REFRESH_TOKEN = refresh_prefs.toString();
-        _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
-      } else {
-        _redirectToLogin();
+        return true;
       }
     }
+    return false;
   }
 
   Future<dynamic> getItem(String endpoint, List<String> pathParams) async {
@@ -145,6 +154,12 @@ class APICalls {
     _redirectToLogin();
   }
 
+  void appLinkLoginRedirect(Function onSuccess, Function onError) async {
+    // Comprobar si tenemos refresh token:
+    if (_REFRESH_TOKEN == '') await getRefreshFromPreferences();
+    _refresh(onSuccess, onError);
+  }
+
   Future<dynamic> _refresh(Function onSuccess, Function onError) async {
     // Llama a refresh, si es correcto setea las variables y llama a onSuccess. Si no llama a onError
     final response = await http
@@ -182,12 +197,14 @@ class APICalls {
     // ignore: todo
     // TODO: Navegar a la login screen
     navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const WelcomeScreen()), (route) => false);
+    FlutterNativeSplash.remove();
   }
 
   void _redirectToHomeScreen() {
     // ignore: todo
     // TODO: Navegar a la home screen
     navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationBottomBar()), (route) => false);
+    FlutterNativeSplash.remove();
   }
 
   factory APICalls() {
