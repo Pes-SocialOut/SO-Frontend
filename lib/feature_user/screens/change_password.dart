@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:core';
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
@@ -47,9 +50,11 @@ class _ChangePassword extends State<ChangePassword> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Change password',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface, fontSize: 16)),
+          title: Text('Changepassword',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 16))
+              .tr(),
           backgroundColor: Theme.of(context).colorScheme.background,
           leading: IconButton(
             iconSize: 24,
@@ -85,7 +90,7 @@ class _ChangePassword extends State<ChangePassword> {
                       ),
                     ),
                     contentPadding: const EdgeInsets.only(left: 30),
-                    labelText: 'Enter your current password',
+                    labelText: 'Entercurrentpassword'.tr(),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     hintStyle: const TextStyle(
                         fontSize: 16,
@@ -119,7 +124,7 @@ class _ChangePassword extends State<ChangePassword> {
                       ),
                     ),
                     contentPadding: const EdgeInsets.only(left: 30),
-                    labelText: 'Enter your new password',
+                    labelText: 'Enternewpassword'.tr(),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     hintStyle: const TextStyle(
                         fontSize: 16,
@@ -153,7 +158,7 @@ class _ChangePassword extends State<ChangePassword> {
                       ),
                     ),
                     contentPadding: const EdgeInsets.only(left: 30),
-                    labelText: 'Repeat your new password',
+                    labelText: 'Repeatnewpassword'.tr(),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                     hintStyle: const TextStyle(
                         fontSize: 16,
@@ -188,12 +193,11 @@ class _ChangePassword extends State<ChangePassword> {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                      title: const Text('Error'),
-                                      content: const Text(
-                                          'All fields are required.'),
+                                      title: Text('Error').tr(),
+                                      content: Text('Allfields').tr(),
                                       actions: [
                                         TextButton(
-                                          child: const Text('OK'),
+                                          child: Text('Ok').tr(),
                                           onPressed: () =>
                                               Navigator.pop(context),
                                         )
@@ -206,12 +210,11 @@ class _ChangePassword extends State<ChangePassword> {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                      title: const Text('Error'),
-                                      content: const Text(
-                                          'Enter valid password: min8caracters(numeric,UpperCase,LowerCase)'),
+                                      title: Text('Error').tr(),
+                                      content: Text('validpassword').tr(),
                                       actions: [
                                         TextButton(
-                                          child: const Text('OK'),
+                                          child: Text('OK').tr(),
                                           onPressed: () =>
                                               Navigator.pop(context),
                                         )
@@ -223,12 +226,12 @@ class _ChangePassword extends State<ChangePassword> {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                      title: const Text('Error'),
-                                      content: const Text(
-                                          'Both passwords must match'),
+                                      title: Text('Error').tr(),
+                                      content:
+                                          Text('BothpasswordsNomatch').tr(),
                                       actions: [
                                         TextButton(
-                                          child: const Text('OK'),
+                                          child: Text('Ok').tr(),
                                           onPressed: () =>
                                               Navigator.pop(context),
                                         )
@@ -240,12 +243,13 @@ class _ChangePassword extends State<ChangePassword> {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                      title: const Text('Error'),
-                                      content: const Text(
-                                          'New password must be different from old password'),
+                                      title: Text('Error').tr(),
+                                      content: Text(
+                                              'Newpassworddifferentoldpassword')
+                                          .tr(),
                                       actions: [
                                         TextButton(
-                                          child: const Text('OK'),
+                                          child: Text('Ok').tr(),
                                           onPressed: () =>
                                               Navigator.pop(context),
                                         )
@@ -258,12 +262,12 @@ class _ChangePassword extends State<ChangePassword> {
                                   showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                              title: const Text('Error'),
-                                              content: const Text(
-                                                  'Incorrect old password'),
+                                              title: Text('Error').tr(),
+                                              content:
+                                                  Text('Incorrectold').tr(),
                                               actions: [
                                                 TextButton(
-                                                  child: const Text('OK'),
+                                                  child: Text('Ok').tr(),
                                                   onPressed: () =>
                                                       Navigator.pop(context),
                                                 )
@@ -274,12 +278,13 @@ class _ChangePassword extends State<ChangePassword> {
                                   showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                              title: const Text('Correct'),
-                                              content: const Text(
-                                                  'Password changed correctly'),
+                                              title: Text('Correct').tr(),
+                                              content:
+                                                  Text('Passchangedcorrect')
+                                                      .tr(),
                                               actions: [
                                                 TextButton(
-                                                  child: const Text('OK'),
+                                                  child: Text('Ok').tr(),
                                                   onPressed: () =>
                                                       Navigator.pop(context),
                                                 )
@@ -287,8 +292,8 @@ class _ChangePassword extends State<ChangePassword> {
                                 }
                             });
                       },
-                      child: const Text(
-                        'Update',
+                      child: Text(
+                        'Update'.tr(),
                         style: TextStyle(
                             height: 1.0,
                             fontSize: 20,

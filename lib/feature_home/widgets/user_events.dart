@@ -20,7 +20,7 @@ class _UserEventsListState extends State<UserEventsList> {
         width: MediaQuery.of(context).size.width,
         height: 140,
         child: FutureBuilder(
-          future: api.getCollection('/v2/events/:0', ["creator"], {"userid":api.getCurrentUser()}),
+          future: api.getCollection('/v3/events/:0', ["creator"], {"userid":api.getCurrentUser()}),
           builder: (BuildContext context, AsyncSnapshot snapshot)  {
             if (snapshot.connectionState == ConnectionState.done) {
               var _events = json.decode(snapshot.data.body);

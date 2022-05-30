@@ -51,16 +51,18 @@ class APICalls {
     // Esta función se llama al iniciar la aplicación. Determina si el usuario debe hacer login o si ya "se acuerda".
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
     final prefs = await SharedPreferences.getInstance();
-    final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
-    //print(_REFRESH_TOKEN_PREFS.toString());
-    //print(refresh_prefs.toString());
-    if (refresh_prefs == null) {
-      _redirectToLogin();
-    } else {
-      // Si hay refresh token, iniciar sesión automáticamente llamando al endpoint de refresh de la API.
-      // Si la operación es aceptada redirecciona a la home screen. Si no redirecciona al logIn.
-      _REFRESH_TOKEN = refresh_prefs;
-      _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
+    // ignore: unnecessary_null_comparison
+    if (prefs != null) {
+      final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
+      // ignore: unnecessary_null_comparison
+      if (refresh_prefs.toString() != null) {
+        // Si hay refresh token, iniciar sesión automáticamente llamando al endpoint de refresh de la API.
+        // Si la operación es aceptada redirecciona a la home screen. Si no redirecciona al logIn.
+        _REFRESH_TOKEN = refresh_prefs.toString();
+        _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
+      } else {
+        _redirectToLogin();
+      }
     }
   }
 

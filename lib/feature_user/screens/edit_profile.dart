@@ -1,8 +1,15 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 import 'dart:core';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/feature_user/screens/change_image_profile.dart';
+import 'package:so_frontend/feature_user/services/externalService.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+
+//import '../services/sharedPreferencesHelper.dart';
 
 class EditarProfile extends StatefulWidget {
   const EditarProfile({Key? key}) : super(key: key);
@@ -16,6 +23,7 @@ class _EditarProfileState extends State<EditarProfile> {
   late String username;
   late String description;
   late String hobbies;
+  late String idUsuar;
   List<dynamic> idiomas = [];
   bool colorInit = false;
   bool colorInit2 = false;
@@ -28,7 +36,9 @@ class _EditarProfileState extends State<EditarProfile> {
   Color secundary3 = Colors.black;
   Map user = {};
   String idProfile = "0";
+  String urlProfilePhoto = "";
   APICalls ac = APICalls();
+  final ExternServicePhoto es = ExternServicePhoto();
 
   String getCurrentUser() {
     return ac.getCurrentUser();
@@ -48,7 +58,21 @@ class _EditarProfileState extends State<EditarProfile> {
       username = user["username"];
       description = user["description"];
       hobbies = user["hobbies"];
+      idUsuar = user["id"];
     });
+    getProfilePhoto(idUsuar);
+    print(json.decode(response.body));
+  }
+
+  Future<void> getProfilePhoto(String idUsuar) async {
+    final response = await es.getAPhoto(idUsuar);
+    if (response != 'Fail') {
+      print("ENTRO A FAIL");
+      setState(() {
+        urlProfilePhoto = response;
+      });
+    }
+    print(response);
   }
 
   @override
@@ -78,20 +102,20 @@ class _EditarProfileState extends State<EditarProfile> {
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Please enter some ' + labelText2;
+          return 'pleaseEnter'.tr() + labelText2;
         }
         return null;
       },
       onSaved: (value) {
-        if (labelText2 == "Username") {
+        if (labelText2 == "Username".tr()) {
           setState(() {
             username = value.toString();
           });
-        } else if (labelText2 == "description") {
+        } else if (labelText2 == "Description".tr()) {
           setState(() {
             description = value.toString();
           });
-        } else if (labelText2 == "hobbies") {
+        } else if (labelText2 == "hobbies".tr()) {
           setState(() {
             hobbies = value.toString();
           });
@@ -101,112 +125,100 @@ class _EditarProfileState extends State<EditarProfile> {
   }
 
   Widget _buildLanguages() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    // ignore: sized_box_for_whitespace
+    return Container(
+      height: 30,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
         children: [
-          const Text(
-            "preferred languages",
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
-                color: Color.fromARGB(255, 112, 108, 108)),
+          const SizedBox(width: 15),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary:
+                    colorInit ? Theme.of(context).colorScheme.primary : primary,
+                onPrimary: colorInit
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : secundary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                minimumSize: const Size(80, 50)),
+            onPressed: () {
+              colorInit = !colorInit;
+              if (!colorInit) {
+                idiomas.remove("spanish");
+              } else {
+                idiomas.add("spanish");
+              }
+              setState(() {
+                primary = nuevoColor(colorInit, "primary");
+                secundary = nuevoColor(colorInit, "secondary");
+              });
+            },
+            child: Text(
+              "Spanish",
+              style: TextStyle(
+                  height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+            ).tr(),
           ),
-          const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(width: 15),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: colorInit
-                        ? Theme.of(context).colorScheme.primary
-                        : primary,
-                    onPrimary: colorInit
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : secundary,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    minimumSize: const Size(100, 50)),
-                onPressed: () {
-                  colorInit = !colorInit;
-                  if (!colorInit) {
-                    idiomas.remove("spanish");
-                  } else {
-                    idiomas.add("spanish");
-                  }
-                  setState(() {
-                    primary = nuevoColor(colorInit, "primary");
-                    secundary = nuevoColor(colorInit, "secondary");
-                  });
-                },
-                child: const Text(
-                  "spanish",
-                  style: TextStyle(
-                      height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(width: 15),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: colorInit2
-                        ? Theme.of(context).colorScheme.primary
-                        : primary2,
-                    onPrimary: colorInit2
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : secundary2,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    minimumSize: const Size(100, 50)),
-                onPressed: () {
-                  colorInit2 = !colorInit2;
-                  if (!colorInit2) {
-                    idiomas.remove("english");
-                  } else {
-                    idiomas.add("english");
-                  }
-                  setState(() {
-                    primary2 = nuevoColor(colorInit2, "primary");
-                    secundary2 = nuevoColor(colorInit2, "secondary");
-                  });
-                },
-                child: const Text(
-                  "english",
-                  style: TextStyle(
-                      height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(width: 15),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: colorInit3
-                        ? Theme.of(context).colorScheme.primary
-                        : primary3,
-                    onPrimary: colorInit3
-                        ? Theme.of(context).colorScheme.onPrimary
-                        : secundary3,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    minimumSize: const Size(100, 50)),
-                onPressed: () {
-                  colorInit3 = !colorInit3;
-                  if (!colorInit3) {
-                    idiomas.remove("catalan");
-                  } else {
-                    idiomas.add("catalan");
-                  }
-                  setState(() {
-                    primary3 = nuevoColor(colorInit3, "primary");
-                    secundary3 = nuevoColor(colorInit3, "secondary");
-                  });
-                },
-                child: const Text(
-                  "catalan",
-                  style: TextStyle(
-                      height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
+          const SizedBox(width: 5),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: colorInit2
+                    ? Theme.of(context).colorScheme.primary
+                    : primary2,
+                onPrimary: colorInit2
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : secundary2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                minimumSize: const Size(80, 50)),
+            onPressed: () {
+              colorInit2 = !colorInit2;
+              if (!colorInit2) {
+                idiomas.remove("english");
+              } else {
+                idiomas.add("english");
+              }
+              setState(() {
+                primary2 = nuevoColor(colorInit2, "primary");
+                secundary2 = nuevoColor(colorInit2, "secondary");
+              });
+            },
+            child: Text(
+              "English",
+              style: TextStyle(
+                  height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+            ).tr(),
+          ),
+          const SizedBox(width: 5),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: colorInit3
+                    ? Theme.of(context).colorScheme.primary
+                    : primary3,
+                onPrimary: colorInit3
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : secundary3,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                minimumSize: const Size(80, 50)),
+            onPressed: () {
+              colorInit3 = !colorInit3;
+              if (!colorInit3) {
+                idiomas.remove("catalan");
+              } else {
+                idiomas.add("catalan");
+              }
+              setState(() {
+                primary3 = nuevoColor(colorInit3, "primary");
+                secundary3 = nuevoColor(colorInit3, "secondary");
+              });
+            },
+            child: Text(
+              "Catalan",
+              style: TextStyle(
+                  height: 1.0, fontSize: 16, fontWeight: FontWeight.bold),
+            ).tr(),
           ),
         ],
       ),
@@ -257,16 +269,24 @@ class _EditarProfileState extends State<EditarProfile> {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("edit profile",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface, fontSize: 16)),
+          title: Text("editprofile",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 16))
+              .tr(),
           backgroundColor: Theme.of(context).colorScheme.background,
           leading: IconButton(
             iconSize: 24,
             color: Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.arrow_back_ios_new_sharp),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                      id: idUsuar,
+                    ),
+                  ));
             },
           ),
         ),
@@ -301,9 +321,12 @@ class _EditarProfileState extends State<EditarProfile> {
                                 offset: const Offset(0, 10))
                           ],
                           shape: BoxShape.circle,
-                          image: const DecorationImage(
+                          image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/dog.jpg'),
+                            image: (urlProfilePhoto == "")
+                                ? AssetImage('assets/noProfileImage.png')
+                                : NetworkImage(urlProfilePhoto)
+                                    as ImageProvider,
                           ),
                         ),
                       ),
@@ -317,8 +340,12 @@ class _EditarProfileState extends State<EditarProfile> {
                             color: Theme.of(context).colorScheme.primary,
                             size: 30,
                           ),
-                          onPressed: () {
-                            // editar foto de perfil
+                          onPressed: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PerfilImage(idUser: idUsuar)));
                           },
                         ),
                       ),
@@ -326,11 +353,16 @@ class _EditarProfileState extends State<EditarProfile> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                builWidgetText("Username", username),
+                builWidgetText("Username".tr(), username),
                 const SizedBox(height: 15),
-                builWidgetText("description", description),
+                builWidgetText("Description".tr(), description),
                 const SizedBox(height: 15),
-                builWidgetText("hobbies", hobbies),
+                builWidgetText("hobbies".tr(), hobbies),
+                const SizedBox(height: 15),
+                Text(
+                  "preferredlanguages",
+                  textAlign: TextAlign.center,
+                ).tr(),
                 const SizedBox(height: 15),
                 _buildLanguages(),
                 const SizedBox(height: 55),
@@ -359,17 +391,16 @@ class _EditarProfileState extends State<EditarProfile> {
                             var ap = await updateUser(bodyAux);
                             if (ap == 200) {
                               getUser();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(mensajeMuestra("updated data"));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  mensajeMuestra("updateddata".tr()));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  mensajeMuestra(
-                                      "update error, some language is needed"));
+                                  mensajeMuestra("updateerror".tr()));
                             }
                           }
                         },
-                        child: const Text(
-                          'Update',
+                        child: Text(
+                          'Update'.tr(),
                           style: TextStyle(
                               height: 1.0,
                               fontSize: 20,

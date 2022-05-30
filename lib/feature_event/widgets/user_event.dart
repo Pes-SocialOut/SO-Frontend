@@ -21,7 +21,7 @@ class _UserEventState extends State<UserEvent> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getItem('/v2/events/:0', [widget.id]),
+      future: api.getItem('/v3/events/:0', [widget.id]),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var _event = [json.decode(snapshot.data.body)];
@@ -125,7 +125,7 @@ class _UserEventState extends State<UserEvent> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             const SizedBox(height: 20),
-                                            Text(_event[0]["date_started"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
+                                            Text(_event[0]["date_started"].substring(0, _event[0]["date_started"].length - 7), style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.w500)),
                                             const SizedBox(height: 15),
                                             Row(
                                               crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:so_frontend/utils/air_tag.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 import 'package:so_frontend/utils/share.dart';
@@ -86,7 +87,7 @@ class _EventWidgetState extends State<EventWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(
-                  child: Text(widget.event["date_started"], style: dateStyle),
+                  child: Text(widget.event["date_started"].substring(0, widget.event["date_started"].length - 7), style: dateStyle),
                 ),
               ]),
               Row(children: [
@@ -97,41 +98,7 @@ class _EventWidgetState extends State<EventWidget> {
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
                   Widget>[
-                ElevatedButton(
-                  child: Text(_event[0]["air_quality"]),
-                  style: TextButton.styleFrom(
-                      primary: Colors.white,
-                      backgroundColor: (_event[0]["air_quality"] == 'MODERATE')
-                          ? const Color.fromARGB(255, 230, 217, 106)
-                          : (_event[0]["air_quality"] == 'LOW')
-                              ? Colors.green
-                              : Colors.red),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                                title: (_event[0]["air_quality"] == 'MODERATE')
-                                    ? const Text('Contaminación moderada')
-                                    : (_event[0]["air_quality"] == 'LOW')
-                                        ? const Text('Contaminación baja')
-                                        : const Text('Contaminación alta'),
-                                content: (_event[0]["air_quality"] ==
-                                        'MODERATE')
-                                    ? const Text(
-                                        'Se espera que para la fecha y hora indicados en el evento la polución sea moderada. Los contaminantes predominantes son los siguientes:')
-                                    : (_event[0]["air_quality"] == 'LOW')
-                                        ? const Text(
-                                            'Se espera que para la fecha y hora indicados en el evento la polución sea baja. Los contaminantes predominantes son los siguientes:')
-                                        : const Text(
-                                            'Se espera que para la fecha y hora indicados en el evento la polución sea alta. Los contaminantes predominantes son los siguientes:'),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('Aceptar'),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ]));
-                  },
-                ),
+                AirTag(longitud: widget.event["longitud"], latitude: widget.event["latitude"], id: widget.event["id"]),
                 Row(children: <Widget>[
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),

@@ -1,11 +1,13 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/widgets/joined_list.dart';
 import 'package:so_frontend/feature_home/widgets/liked_list.dart';
 import 'package:so_frontend/feature_home/widgets/past_list.dart';
 
-
 class EventsTabMenu extends StatefulWidget {
-  const EventsTabMenu({ Key? key }) : super(key: key);
+  const EventsTabMenu({Key? key}) : super(key: key);
 
   @override
   State<EventsTabMenu> createState() => _EventsTabMenuState();

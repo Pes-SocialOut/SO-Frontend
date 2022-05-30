@@ -30,7 +30,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getCollection('/v2/events/:0', [pathParam], null),
+      future: api.getCollection('/v3/events/:0', [pathParam], null),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var recommendations = json.decode(snapshot.data.body);
@@ -108,7 +108,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(recommendations[index]["date_started"], style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold)),
+                                      Text(recommendations[index]["date_started"].substring(0, recommendations[index]["date_started"].length - 7), style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14, fontWeight: FontWeight.bold)),
                                       const SizedBox(height: 10),
                                       Text(recommendations[index]["name"], style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 14, fontWeight: FontWeight.bold)),
                                       Row(
