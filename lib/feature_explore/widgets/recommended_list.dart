@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/like_button.dart';
 import 'package:so_frontend/utils/share.dart';
+import 'package:skeletons/skeletons.dart';
 
 class RecommendedList extends StatefulWidget {
   const RecommendedList({ Key? key }) : super(key: key);
@@ -141,8 +142,29 @@ class _RecommendedListState extends State<RecommendedList> {
             );
           }
           else {
-            return const  Center(
-              child: CircularProgressIndicator()
+            return ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => const SizedBox(width: 20),
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return Center(
+                    child: SkeletonItem(
+                      child: SkeletonParagraph(
+                        style: SkeletonParagraphStyle(
+                          lines: 1,
+                          spacing: 2,
+                          lineStyle: SkeletonLineStyle(
+                            width: 250,
+                            height: 250,
+                            borderRadius: BorderRadius.circular(10)
+                          )
+                        )
+                      )
+                    ),
+                  );
+                }
             );
           }
         } 
