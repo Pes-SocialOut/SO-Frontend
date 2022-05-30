@@ -53,6 +53,9 @@ class APICalls {
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
     final bool couldReadRefreshFromPreferences = await getRefreshFromPreferences();
     if (couldReadRefreshFromPreferences) {
+      WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  
       _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
     } else {
       _redirectToLogin();
