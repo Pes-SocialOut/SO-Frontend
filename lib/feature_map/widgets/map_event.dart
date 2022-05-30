@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:so_frontend/utils/air_tag.dart';
+import 'package:so_frontend/utils/api_controller.dart';
+import 'dart:convert';
+import 'package:so_frontend/utils/share.dart';
+import 'package:so_frontend/utils/like_button.dart';
 
 class EventWidget extends StatefulWidget {
-  const EventWidget({Key? key}) : super(key: key);
+  final Map<String, dynamic> event;
+  final double pollution;
+  const EventWidget({Key? key, required this.event, required this.pollution}) : super(key: key);
 
   @override
   State<EventWidget> createState() => _EventWidgetState();
@@ -40,9 +48,23 @@ class _EventWidgetState extends State<EventWidget> {
     }
   ];
 
+  APICalls api = APICalls();
+
   //Temporalmente hardcoded
   String eventPhoto = 'assets/gato.jpg';
   String creatorPhoto = 'assets/dog.jpg';
+
+  Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
+
+    final response = await api.postItem('/v2/events/:0/:1', [widget.event["id"], 'join'], bodyData);
+    return response;
+  }
+
+  Future<dynamic> leaveEvent(String id, Map<String, dynamic> bodyData) async {
+
+    final response = await api.postItem('/v2/events/:0/:1', [widget.event["id"], 'leave'], bodyData);
+    return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +77,7 @@ class _EventWidgetState extends State<EventWidget> {
             child: Column(children: [
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage(eventPhoto),
+                backgroundImage: NetworkImage(widget.event["event_image_uri"]),
               ),
             ]),
           ),
@@ -65,52 +87,18 @@ class _EventWidgetState extends State<EventWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(
-                  child: Text(_event[0]["date"], style: dateStyle),
+                  child: Text(widget.event["date_started"].substring(0, widget.event["date_started"].length - 7), style: dateStyle),
                 ),
               ]),
               Row(children: [
                 Expanded(
-                  child: Text(_event[0]["title"],
+                  child: Text(widget.event["name"],
                       style: eventStyle, textAlign: TextAlign.left),
                 ),
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
                   Widget>[
-                ElevatedButton(
-                  child: Text(_event[0]["air_quality"]),
-                  style: TextButton.styleFrom(
-                      primary: Colors.white,
-                      backgroundColor: (_event[0]["air_quality"] == 'MODERATE')
-                          ? const Color.fromARGB(255, 230, 217, 106)
-                          : (_event[0]["air_quality"] == 'LOW')
-                              ? Colors.green
-                              : Colors.red),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                                title: (_event[0]["air_quality"] == 'MODERATE')
-                                    ? const Text('Contaminación moderada')
-                                    : (_event[0]["air_quality"] == 'LOW')
-                                        ? const Text('Contaminación baja')
-                                        : const Text('Contaminación alta'),
-                                content: (_event[0]["air_quality"] ==
-                                        'MODERATE')
-                                    ? const Text(
-                                        'Se espera que para la fecha y hora indicados en el evento la polución sea moderada. Los contaminantes predominantes son los siguientes:')
-                                    : (_event[0]["air_quality"] == 'LOW')
-                                        ? const Text(
-                                            'Se espera que para la fecha y hora indicados en el evento la polución sea baja. Los contaminantes predominantes son los siguientes:')
-                                        : const Text(
-                                            'Se espera que para la fecha y hora indicados en el evento la polución sea alta. Los contaminantes predominantes son los siguientes:'),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('Aceptar'),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ]));
-                  },
-                ),
+                AirTag(longitud: widget.event["longitud"], latitude: widget.event["latitude"], id: widget.event["id"]),
                 Row(children: <Widget>[
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -120,7 +108,7 @@ class _EventWidgetState extends State<EventWidget> {
                         color: Colors.green,
                         size: 30.0,
                       ),
-                      Text(_event[0]["numAttendees"], style: participantsStyle)
+                      Text(widget.event["max_participants"].toString(), style: participantsStyle)
                     ]),
                   ),
                 ]),
@@ -129,10 +117,21 @@ class _EventWidgetState extends State<EventWidget> {
           ),
         ]),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-            'Created by: ' + _event[0]["creator"] + '  ',
-            style: creatorStyle,
-            textAlign: TextAlign.center,
+          FutureBuilder(
+            future: http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/users/' + widget.event["user_creator"])),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var user = json.decode(snapshot.data.body);
+                return Text(
+                  'Created by: ' + user["username"] + '  ',
+                  style: creatorStyle,
+                  textAlign: TextAlign.center,
+                );
+              }
+              else {
+                return const CircularProgressIndicator();
+              }
+            } 
           ),
           CircleAvatar(
             backgroundImage: AssetImage(creatorPhoto),
@@ -147,7 +146,7 @@ class _EventWidgetState extends State<EventWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              _event[0]["description"],
+              widget.event["description"],
               style: explainStyle,
               textAlign: TextAlign.center,
             ),
@@ -158,41 +157,114 @@ class _EventWidgetState extends State<EventWidget> {
           IconButton(
               icon: const Icon(Icons.share,
                   size: 30.0, color: Color.fromARGB(255, 110, 108, 108)),
-              onPressed: () {}),
+              onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + widget.event["id"], context)),
           const Divider(endIndent: 30),
-          ElevatedButton(
-            child: const Text('    JOIN NOW    '),
-            style: TextButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: Colors.green,
-            ),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                          title: const Text('Joined!'),
-                          content: const Text(
-                              'You have joined the event! Now you will recieve notifications about it.\nYou can change this on settings.'),
-                          actions: [
-                            TextButton(
-                              child: const Text('Aceptar'),
-                              onPressed: () => Navigator.pop(context),
+          FutureBuilder(
+            future: api.getCollection('/v2/events/participants',[],{"eventid":widget.event["id"]}),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var participants = json.decode(snapshot.data.body);
+                var found = false;
+                int i = 0;
+                while (!found && i < participants.length) {
+                  if (participants[i] == api.getCurrentUser()) {
+                    found = true;
+                  }
+                  ++i;
+                }
+                if (!found) {
+                    
+                    return InkWell(
+                      onTap: () async {
+                        final bodyData = {"user_id": api.getCurrentUser()};
+                        var response = await joinEvent(_event[0]["id"], bodyData);
+                        SnackBar snackBar;
+                        if (response.statusCode == 200) {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.secondary,
+                            content: const Text('You are in!'),
+                          );
+                        } else {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.error,
+                            content: const Text('Something bad happened. Try again later...'),
+                          );
+                        }
+                        setState(() {
+                          found = false;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Theme.of(context).colorScheme.secondary,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3), // changes position of shadow
                             ),
-                          ]));
-            },
+                          ],
+                        ),
+                        width: 150,
+                        height: 40,
+                        child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                      ),
+                    );
+                }
+                else {
+                  return InkWell(
+                    onTap: () async {
+                      final bodyData = {"user_id": api.getCurrentUser()};
+                      var response = await leaveEvent(_event[0]["id"], bodyData);
+                      setState(() {
+                        found = false;
+                      });
+                      SnackBar snackBar;
+                        if (response.statusCode == 200) {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.secondary,
+                            content: const Text('You left!'),
+                          );
+                        } else {
+                          snackBar = SnackBar(
+                            backgroundColor: Theme.of(context).colorScheme.error,
+                            content: const Text('Something bad happened. Try again later...'),
+                          );
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Theme.of(context).colorScheme.error,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.error.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      width: 150,
+                      height: 40,
+                      child: Center(child: Text('LEAVE', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                      
+                    ),
+                  );
+                }
+                
+              }
+              else {
+                return const CircularProgressIndicator();
+              }
+            }
           ),
           const Divider(indent: 30),
-          IconButton(
-              icon: Icon(Icons.favorite,
-                  size: 30.0,
-                  color: (isFavourite == true)
-                      ? Colors.red
-                      : const Color.fromARGB(255, 114, 113, 113)),
-              onPressed: () {
-                setState(() {
-                  isFavourite = !isFavourite;
-                });
-              })
+          LikeButton(id: widget.event["id"])
         ]),
       ]),
     );

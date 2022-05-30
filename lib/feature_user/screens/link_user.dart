@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
 
@@ -22,7 +25,7 @@ class LinkScreenState extends State<LinkScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0x00c8c8c8),
-        title: const Text('Link account'),
+        title: Text('Linkaccount').tr(),
       ),
       body: Container(
         margin: const EdgeInsets.all(24),
@@ -37,7 +40,7 @@ class LinkScreenState extends State<LinkScreen> {
             const SizedBox(height: 50),
             Center(
               child: Text(
-                "Email is already registered\n with an associated\n account",
+                "EmailAlreadyAccount",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontStyle: FontStyle.normal,
@@ -45,7 +48,7 @@ class LinkScreenState extends State<LinkScreen> {
                   fontSize: 30,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-              ),
+              ).tr(),
             ),
             const SizedBox(height: 30),
             Center(
@@ -63,9 +66,12 @@ class LinkScreenState extends State<LinkScreen> {
             const SizedBox(height: 50),
             if (widget.type == 'socialout') codiVerification(),
             //else if(widget.type == 'google'){},
-            if (widget.type == 'socialout') linkButton("socialout")
-            else if (widget.type == 'google') linkButton("google")
-            else if (widget.type == 'facebook') linkButton("facebook"),
+            if (widget.type == 'socialout')
+              linkButton("socialout")
+            else if (widget.type == 'google')
+              linkButton("google")
+            else if (widget.type == 'facebook')
+              linkButton("facebook"),
             cancelButton(),
           ]),
         ),
@@ -76,14 +82,14 @@ class LinkScreenState extends State<LinkScreen> {
   //CASILLA DE CODIGO DE VERIFICACION
   Widget codiVerification() {
     return TextFormField(
-      decoration: const InputDecoration(
-        labelText: "Verification Code",
+      decoration: InputDecoration(
+        labelText: "VerificationCode".tr(),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(29))),
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Please enter verification code';
+          return 'enterVeriCode'.tr();
         }
         return null;
       },
@@ -109,8 +115,8 @@ class LinkScreenState extends State<LinkScreen> {
         onPressed: () async {
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
-            int linkacount = await uapi.linkRegistrerAndLogin(widget.email,
-                widget.password, verification, s, widget.token);
+            int linkacount = await uapi.linkRegistrerAndLogin(
+                widget.email, widget.password, verification, s, widget.token);
             if (linkacount == 200) {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/home', (route) => false);
@@ -119,15 +125,15 @@ class LinkScreenState extends State<LinkScreen> {
                 context: context,
                 barrierDismissible: false,
                 builder: (context) => AlertDialog(
-                  title: const Text("Fail link"),
-                  content: const Text(
-                    "Account does not exist\nor\nwrong verification code",
+                  title: Text("Faillink").tr(),
+                  content: Text(
+                    "Linkwrongverificationcode",
                     textAlign: TextAlign.center,
-                  ),
+                  ).tr(),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text("Ok"),
+                      child: Text("Ok").tr(),
                     ),
                   ],
                 ),
@@ -135,14 +141,14 @@ class LinkScreenState extends State<LinkScreen> {
             }
           }
         },
-        child: const Text(
-          'Link account',
+        child: Text(
+          'Linkaccount',
           style: TextStyle(
             height: 1.0,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-        ),
+        ).tr(),
       ),
     );
   }
@@ -163,14 +169,14 @@ class LinkScreenState extends State<LinkScreen> {
         onPressed: () {
           Navigator.of(context).pushNamed('/login');
         },
-        child: const Text(
+        child: Text(
           'Cancel',
           style: TextStyle(
             height: 1.0,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-        ),
+        ).tr(),
       ),
     );
   }

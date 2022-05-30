@@ -1,9 +1,12 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:so_frontend/feature_navigation/screens/navigation.dart';
+import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/main.dart';
 
 class APICalls {
@@ -49,21 +52,23 @@ class APICalls {
     // Esta función se llama al iniciar la aplicación. Determina si el usuario debe hacer login o si ya "se acuerda".
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
     final prefs = await SharedPreferences.getInstance();
-    final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
-    //print(_REFRESH_TOKEN_PREFS.toString());
-    //print(refresh_prefs.toString());
-    if (refresh_prefs == null) {
-      _redirectToLogin();
-    } else {
-      // Si hay refresh token, iniciar sesión automáticamente llamando al endpoint de refresh de la API.
-      // Si la operación es aceptada redirecciona a la home screen. Si no redirecciona al logIn.
-      _REFRESH_TOKEN = refresh_prefs;
-      _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
+    // ignore: unnecessary_null_comparison
+    if (prefs != null) {
+      final String? refresh_prefs = prefs.getString(_REFRESH_TOKEN_PREFS);
+      // ignore: unnecessary_null_comparison
+      if (refresh_prefs.toString() != null) {
+        // Si hay refresh token, iniciar sesión automáticamente llamando al endpoint de refresh de la API.
+        // Si la operación es aceptada redirecciona a la home screen. Si no redirecciona al logIn.
+        _REFRESH_TOKEN = refresh_prefs.toString();
+        _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
+      } else {
+        _redirectToLogin();
+      }
     }
   }
 
   Future<dynamic> getItem(String endpoint, List<String> pathParams) async {
-    final uri = buildUri(endpoint, pathParams, {});
+    final uri = buildUri(endpoint, pathParams, null);
     final response = await http.get(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
@@ -89,77 +94,47 @@ class APICalls {
     return response;
   }
 
-  void postItem(
-      String endpoint,
-      List<String> pathParams,
-      Map<String, dynamic> bodyData,
-      Function onSuccess,
-      Function onError) async {
+  Future<dynamic> postItem(String endpoint, List<String> pathParams,
+      Map<String, dynamic>? bodyData) async {
     final uri = buildUri(endpoint, pathParams, {});
-    final response = await http.post(uri, body: bodyData, headers: {
+    final response = await http.post(uri, body: jsonEncode(bodyData), headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(
-          () => postItem(endpoint, pathParams, bodyData, onSuccess, onError),
+      return _refresh(() => postItem(endpoint, pathParams, bodyData),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
     }
+    return response;
   }
 
-  void putItem(
-      String endpoint,
-      List<String> pathParams,
-      Map<String, dynamic> bodyData,
-      Function onSuccess,
-      Function onError) async {
+  Future<dynamic> putItem(String endpoint, List<String> pathParams,
+      Map<String, dynamic>? bodyData) async {
     final uri = buildUri(endpoint, pathParams, {});
-    final response = await http.put(uri, body: bodyData, headers: {
+    final response = await http.put(uri, body: json.encode(bodyData), headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(
-          () => putItem(endpoint, pathParams, bodyData, onSuccess, onError),
+      return _refresh(
+          () => putItem(endpoint, pathParams, bodyData),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
-    }
+    } 
+    return response;
   }
 
-  void deleteItem(String endpoint, List<String> pathParams, Function onSuccess,
-      Function onError) async {
-    final uri = buildUri(endpoint, pathParams, {});
-    final response = await http.post(uri, headers: {
+  Future<dynamic> deleteItem(String endpoint, List<String> pathParams) async {
+    final uri = buildUri(endpoint, pathParams, null);
+    print(uri);
+    final response = await http.delete(uri, headers: {
       'Authorization': 'Bearer $_ACCESS_TOKEN',
       'Content-Type': 'application/json'
     });
     if (response.statusCode == _UNAUTHORIZED) {
-      _refresh(() => deleteItem(endpoint, pathParams, onSuccess, onError),
+      return _refresh(() => deleteItem(endpoint, pathParams),
           () => _redirectToLogin());
-    } else if (response.statusCode ~/ 100 == 2) {
-      onSuccess(jsonDecode(response.body));
-    } else {
-      String errorMessage = 'No error message provided';
-      if (jsonDecode(response.body).containsKey('error_message')) {
-        errorMessage = jsonDecode(response.body)['error_message'];
-      }
-      onError(errorMessage, response.statusCode);
-    }
+    } 
+    return response;
   }
 
   void logOut() async {
@@ -207,13 +182,13 @@ class APICalls {
   void _redirectToLogin() {
     // ignore: todo
     // TODO: Navegar a la login screen
-    navigatorKey.currentState!.pushNamed('/welcome');
+    navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const WelcomeScreen()), (route) => false);
   }
 
   void _redirectToHomeScreen() {
     // ignore: todo
     // TODO: Navegar a la home screen
-    navigatorKey.currentState!.pushNamed('/home');
+    navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationBottomBar()), (route) => false);
   }
 
   factory APICalls() {

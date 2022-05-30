@@ -1,5 +1,6 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/screens/link_user.dart';
@@ -20,13 +21,27 @@ class RegisterScreenState extends State<RegisterScreen> {
   late String email;
   late String password;
   late String confirm;
+  bool showPassword1 = true;
+  bool isPasswordTextField1 = true;
+  bool showPassword2 = true;
+  bool isPasswordTextField2 = true;
+  bool incorrectConfirm = false;
+
+  Widget crearMensajeError() {
+    return Center(
+      child: Text(
+        "passwordconfirmnotmatch",
+        style: TextStyle(color: Colors.red),
+      ).tr(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0x00c8c8c8),
-        title: const Text('Register!'),
+        title: Text('Registerso').tr(),
       ),
       body: Form(
         key: formKey,
@@ -46,18 +61,21 @@ class RegisterScreenState extends State<RegisterScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  hintText: "Enter email",
-                  labelText: "Email",
+                  hintText: "Enteremail".tr(),
+                  labelText: "Email".tr(),
                 ),
                 validator: (value) {
                   if (value!.isEmpty ||
                       !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                           .hasMatch(value)) {
-                    return "a valid email is required";
+                    setState(() {
+                      incorrectConfirm = false;
+                    });
+                    return "validemail".tr();
                   }
                   return null;
                 },
@@ -73,22 +91,41 @@ class RegisterScreenState extends State<RegisterScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextFormField(
                 keyboardType: TextInputType.text,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
+                obscureText: isPasswordTextField1 ? showPassword1 : false,
+                decoration: InputDecoration(
+                  suffixIcon: isPasswordTextField1
+                      ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword1 = !showPassword1;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        )
+                      : null,
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  hintText: "Enter password",
-                  labelText: "Password",
+                  hintText: "Enterpassword".tr(),
+                  labelText: "Password".tr(),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "a password is required";
+                    setState(() {
+                      incorrectConfirm = false;
+                    });
+                    return "passwordrequired".tr();
                   } else {
                     RegExp regex =
                         RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
                     if (!regex.hasMatch(value)) {
-                      return 'Enter valid password: min8caracters(numeric,UpperCase,LowerCase)';
+                      setState(() {
+                        incorrectConfirm = false;
+                      });
+                      return 'validpassword'.tr();
                     } else {
                       return null;
                     }
@@ -100,7 +137,51 @@ class RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
 
-            const SizedBox(height: 30),
+            //CONFIRM PASSWORD
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(horizontal: 40),
+              child: TextFormField(
+                keyboardType: TextInputType.text,
+                obscureText: isPasswordTextField2 ? showPassword2 : false,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(29)),
+                  ),
+                  suffixIcon: isPasswordTextField2
+                      ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword2 = !showPassword2;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        )
+                      : null,
+                  hintText: "EnterConfirmpassword".tr(),
+                  labelText: "Confirmpassword".tr(),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    setState(() {
+                      incorrectConfirm = false;
+                    });
+                    return "Confirmrequired".tr();
+                  } else {
+                    return null;
+                  }
+                },
+                onSaved: (value) {
+                  confirm = value.toString();
+                },
+              ),
+            ),
+            if (incorrectConfirm) crearMensajeError(),
+            const SizedBox(height: 10),
             //REGISTER BUTTON
             Container(
               alignment: Alignment.center,
@@ -117,66 +198,72 @@ class RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
-                    Map<String, dynamic> ap = await uapi.checkUserEmail(email);
-                    
-                    if (ap["action"] == "continue") {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  FormRegister(email, password)),
-                          (route) => false);
-                    } else if (ap["action"] == "link_auth") {
-                      //enlazar cuentas
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => AlertDialog(
-                          title: const Text(
-                              "Authentication method not available for this email, existe account with this email"),
-                          content:
-                              const Text("Do you want to connect the account of SocialOut??"),
-                          actions: <Widget>[
-                            TextButton(
-                                onPressed: () => {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LinkScreen(
-                                            email, password, "socialout", "")),
-                                    (route) => false)
-                                },
-                                //Navigator.of(context).pushNamed('/welcome'),
-                                child: const Text("Yes")),
-                            TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: const Text("No")),
-                          ],
-                        ),
-                      );
+                    if (confirm != password) {
+                      setState(() {
+                        incorrectConfirm = true;
+                      });
                     } else {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Fail register"),
-                          content: const Text("Account already exists"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text("Ok"),
-                            ),
-                          ],
-                        ),
-                      );
+                      Map<String, dynamic> ap =
+                          await uapi.checkUserEmail(email);
+
+                      if (ap["action"] == "continue") {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FormRegister(email, password)),
+                            (route) => false);
+                      } else if (ap["action"] == "link_auth") {
+                        //enlazar cuentas
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => AlertDialog(
+                            title: Text("methodnotavailableemail").tr(),
+                            content: Text("wantConnect").tr(),
+                            actions: <Widget>[
+                              TextButton(
+                                  onPressed: () => {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LinkScreen(email, password,
+                                                        "socialout", "")),
+                                            (route) => false)
+                                      },
+                                  //Navigator.of(context).pushNamed('/welcome'),
+                                  child: Text("Yes").tr()),
+                              TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("No").tr()),
+                            ],
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => AlertDialog(
+                            title: Text("Failregister").tr(),
+                            content: Text("Accountalreadyexists").tr(),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text("Ok").tr(),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   }
                 },
-                child: const Text(
-                  'Register',
+                child: Text(
+                  'RegisterButton',
                   style: TextStyle(
                       height: 1.0, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+                ).tr(),
               ),
             ),
             Container(
@@ -190,14 +277,14 @@ class RegisterScreenState extends State<RegisterScreen> {
                         color: Theme.of(context).colorScheme.surface,
                         fontSize: 14,
                       ),
-                      text: "Do you already have an account? ",
+                      text: "alreadyhaveaccount".tr(),
                     ),
                     TextSpan(
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                         fontSize: 14,
                       ),
-                      text: "Login",
+                      text: "login".tr(),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Navigator.of(context).pushNamed('/login');

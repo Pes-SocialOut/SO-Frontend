@@ -1,6 +1,10 @@
-import 'dart:core';
+// ignore_for_file: prefer_const_constructors
 
+import 'dart:core';
+import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:so_frontend/utils/api_controller.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
@@ -10,141 +14,297 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePassword extends State<ChangePassword> {
-  String oldPassword = '';
-  String newPassword1 = '';
-  String newPassword2 = '';
-  bool showPassword = true;
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newPassword1Controller = TextEditingController();
+  TextEditingController newPassword2Controller = TextEditingController();
+
+  bool showOldPassword = true;
+  bool showNewPassword1 = true;
+  bool showNewPassword2 = true;
+
+  APICalls ac = APICalls();
+
+  String getCurrentUser() {
+    return ac.getCurrentUser();
+  }
+
+  Future<bool> postPassword(String idProfile) async {
+    final response = await ac.postItem("/v1/users/:0/pw", [
+      idProfile
+    ], {
+      "old": oldPasswordController.text,
+      "new": newPassword1Controller.text
+    });
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      String accessToken = json.decode(response.body)['access_token'];
+      String userID = json.decode(response.body)['id'];
+      String refreshToken = json.decode(response.body)['refresh_token'];
+      ac.initialize(userID, accessToken, refreshToken, true);
+      return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Change password',
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.surface, fontSize: 16)),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        leading: IconButton(
-          iconSize: 24,
-          color: Theme.of(context).colorScheme.onSurface,
-          icon: const Icon(Icons.arrow_back_ios_new_sharp),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Changepassword',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 16))
+              .tr(),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          leading: IconButton(
+            iconSize: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+            icon: const Icon(Icons.arrow_back_ios_new_sharp),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            const SizedBox(height: 15),
-            builContainerText("Enter your current password", oldPassword, true),
-            builContainerText("Enter your new password", newPassword1, true),
-            builContainerText("Repeat your new password", newPassword2, true),
-            const SizedBox(height: 15),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).colorScheme.secondary,
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              const SizedBox(height: 15),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: oldPasswordController,
+                  obscureText: showOldPassword,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showOldPassword = !showOldPassword;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.remove_red_eye,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
-                      minimumSize: const Size(200, 40),
                     ),
-                    onPressed: () {
-                      (oldPassword.isEmpty ||
-                              newPassword1.isEmpty ||
-                              newPassword2.isEmpty)
-                          ? showDialog(
+                    contentPadding: const EdgeInsets.only(left: 30),
+                    labelText: 'Entercurrentpassword'.tr(),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(29),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: newPassword1Controller,
+                  obscureText: showNewPassword1,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showNewPassword1 = !showNewPassword1;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.remove_red_eye,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 30),
+                    labelText: 'Enternewpassword'.tr(),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(29),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: newPassword2Controller,
+                  obscureText: showNewPassword2,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showNewPassword2 = !showNewPassword2;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.remove_red_eye,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 30),
+                    labelText: 'Repeatnewpassword'.tr(),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(29),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).colorScheme.secondary,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        minimumSize: const Size(200, 40),
+                      ),
+                      onPressed: () async {
+                        if (oldPasswordController.text.isEmpty ||
+                            newPassword1Controller.text.isEmpty ||
+                            newPassword2Controller.text.isEmpty) {
+                          showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                      title: const Text('Error'),
-                                      content: const Text(
-                                          'All fields are required.'),
+                                      title: Text('Error').tr(),
+                                      content: Text('Allfields').tr(),
                                       actions: [
                                         TextButton(
-                                          child: const Text('OK'),
+                                          child: Text('Ok').tr(),
                                           onPressed: () =>
                                               Navigator.pop(context),
                                         )
-                                      ]))
-                          : (newPassword1.length <= 6)
-                              ? showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                          title: const Text('Error'),
-                                          content: const Text(
-                                              'The password must be at least 6 characters long.'),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('OK'),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            )
-                                          ]))
-                              : (newPassword2 == newPassword1)
-                                  ? Navigator.of(context).pushNamed('/profile')
-                                  : Navigator.of(context).pushNamed('/profile');
-                    },
-                    child: const Text(
-                      'Update',
-                      style: TextStyle(
-                          height: 1.0,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                                      ]));
+                          return;
+                        }
+                        if (!RegExp(
+                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+                            .hasMatch(newPassword1Controller.text)) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                      title: Text('Error').tr(),
+                                      content: Text('validpassword').tr(),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('OK').tr(),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        )
+                                      ]));
+                          return;
+                        }
+                        if (newPassword1Controller.text !=
+                            newPassword2Controller.text) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                      title: Text('Error').tr(),
+                                      content:
+                                          Text('BothpasswordsNomatch').tr(),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('Ok').tr(),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        )
+                                      ]));
+                          return;
+                        }
+                        if (oldPasswordController.text ==
+                            newPassword1Controller.text) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                      title: Text('Error').tr(),
+                                      content: Text(
+                                              'Newpassworddifferentoldpassword')
+                                          .tr(),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('Ok').tr(),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        )
+                                      ]));
+                          return;
+                        }
+                        postPassword(getCurrentUser()).then((pass) => {
+                              if (!pass)
+                                {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: Text('Error').tr(),
+                                              content:
+                                                  Text('Incorrectold').tr(),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text('Ok').tr(),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                )
+                                              ]))
+                                }
+                              else
+                                {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: Text('Correct').tr(),
+                                              content:
+                                                  Text('Passchangedcorrect')
+                                                      .tr(),
+                                              actions: [
+                                                TextButton(
+                                                  child: Text('Ok').tr(),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                )
+                                              ]))
+                                }
+                            });
+                      },
+                      child: Text(
+                        'Update'.tr(),
+                        style: TextStyle(
+                            height: 1.0,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Container builContainerText(
-      String labelText2, String placeHolder, bool isPasswordTextField) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      child: TextFormField(
-        obscureText: isPasswordTextField ? showPassword : false,
-        initialValue: placeHolder,
-        decoration: InputDecoration(
-          suffixIcon: isPasswordTextField
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      showPassword = !showPassword;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                )
-              : null,
-          contentPadding: const EdgeInsets.only(left: 30),
-          labelText: labelText2,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          hintStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+                  ],
+                ),
+              )
+            ],
           ),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(29),
-            ),
-          ),
-        ),
-      ),
-    );
+        ));
   }
 }

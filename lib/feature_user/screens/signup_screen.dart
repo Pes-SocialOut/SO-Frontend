@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -23,8 +26,17 @@ class SignUpScreen extends StatelessWidget {
     double policyTextSize = 14;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: const Color(0x00c8c8c8),
-            title: const Text('Sign Up')),
+          backgroundColor: const Color(0x00c8c8c8),
+          title: const Text('register').tr(),
+          leading: IconButton(
+            iconSize: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+            icon: const Icon(Icons.arrow_back_ios_new_sharp),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/welcome');
+            },
+          ),
+        ),
         body: Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -37,7 +49,7 @@ class SignUpScreen extends StatelessWidget {
                     Buttons.Google,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Continue with Google",
+                    text: "ContinuewithGoogle".tr(),
                     onPressed: () => _handleSignInGoogle(
                         context), //{print("object"); FacebookSignInApi.logout2();}
                   ),
@@ -49,7 +61,7 @@ class SignUpScreen extends StatelessWidget {
                     Buttons.Facebook,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Continue with Facebook",
+                    text: "ContinuewithFacebook".tr(),
                     onPressed: () => _handleSignInFacebook(context),
                   ),
                 ),
@@ -58,9 +70,9 @@ class SignUpScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10),
                   child: const Text(
-                    "OR",
+                    "or",
                     style: TextStyle(color: Colors.black45, fontSize: 16),
-                  ),
+                  ).tr(),
                 ),
                 const SizedBox(height: 10),
                 Container(
@@ -70,7 +82,7 @@ class SignUpScreen extends StatelessWidget {
                     Buttons.Email,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
-                    text: "Continue with Email",
+                    text: "ContinuewithEmail".tr(),
                     onPressed: () {
                       Navigator.of(context).pushNamed('/register');
                     },
@@ -85,12 +97,12 @@ class SignUpScreen extends StatelessWidget {
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.surface,
                               fontSize: policyTextSize),
-                          text: "Already have an account? "),
+                          text: "Alreadyhaveanaccount".tr()),
                       TextSpan(
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               fontSize: policyTextSize),
-                          text: "Log In",
+                          text: "login".tr(),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.of(context).pushNamed('/login');
@@ -136,15 +148,15 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text("User with this email already exists"),
-            content: const Text("Do you want to Log In?"),
+            title: Text("Userexists").tr(),
+            content: Text("wantLogin").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pushNamed('/login'),
-                  child: const Text("Yes")),
+                  child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("No")),
+                  child: Text("No").tr()),
             ],
           ),
         );
@@ -154,9 +166,8 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title:
-                const Text("User with this email already exists in SocialOut"),
-            content: const Text("Do you want to Link with SocialOut?"),
+            title: Text("UserexistsSocialOut").tr(),
+            content: Text("LinkSocialOut").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
@@ -169,10 +180,10 @@ class SignUpScreen extends StatelessWidget {
                         //Navigator.of(context).pushNamed('/welcome'),
                       },
                   //Navigator.of(context).pushNamed('/login'),
-                  child: const Text("Yes")),
+                  child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("No")),
+                  child: Text("No".tr())),
             ],
           ),
         );
@@ -185,10 +196,8 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text(
-                "Authentication method not available for this email, existe account with this email"),
-            content:
-                const Text("Do you want to connect the account of SocialOut?"),
+            title: Text("methodnotavailableemail").tr(),
+            content: Text("LinkSocialOut").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.pushAndRemoveUntil(
@@ -198,10 +207,10 @@ class SignUpScreen extends StatelessWidget {
                               "", "", "google", auxToken.toString())),
                       (route) => false),
                   //Navigator.of(context).pushNamed('/welcome'),
-                  child: const Text("Yes")),
+                  child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("No")),
+                  child: Text("No").tr()),
             ],
           ),
         );
@@ -214,22 +223,6 @@ class SignUpScreen extends StatelessWidget {
       print('error_message: ' + json.decode(response.body)['error_message']);
       print("Undefined Error"); */
     }
-
-    /*
-    Map<String, dynamic>ap = json.decode(response.body);
-    //Map<String, dynamic> ap = await uapi.checkUserGoogle(googleSignInAuthentication.accessToken);
-    if (ap["action"] == "continue") {
-      print("la cuanta no existe");
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  FormRegisterCS(googleSignInAuthentication.accessToken.toString())),
-          (route) => false);
-    } else {
-      print("enlazar a cuenta ya existente");
-    }
-    */
   }
 
   void _handleSignUpFacebook(
@@ -250,15 +243,15 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text("User with this email already exists"),
-            content: const Text("Do you want to Log In?"),
+            title: Text("Userexists").tr(),
+            content: Text("wantLogin").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pushNamed('/login'),
-                  child: const Text("Yes")),
+                  child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("No")),
+                  child: Text("No").tr()),
             ],
           ),
         );
@@ -268,9 +261,8 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title:
-                const Text("User with this email already exists in SocialOut"),
-            content: const Text("Do you want to Link with SocialOut?"),
+            title: Text("UserexistsSocialOut").tr(),
+            content: Text("LinkSocialOut").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
@@ -283,10 +275,10 @@ class SignUpScreen extends StatelessWidget {
                         //Navigator.of(context).pushNamed('/welcome'),
                       },
                   //Navigator.of(context).pushNamed('/login'),
-                  child: const Text("Yes")),
+                  child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("No")),
+                  child: Text("No").tr()),
             ],
           ),
         );
@@ -299,10 +291,8 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text(
-                "Authentication method not available for this email, existe account with this email"),
-            content:
-                const Text("Do you want to connect the account of SocialOut?"),
+            title: Text("methodnotavailableemail").tr(),
+            content: Text("LinkSocialOut").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.pushAndRemoveUntil(
@@ -311,10 +301,10 @@ class SignUpScreen extends StatelessWidget {
                           builder: (context) =>
                               LinkScreen("", "", "facebook", accessToken)),
                       (route) => false),
-                  child: const Text("Yes")),
+                  child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("No")),
+                  child: Text("No").tr()),
             ],
           ),
         );
@@ -337,12 +327,12 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text('Sign up Failed'),
-            content: const Text("Please try again"),
+            title: Text('SignupFailed').tr(),
+            content: Text("tryAgain").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Ok")),
+                  child: Text("Ok").tr()),
             ],
           ),
         );
@@ -388,12 +378,12 @@ class SignUpScreen extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: const Text('Sign up Failed'),
-            content: const Text("Please try again"),
+            title: Text('SigninFailed').tr(),
+            content: Text("tryAgain").tr(),
             actions: <Widget>[
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("Ok")),
+                  child: Text("Ok").tr()),
             ],
           ),
         );

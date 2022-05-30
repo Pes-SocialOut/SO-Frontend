@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/event.dart';
+import 'package:so_frontend/utils/api_controller.dart';
+import 'package:so_frontend/utils/share.dart';
+import 'package:so_frontend/utils/like_button.dart';
 
-class EventScreen extends StatelessWidget {
+class EventScreen extends StatefulWidget {
   final String id;
   const EventScreen({Key? key, required this.id}) : super(key: key);
+
+  @override
+  State<EventScreen> createState() => _EventScreenState();
+}
+
+class _EventScreenState extends State<EventScreen> {
+
+
+
+  APICalls api = APICalls();
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +33,8 @@ class EventScreen extends StatelessWidget {
                   iconSize: 24,
                   color: Theme.of(context).colorScheme.onSurface,
                   icon: const Icon(Icons.share),
-                  onPressed: () {}),
-              IconButton(
-                  iconSize: 24,
-                  color: Theme.of(context).colorScheme.onSurface,
-                  icon: const Icon(Icons.favorite),
-                  onPressed: () {}),
+                  onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + widget.id, context)),
+              LikeButton(id: widget.id)
             ],
             leading: IconButton(
               iconSize: 24,
@@ -35,6 +44,6 @@ class EventScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             )),
-        body:  Center(child: Event(id: id)));
+        body:  Center(child: Event(id: widget.id)));
   }
 }

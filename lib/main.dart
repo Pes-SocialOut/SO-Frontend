@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_chat/screens/chat_screen.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
@@ -11,10 +13,24 @@ import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/feature_user/screens/signup_screen.dart';
 import 'package:so_frontend/feature_user/screens/change_password.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+import 'package:flutter/services.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'feature_user/screens/languages.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  //final prefs = await SharedPreferences.getInstance();
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('ca', 'ES'), Locale('en'), Locale('es', 'ES')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      saveLocale: true,
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,13 +39,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //APICalls().tryInitializeFromPreferences();
-    //APICalls().getCurrentUser();
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    APICalls().tryInitializeFromPreferences();
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       navigatorKey: navigatorKey,
       title: 'SocialOut',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          cardColor: Colors.white,
           primaryColor: Colors.green,
           tabBarTheme: TabBarTheme(
             labelColor: Theme.of(context).colorScheme.secondary,
@@ -42,13 +63,6 @@ class MyApp extends StatelessWidget {
                 // color for indicator (underline)
                 borderSide: BorderSide(
                     width: 2, color: Theme.of(context).colorScheme.primary)),
-            unselectedLabelColor:
-                Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-            unselectedLabelStyle: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-                color:
-                    Theme.of(context).colorScheme.secondary), // color for text
           ),
           colorScheme: ColorScheme(
             brightness: Brightness.light,
@@ -63,7 +77,7 @@ class MyApp extends StatelessWidget {
             surface: Colors.black,
             onSurface: HexColor('767676'),
           )),
-      initialRoute: '/chat',
+      initialRoute: '/welcome',
       home: const WelcomeScreen(),
       routes: {
         '/welcome': (_) => const WelcomeScreen(),
@@ -75,7 +89,7 @@ class MyApp extends StatelessWidget {
         '/profile': (_) => const ProfileScreen(id: "0"),
         '/edit_profile': (_) => const EditarProfile(),
         '/change_password': (_) => const ChangePassword(),
-        '/chat': (_) => ChatScreen(),
+        '/languages': (_) => const LanguagesOptions(),
       },
     );
   }

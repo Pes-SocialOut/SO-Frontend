@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/create_confirmation.dart';
 
 class CreationSucess extends StatelessWidget {
-  const CreationSucess({ Key? key }) : super(key: key);
+  final String image;
+  const CreationSucess({ Key? key, required this.image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +13,16 @@ class CreationSucess extends StatelessWidget {
         centerTitle: true,
         elevation: 1,
         backgroundColor: Theme.of(context).colorScheme.background,
-
+        leading: IconButton(
+          iconSize: 24,
+          color: Theme.of(context).colorScheme.onSurface,
+          icon: const Icon(Icons.arrow_back_ios_new_sharp),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
       ),
-      body: const ConfirmationMessage()
+      body: ConfirmationMessage(image: image)
     );
   }
 }

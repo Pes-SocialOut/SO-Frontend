@@ -1,9 +1,13 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_home/widgets/joined_list.dart';
-
+import 'package:so_frontend/feature_home/widgets/liked_list.dart';
+import 'package:so_frontend/feature_home/widgets/past_list.dart';
 
 class EventsTabMenu extends StatefulWidget {
-  const EventsTabMenu({ Key? key }) : super(key: key);
+  const EventsTabMenu({Key? key}) : super(key: key);
 
   @override
   State<EventsTabMenu> createState() => _EventsTabMenuState();
@@ -18,27 +22,28 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
         height: MediaQuery.of(context).size.height,
         child: DefaultTabController(
           
-          length: 2,
+          length: 3,
           child: Column(
-            children:  [
-               const TabBar(
+            children:  const [
+               TabBar(
                 tabs:  [
                   Tab(
                     text: 'JOINED'
                   ),
                   Tab(
                     text: "LIKED"
+                  ),
+                  Tab(
+                    text: 'PAST'
                   )
                 ]
               ),
               Expanded(
                 child: TabBarView(
                   children: [
-                    const JoinedList(),
-                    Container(
-                      color: Colors.red
-                    )
-              
+                    JoinedList(),
+                    LikedList(),
+                    PastEventsList()
                   ],
                 ),
               )
