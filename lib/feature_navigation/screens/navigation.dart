@@ -4,6 +4,7 @@ import 'package:so_frontend/feature_event/screens/create_event.dart';
 import 'package:so_frontend/feature_explore/screens/home.dart';
 import 'package:so_frontend/feature_home/screens/home.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/utils/go_to.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:async';
@@ -52,12 +53,34 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
           case "events":
             var id = uri.pathSegments[2];
             if (id != '') {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen(id: id)));
+              APICalls().appLinkLoginRedirect(() {
+                // User is logged in, jump right into the action
+                Navigator.of(context).pushNamed('/home');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen(id: id)));
+              }, () {
+                // User is not logged in.
+                Navigator.pushNamed(context, '/login', arguments: GoTo(() {
+                    Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen(id: id)));
+                  }
+                ));
+              });
             }
             break;
           case "users":
             var response = await APICalls().getCollection('/v2/users/new_friend', [], {"code": uri.queryParameters["code"]!});
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: json.decode(response.body)["id"])));
+            APICalls().appLinkLoginRedirect(() {
+              // User is logged in, jump right into the action
+              Navigator.of(context).pushNamed('/home');
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: json.decode(response.body)["id"])));
+            }, () {
+              // User is not logged in.
+              Navigator.pushNamed(context, '/login', arguments: GoTo(() {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: json.decode(response.body)["id"])));
+                }
+              ));
+            });
             break;
           default:
         }

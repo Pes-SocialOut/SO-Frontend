@@ -14,6 +14,7 @@ import 'package:so_frontend/feature_user/services/signIn_google.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
+import 'package:so_frontend/utils/go_to.dart';
 
 import 'form_register_CS.dart';
 
@@ -105,7 +106,9 @@ class SignUpScreen extends StatelessWidget {
                           text: "login".tr(),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.of(context).pushNamed('/login');
+                              Navigator.pushReplacementNamed(context, '/new_route', arguments: GoTo(
+                                () => Navigator.pushNamed(context, '/home')
+                              ));
                               //cant launch at the moment, because emualtor has no internet
                               /*
                           if(await canLaunchUrl(url)){
@@ -152,7 +155,9 @@ class SignUpScreen extends StatelessWidget {
             content: Text("wantLogin").tr(),
             actions: <Widget>[
               TextButton(
-                  onPressed: () => Navigator.of(context).pushNamed('/login'),
+                  onPressed: () => Navigator.pushNamed(context, '/login', arguments: GoTo(
+                    () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
+                  )),
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -171,15 +176,13 @@ class SignUpScreen extends StatelessWidget {
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LinkScreen(
-                                    "", "", "google", auxToken.toString())),
-                            (route) => false),
-                        //Navigator.of(context).pushNamed('/welcome'),
-                      },
-                  //Navigator.of(context).pushNamed('/login'),
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LinkScreen(
+                          "", "", "google", auxToken.toString())),
+                      (route) => false)
+                  },
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -214,14 +217,14 @@ class SignUpScreen extends StatelessWidget {
             ],
           ),
         );
-        Navigator.of(context).pushNamed('/login');
+        Navigator.pushNamed(context, '/login', arguments: GoTo(
+          () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
+        ));
       } else if (errorMessage == "Google token was invalid") {
-        Navigator.of(context).pushNamed('/login');
+        Navigator.pushNamed(context, '/login', arguments: GoTo(
+          () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
+        ));
       }
-    } else {
-      /* print('status code : ' + response.statusCode.toString());
-      print('error_message: ' + json.decode(response.body)['error_message']);
-      print("Undefined Error"); */
     }
   }
 
@@ -247,7 +250,9 @@ class SignUpScreen extends StatelessWidget {
             content: Text("wantLogin").tr(),
             actions: <Widget>[
               TextButton(
-                  onPressed: () => Navigator.of(context).pushNamed('/login'),
+                  onPressed: () => Navigator.pushNamed(context, '/login', arguments: GoTo(
+                    () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
+                  )),
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -272,9 +277,7 @@ class SignUpScreen extends StatelessWidget {
                                 builder: (context) => LinkScreen(
                                     "", "", "facebook", accessToken)),
                             (route) => false),
-                        //Navigator.of(context).pushNamed('/welcome'),
                       },
-                  //Navigator.of(context).pushNamed('/login'),
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),

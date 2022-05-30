@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:so_frontend/utils/go_to.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -76,7 +77,9 @@ class WelcomeScreen extends StatelessWidget {
                                   BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
                       onPressed: () async {
-                        Navigator.of(context).pushNamed('/login');
+                        Navigator.pushNamed(context, '/login', arguments: GoTo(
+                          () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
+                        ));
                       },
                       child: const Text(
                         'login',
