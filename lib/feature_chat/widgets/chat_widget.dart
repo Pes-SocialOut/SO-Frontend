@@ -6,8 +6,9 @@ import 'package:so_frontend/utils/api_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SendWidget extends StatelessWidget {
-  SendWidget({Key? key}) : super(key: key);
-  String eventId = "f6a92275-7e03-4d3c-a152-2247e68dd047";
+  final String eventId;
+  SendWidget({Key? key, required this.eventId}) : super(key: key);
+  //= "f6a92275-7e03-4d3c-a152-2247e68dd047";
   final chatAPI cAPI = chatAPI();
   final messageTextController = TextEditingController();
   @override
@@ -53,6 +54,7 @@ class SendWidget extends StatelessWidget {
                     messageTextController.text);
                 messageTextController.clear();
                 /*
+                //ejecutar cuando unir un participante
                 Response resp = await cAPI.createChat(
                     "eventId", currentUserId);
           */

@@ -7,7 +7,8 @@ import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 
 class ChatScreen extends StatelessWidget {
-  ChatScreen({Key? key}) : super(key: key);
+  final String eventId;
+  ChatScreen({Key? key, required this.eventId}) : super(key: key);
   final chatAPI cAPI = chatAPI();
   DateTime _lastQuitTime = DateTime.now();
   @override
@@ -189,7 +190,7 @@ class ChatScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                SendWidget(),
+                SendWidget(eventId: eventId),
               ],
             )),
         /*
