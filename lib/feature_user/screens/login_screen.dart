@@ -12,6 +12,7 @@ import 'package:so_frontend/feature_user/services/signIn_facebook.dart';
 import 'package:so_frontend/feature_user/widgets/policy.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:so_frontend/utils/go_to.dart';
 import '../services/signIn_google.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -52,6 +53,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final goto = ModalRoute.of(context)!.settings.arguments as GoTo;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0x00c8c8c8),
@@ -79,7 +81,7 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "LoginwithGoogle".tr(),
-                    onPressed: () => _handleLoginGoogle(context),
+                    onPressed: () => _handleLoginGoogle(context, goto),
                   ),
                 ),
                 // LOGIN WITH FACEBOOK
@@ -91,7 +93,7 @@ class LoginScreenState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderradius)),
                     text: "LoginwithFacebook".tr(),
-                    onPressed: () => _handleLoginFacebook(context),
+                    onPressed: () => _handleLoginFacebook(context, goto),
                   ),
                 ),
                 // EMAIL
@@ -169,8 +171,7 @@ class LoginScreenState extends State<LoginScreen> {
                         if (ap["action"] == "continue") {
                           int aux = await uapi.loginSocialOut(email, password);
                           if (aux == 200) {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/home', (route) => false);
+                            goto.action();
                           } else if (aux == 400) {
                             setState(() {
                               incorrectPassword = true;
@@ -310,10 +311,7 @@ class LoginScreenState extends State<LoginScreen> {
                                                             newPassword,
                                                             codeVerification);
                                                     if (ap == 200) {
-                                                      Navigator.of(context)
-                                                          .pushNamedAndRemoveUntil(
-                                                              '/home',
-                                                              (route) => false);
+                                                      goto.action();
                                                     } else if (ap == 403) {
                                                       cambiarEstado(() {
                                                         mensaje2 =
@@ -404,7 +402,7 @@ class LoginScreenState extends State<LoginScreen> {
                           text: "signUp".tr(),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.of(context).pushNamed('/signup');
+                              Navigator.pushReplacementNamed(context, '/signup');
                             }),
                     ]),
                   ),
@@ -420,10 +418,10 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLogIn(BuildContext context, Response response, String accessToken,
-      String type) {
+      String type, GoTo goto) {
     String? auxToken = accessToken;
     if (response.statusCode == 200) {
-      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      goto.action();
     } else if (response.statusCode == 400) {
       String errorMessage = json.decode(response.body)['error_message'];
       if (errorMessage == "User does not exist") {
@@ -458,26 +456,25 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
-                        if (type == "google")
-                          {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        LinkScreen("", "", "google", auxToken)),
-                                (route) => false),
-                          }
-                        else if (type == "facebook")
-                          {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LinkScreen(
-                                        "", "", "facebook", auxToken)),
-                                (route) => false),
-                          }
-                      },
-                  //Navigator.of(context).pushNamed('/welcome'),
+                    if (type == "google")
+                      {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LinkScreen("", "", "google", auxToken)),
+                            (route) => false),
+                      }
+                    else if (type == "facebook")
+                      {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LinkScreen(
+                                    "", "", "facebook", auxToken)),
+                            (route) => false),
+                      }
+                  },
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -485,16 +482,17 @@ class LoginScreenState extends State<LoginScreen> {
             ],
           ),
         );
-        //Navigator.of(context).pushNamed('/login');
 
       } else if (errorMessage == "Google token was invalid" ||
           errorMessage == "Facebook token was invalid") {
-        Navigator.of(context).pushNamed('/login');
+        Navigator.pushNamed(context, '/login', arguments: GoTo(
+          () => goto.action()
+        ));
       }
     }
   }
 
-  Future<void> _handleLoginGoogle(BuildContext context) async {
+  Future<void> _handleLoginGoogle(BuildContext context, GoTo goto) async {
     try {
       final user = await GoogleSignInApi.login();
 
@@ -518,25 +516,15 @@ class LoginScreenState extends State<LoginScreen> {
         Response response = await uapi
             .logInGoogle(googleSignInAuthentication.accessToken.toString());
         _handleLogIn(context, response,
-            googleSignInAuthentication.accessToken.toString(), "google");
+            googleSignInAuthentication.accessToken.toString(), "google", goto);
         GoogleSignInApi.logout2();
-        //Navigator.of(context).pushNamed('/home');
-
-        /*
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => LoggedInPage(
-            user: user,
-          ),
-        )
-        );
-        */
       }
     } catch (error) {
       //print(error);
     }
   }
 
-  Future<void> _handleLoginFacebook(BuildContext context) async {
+  Future<void> _handleLoginFacebook(BuildContext context, GoTo goto) async {
     try {
       final LoginResult result =
           await FacebookAuth.i.login(permissions: ['public_profile', 'email']);
@@ -546,7 +534,7 @@ class LoginScreenState extends State<LoginScreen> {
         Response response =
             await uapi.logInFacebook(accessTokenFacebook.toString());
         _handleLogIn(
-            context, response, accessTokenFacebook.toString(), "facebook");
+            context, response, accessTokenFacebook.toString(), "facebook", goto);
         FacebookSignInApi.logout();
       } else {}
       FacebookSignInApi.logout();

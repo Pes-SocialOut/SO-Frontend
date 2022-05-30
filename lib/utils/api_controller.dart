@@ -51,6 +51,15 @@ class APICalls {
   void tryInitializeFromPreferences() async {
     // Esta función se llama al iniciar la aplicación. Determina si el usuario debe hacer login o si ya "se acuerda".
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
+    final bool couldReadRefreshFromPreferences = await getRefreshFromPreferences();
+    if (couldReadRefreshFromPreferences) {
+      _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
+    } else {
+      _redirectToLogin();
+    }
+  }
+
+  Future<bool> getRefreshFromPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     // ignore: unnecessary_null_comparison
     if (prefs != null) {
@@ -60,11 +69,10 @@ class APICalls {
         // Si hay refresh token, iniciar sesión automáticamente llamando al endpoint de refresh de la API.
         // Si la operación es aceptada redirecciona a la home screen. Si no redirecciona al logIn.
         _REFRESH_TOKEN = refresh_prefs.toString();
-        _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
-      } else {
-        _redirectToLogin();
+        return true;
       }
     }
+    return false;
   }
 
   Future<dynamic> getItem(String endpoint, List<String> pathParams) async {
@@ -144,6 +152,12 @@ class APICalls {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_REFRESH_TOKEN_PREFS);
     _redirectToLogin();
+  }
+
+  void appLinkLoginRedirect(Function onSuccess, Function onError) async {
+    // Comprobar si tenemos refresh token:
+    if (_REFRESH_TOKEN == '') await getRefreshFromPreferences();
+    _refresh(onSuccess, onError);
   }
 
   Future<dynamic> _refresh(Function onSuccess, Function onError) async {
