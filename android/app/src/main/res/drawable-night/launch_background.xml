@@ -3,4 +3,7 @@
     <item>
         <bitmap android:gravity="fill" android:src="@drawable/background"/>
     </item>
+    <item android:height="400dp" android:width="400dp" android:gravity="fill">
+        <bitmap android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="fill" android:src="@drawable/branding"/>
+    </item>
 </layer-list>

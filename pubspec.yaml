@@ -80,8 +80,8 @@ flutter_icons:
   image_path: "assets/logo.png"
 
 flutter_native_splash:
-  color: "#38A3A5"
-  branding: assets/Logo-big.png
+  color: "#f8f3f5"
+  image: assets/Logo.big.png
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
