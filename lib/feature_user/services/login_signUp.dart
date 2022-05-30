@@ -19,8 +19,9 @@ class userAPI {
   /* Comprobar que un Google socialout existe o no en la BD */
   Future<http.Response> checkUserGoogle(gtoken) async {
     String _path = 'register/check?type=google&token=';
-
+    print(gtoken);
     final response = await http.get(Uri.parse(basicUrl + _path + gtoken));
+
     if (response.statusCode != 200) {
       // return error
     }
@@ -30,9 +31,9 @@ class userAPI {
   /* Comprobar que un Facebook socialout existe o no en la BD */
   Future<http.Response> checkUserFacebook(ftoken) async {
     String _path = 'register/check?type=facebook&token=';
-  
+
     final response = await http.get(Uri.parse(basicUrl + _path + ftoken));
-    
+
     if (response.statusCode != 200) {
       // return error
     }
@@ -224,7 +225,6 @@ class userAPI {
     }
     return response.statusCode;
   }
-
 
   Future<http.Response> logInGoogle(
     String tokenGoogle,

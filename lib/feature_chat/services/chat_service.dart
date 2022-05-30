@@ -45,17 +45,21 @@ class chatAPI {
     return response;
   }
 
-  /* entrar el chat */
-  Future<http.Response> enterChat(
+  /* get all messages from a chat */
+  Future<http.Response> openSession(
     String eventId,
     String participantId,
   ) async {
-    String _path = 'v1/chat/';
-    String partEvent = 'event_id=' + eventId;
-    String partPartcipant = '&participant_id=' + participantId;
-    String finalUri = basicUrl + _path + partEvent + partPartcipant;
+    String _path = 'v1/chat/Message/';
+    String finalUri = basicUrl + _path;
+    String aux = "socialout-develop.herokuapp.com";
+    var str = {"participant_id": participantId, "event_id": eventId};
+    final uri = Uri.http(aux, _path, str);
 
-    final response = await http.get(Uri.parse(finalUri));
+    final response = await http.get(uri,
+        headers: {'Authorization': 'Bearer ' + APICalls().getCurrentAccess()});
+
+    String a = "";
 
     if (response.statusCode != 200) {
       // return error
@@ -80,8 +84,7 @@ class chatAPI {
 
     final response =
         await http.post(Uri.parse(finalUri), body: jsonEncode(str), headers: {
-      'Authorization':
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1Mzg0Njk4NywianRpIjoiYjdkYmU5OWUtMzE2Ny00MWM3LWE1ZjctMjJlM2IyNTE5ZThhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImZlZTAzMzE5LTI3NDItNGVmNS04MzE3LTY3N2NiNjQ0NWVkYSIsIm5iZiI6MTY1Mzg0Njk4NywiZXhwIjoxNjUzODUwNTg3fQ.2XBjE2YDYlzoi4W3Oj7dWpiJt-E5UcDXk9nBP9CiTTc',
+      'Authorization': 'Bearer ' + APICalls().getCurrentAccess(),
       'Content-Type': 'application/json'
     });
 
@@ -104,7 +107,7 @@ class chatAPI {
     return response;
   }
 
-  /* Eliminar el mensage */
+  /* Obtener el lista de chat */
   Future<http.Response> getListChat(
     String creatorId,
   ) async {

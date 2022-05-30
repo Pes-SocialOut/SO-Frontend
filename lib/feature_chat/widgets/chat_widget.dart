@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SendWidget extends StatelessWidget {
   SendWidget({Key? key}) : super(key: key);
   final chatAPI cAPI = chatAPI();
+  final messageTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -23,6 +24,7 @@ class SendWidget extends StatelessWidget {
             ),
             Expanded(
               child: TextField(
+                controller: messageTextController,
                 decoration: InputDecoration(
                     hintText: "Write message...",
                     hintStyle: TextStyle(color: Colors.black54),
@@ -42,12 +44,28 @@ class SendWidget extends StatelessWidget {
                 String accessToken = APICalls().getCurrentAccess();
                 cAPI.getEvents(aux_s);
                 print("accessToken:" + accessToken);
-
-                //cAPI.createChat("23fa941a-9bee-4788-8b3d-3ebaa886bfe7","f01e9aaa-f0a9-42f0-98f3-0011f2c07d74");
+                print(messageTextController.text);
+                /*
+                cAPI.createChat("f6a92275-7e03-4d3c-a152-2247e68dd047",
+                    "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
+                    */
+                /*
                 cAPI.createMessage(
-                    "f01e9aaa-f0a9-42f0-98f3-0011f2c07d74",
-                    "23fa941a-9bee-4788-8b3d-3ebaa886bfe7", //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
+                    "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f",
+                    "f6a92275-7e03-4d3c-a152-2247e68dd047", //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
                     "hola del f01e9aaa-f0a9-42f0-98f3-0011f2c07d74");
+                    */
+                /*
+                cAPI.enterChat("f6a92275-7e03-4d3c-a152-2247e68dd047",
+                    "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
+                */
+                /*
+                 */
+
+                /*
+                cAPI.openSession("f6a92275-7e03-4d3c-a152-2247e68dd047",
+                    "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
+                 */
               },
               child: Icon(
                 Icons.send,
