@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
 import 'package:so_frontend/utils/share.dart';
 import 'package:so_frontend/utils/air_tag.dart';
+import 'package:skeletons/skeletons.dart';
 
 class LikedList extends StatefulWidget {
   const LikedList({ Key? key }) : super(key: key);
@@ -66,7 +67,19 @@ class _LikedListState extends State<LikedList> {
                                       return Text(participants.length.toString() + " are going", style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 14));
                                     } 
                                     else {
-                                      return const CircularProgressIndicator();
+                                      return SkeletonItem(
+                                        child:  SkeletonParagraph(
+                                          style: SkeletonParagraphStyle(
+                                            lines: 1,
+                                            spacing: 4,
+                                            lineStyle: SkeletonLineStyle(
+                                              width: 70,
+                                              height: 20,
+                                              borderRadius: BorderRadius.circular(10)
+                                            )
+                                          )
+                                        )
+                                      );
                                     }
                       
                                   }
@@ -114,8 +127,29 @@ class _LikedListState extends State<LikedList> {
             );
           }
           else {
-            return const Center(
-              child: CircularProgressIndicator()
+            return ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => const SizedBox(width: 20),
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return Center(
+                    child: SkeletonItem(
+                      child: SkeletonParagraph(
+                        style: SkeletonParagraphStyle(
+                          lines: 1,
+                          spacing: 4,
+                          lineStyle: SkeletonLineStyle(
+                            width: MediaQuery.of(context).size.width,
+                            height: 130,
+                            borderRadius: BorderRadius.circular(10)
+                          )
+                        )
+                      )
+                    ),
+                  );
+                }
             );
           }
         } 

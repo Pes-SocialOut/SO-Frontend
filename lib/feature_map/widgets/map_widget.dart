@@ -65,7 +65,7 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getCollection('/v2/events/', [], null),
+      future: api.getCollection('/v3/events/', [], null),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var events = json.decode(snapshot.data.body);
@@ -108,13 +108,26 @@ class _MapWidgetState extends State<MapWidget> {
                                     var color = json.decode(snapshot.data.body);
                                     return IconButton(
                                       icon: const Icon(Icons.location_on_sharp, size: 40),
-                                      onPressed: () => showEvent(events[i], color["pollution"]),
-                                      color: (color["pollution"] < 0.15)
-                                      ? Colors.green
-                                      : (color["pollution"] > 0.3)
-                                          ? Colors.red
-                                          : Colors.yellow,
-                                    );
+                                      onPressed: () => showEvent(
+                                        events[i],
+                                        color["pollution"]),
+                                    color: Color.lerp(
+                                        Colors.green,
+                                        Color.lerp(
+                                            Colors.yellow,
+                                            Colors.red,
+                                            
+                                        color['pollution'] < 0.15
+                                            ? 0
+                                            : (color['pollution'] >
+                                                    0.3
+                                                ? 1
+                                                : (color['pollution'] -
+                                                        0.15) /
+                                                    0.15)), color['pollution'] > 0.15
+                                                ? 1
+                                                : color['pollution'] /
+                                                    0.15),);
                                   } 
                                   else {
                                     return IconButton(
@@ -133,11 +146,23 @@ class _MapWidgetState extends State<MapWidget> {
                               builder: (context) => IconButton(
                                   icon: const Icon(Icons.device_thermostat, size: 30),
                                   onPressed: () => showStation(stations[i]["id"]),
-                                  color: (stations[i]["pollution"] < 0.15)
-                                      ? Colors.green
-                                      : (stations[i]["pollution"] > 0.3)
-                                          ? Colors.red
-                                          : Colors.yellow))
+                                  color: Color.lerp(
+                                        Colors.green,
+                                        Color.lerp(
+                                            Colors.yellow,
+                                            Colors.red,
+                                            
+                                        stations[i]['pollution'] < 0.15
+                                            ? 0
+                                            : (stations[i]['pollution'] >
+                                                    0.3
+                                                ? 1
+                                                : (stations[i]['pollution'] -
+                                                        0.15) /
+                                                    0.15)), stations[i]['pollution'] > 0.15
+                                                ? 1
+                                                : stations[i]['pollution'] /
+                                                    0.15)))
                       ],
                     ),
                   ],

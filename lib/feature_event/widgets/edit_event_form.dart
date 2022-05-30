@@ -125,11 +125,12 @@ class EditEventFormState extends State<EditEventForm> {
                             };
                             var response = await api.putItem('/v3/events/:0', [widget.id], body);
                             SnackBar snackBar;
-                            if (response.statusCode == 201) {
+                            if (response.statusCode == 200) {
                               snackBar = SnackBar(
                                 backgroundColor: Theme.of(context).colorScheme.secondary,
                                 content: const Text('Your event has been updated successfully!'),
                               );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               Navigator.pop(context);
                             } else {
                               snackBar = SnackBar(

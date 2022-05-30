@@ -3,6 +3,7 @@ import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
 import 'package:so_frontend/utils/review.dart';
+import 'package:skeletons/skeletons.dart';
 
 class PastEventsList extends StatefulWidget {
   const PastEventsList({ Key? key }) : super(key: key);
@@ -25,7 +26,7 @@ class _PastEventsListState extends State<PastEventsList> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var _joined = json.decode(snapshot.data.body);
-            if (_joined.isEmpty) return const Center(child: Text('You have not liked any event!'));
+            if (_joined.isEmpty) return const Center(child: Text('You have reviewed all the event!'));
             return ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
@@ -75,8 +76,29 @@ class _PastEventsListState extends State<PastEventsList> {
             );
           }
           else {
-            return const Center(
-              child: CircularProgressIndicator()
+            return ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              separatorBuilder: (context, index) => const SizedBox(width: 20),
+              itemCount: 5,
+              itemBuilder: (BuildContext context, int index) {
+                return Center(
+                  child: SkeletonItem(
+                    child: SkeletonParagraph(
+                      style: SkeletonParagraphStyle(
+                        lines: 1,
+                        spacing: 4,
+                        lineStyle: SkeletonLineStyle(
+                          width: MediaQuery.of(context).size.width,
+                          height: 130,
+                          borderRadius: BorderRadius.circular(10)
+                        )
+                      )
+                    )
+                  ),
+                );
+              }
             );
           }
         } 

@@ -98,7 +98,7 @@ class _EventWidgetState extends State<EventWidget> {
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
                   Widget>[
-                AirTag(longitud: widget.event["longitud"], latitude: widget.event["latitude"], id: widget.event["id"]),
+                AirTag(longitud: widget.event["longitud"].toString(), latitude: widget.event["latitude"].toString(), id: widget.event["id"]),
                 Row(children: <Widget>[
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
