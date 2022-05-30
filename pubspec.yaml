@@ -59,6 +59,7 @@ dependencies:
   easy_localization: ^3.0.0
   qr_flutter: ^4.0.0
   another_flushbar: ^1.10.29
+  skeletons: ^0.0.3
 
 dev_dependencies:
   flutter_test:

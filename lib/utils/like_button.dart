@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
+import 'package:skeletons/skeletons.dart';
 
 class LikeButton extends StatefulWidget {
   final String id;
@@ -45,7 +46,12 @@ class _LikeButtonState extends State<LikeButton> {
             });
         }
         else {
-          return const CircularProgressIndicator();
+          return const SkeletonItem(
+            child: SkeletonAvatar(
+                style: SkeletonAvatarStyle(
+                    shape: BoxShape.circle, width: 20, height: 20),
+              ),
+          );
         }
       } 
     );
