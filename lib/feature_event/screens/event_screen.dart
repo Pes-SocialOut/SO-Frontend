@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_chat/screens/chat_screen.dart';
 import 'package:so_frontend/feature_event/widgets/event.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'package:so_frontend/utils/share.dart';
@@ -13,9 +14,6 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
-
-
-
   APICalls api = APICalls();
 
   @override
@@ -33,8 +31,11 @@ class _EventScreenState extends State<EventScreen> {
                   iconSize: 24,
                   color: Theme.of(context).colorScheme.onSurface,
                   icon: const Icon(Icons.share),
-                  onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + widget.id, context)),
-              LikeButton(id: widget.id)
+                  onPressed: () => showShareMenu(
+                      'https://socialout-develop.herokuapp.com/v3/events/' +
+                          widget.id,
+                      context)),
+              LikeButton(id: widget.id),
             ],
             leading: IconButton(
               iconSize: 24,
@@ -44,6 +45,6 @@ class _EventScreenState extends State<EventScreen> {
                 Navigator.pop(context);
               },
             )),
-        body:  Center(child: Event(id: widget.id)));
+        body: Center(child: Event(id: widget.id)));
   }
 }

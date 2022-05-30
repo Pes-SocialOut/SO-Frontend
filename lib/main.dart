@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_chat/screens/chat_screen.dart';
+import 'package:so_frontend/feature_chat/screens/listChat_screen.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
@@ -90,6 +91,7 @@ class MyApp extends StatelessWidget {
         '/edit_profile': (_) => const EditarProfile(),
         '/change_password': (_) => const ChangePassword(),
         '/languages': (_) => const LanguagesOptions(),
+        '/list_chat': (_) => const ListChatScreen(),
       },
     );
   }

@@ -46,7 +46,7 @@ class chatAPI {
   }
 
   /* get all messages from a chat */
-  Future<http.Response> openSession(
+  Future<dynamic> openSession(
     String eventId,
     String participantId,
   ) async {
@@ -62,10 +62,6 @@ class chatAPI {
 
     final response = await http.get(uri,
         headers: {'Authorization': 'Bearer ' + APICalls().getCurrentAccess()});
-
-    if (response.statusCode != 200) {
-      // return error
-    } else {}
 
     return response;
   }

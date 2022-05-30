@@ -53,6 +53,7 @@ class SendWidget extends StatelessWidget {
                     eventId, //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
                     messageTextController.text);
                 messageTextController.clear();
+
                 /*
                 //ejecutar cuando unir un participante
                 Response resp = await cAPI.createChat(
