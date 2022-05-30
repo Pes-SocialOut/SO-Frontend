@@ -23,7 +23,12 @@ void main() async {
   //final prefs = await SharedPreferences.getInstance();
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('ca', 'ES'), Locale('en'), Locale('es', 'ES')],
+      supportedLocales: [
+        Locale('ca', 'ES'),
+        Locale('en'),
+        Locale('es', 'ES'),
+        Locale('zh', 'CN')
+      ],
       path: 'assets/translations',
       fallbackLocale: Locale('en'),
       saveLocale: true,
@@ -38,7 +43,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     APICalls().tryInitializeFromPreferences();
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,

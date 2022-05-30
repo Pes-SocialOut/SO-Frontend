@@ -63,7 +63,7 @@ android {
         debug{
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('socialout-key.jks')
+            //storeFile file('socialout-key.jks')
             storePassword 'android'
         }
     }
@@ -73,7 +73,7 @@ android {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
+            //storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
         }
     }

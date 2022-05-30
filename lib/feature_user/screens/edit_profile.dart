@@ -61,18 +61,15 @@ class _EditarProfileState extends State<EditarProfile> {
       idUsuar = user["id"];
     });
     getProfilePhoto(idUsuar);
-    print(json.decode(response.body));
   }
 
   Future<void> getProfilePhoto(String idUsuar) async {
     final response = await es.getAPhoto(idUsuar);
     if (response != 'Fail') {
-      print("ENTRO A FAIL");
       setState(() {
         urlProfilePhoto = response;
       });
     }
-    print(response);
   }
 
   @override

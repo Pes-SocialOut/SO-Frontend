@@ -137,6 +137,31 @@ class LanguagesOptionsState extends State<LanguagesOptions> {
             dense: true,
             selected: false,
           ),
+          ListTile(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            textColor: catalan
+                ? Theme.of(context).colorScheme.onPrimary
+                : Colors.black26,
+            tileColor:
+                catalan ? Theme.of(context).colorScheme.primary : Colors.white,
+            title: const Text(
+              'Chino',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ).tr(),
+            onTap: () => {
+              context.setLocale(const Locale('zh', 'CN')),
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(mensajeMuestra("updatedlanguage".tr())),
+            },
+            enabled: true,
+            dense: true,
+            selected: false,
+          ),
         ]));
   }
 }
