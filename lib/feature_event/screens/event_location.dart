@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_map/widgets/map_widget.dart';
 
-class MapEventScreen extends StatelessWidget {
+class EventLocationScreen extends StatelessWidget {
   final double lat, lng;
-  const MapEventScreen({ Key? key, required this.lat, required this.lng }) : super(key: key);
+  const EventLocationScreen({ Key? key, required this.lat, required this.lng }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class MapEventScreen extends StatelessWidget {
         children: [
           lat == 0 && lng == 0
               ? Container(decoration: const BoxDecoration(color: Colors.grey))
-              : MapWidget(lat: lat, long: lng, isEvent: false),
+              : MapWidget(lat: lat, long: lng, isEvent: true,),
           Padding(
             padding: const EdgeInsets.only(top: 40, left: 16),
             child: CircleAvatar(
