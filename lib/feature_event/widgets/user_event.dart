@@ -402,25 +402,6 @@ class _UserEventState extends State<UserEvent> {
                                 ),
                               ),
                               SizedBox(width: 40),
-                              FloatingActionButton(
-                                onPressed: () async {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ListChatScreen(
-                                                id_event: widget.id,
-                                              )));
-                                },
-                                child: Icon(
-                                  Icons.notifications,
-                                  color:
-                                      Theme.of(context).colorScheme.onSecondary,
-                                  size: 18,
-                                ),
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                elevation: 0,
-                              ),
                             ],
                           )),
                     )

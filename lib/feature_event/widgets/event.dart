@@ -17,7 +17,7 @@ class Event extends StatefulWidget {
 
 class _EventState extends State<Event> {
   APICalls api = APICalls();
-  String user_creator = "";
+
   bool found = false;
 
   Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
@@ -29,25 +29,6 @@ class _EventState extends State<Event> {
   Future<dynamic> leaveEvent(String id, Map<String, dynamic> bodyData) async {
     final response =
         await api.postItem('/v2/events/:0/:1', [widget.id, 'leave'], bodyData);
-    return response;
-  }
-
-  Future<String> getEventCreator() async {
-    http.Response resp = await getEventItem('/v2/events/:0', [widget.id]);
-    var _event = [json.decode(resp.body)];
-    user_creator = _event[0]["user_creator"];
-
-    return user_creator;
-  }
-
-  Future<http.Response> getEventItem(
-      String endpoint, List<String> pathParams) async {
-    final uri = api.buildUri(endpoint, pathParams, null);
-    final response = await http.get(uri, headers: {
-      'Authorization': 'Bearer ' + APICalls().getCurrentAccess(),
-      'Content-Type': 'application/json'
-    });
-
     return response;
   }
 
@@ -558,41 +539,6 @@ class _EventState extends State<Event> {
                                                               .bold))),
                                             ),
                                           ),
-                                          IconButton(
-                                            iconSize: 24,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                            icon: const Icon(Icons.message),
-                                            onPressed: () async {
-                                              String idEventCreator =
-                                                  await getEventCreator();
-                                              var acu = api.getCurrentUser();
-                                              bool aux = acu.compareTo(
-                                                      idEventCreator) ==
-                                                  0;
-                                              if (!aux) {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ChatScreen(
-                                                              eventId:
-                                                                  widget.id,
-                                                              participanId: acu,
-                                                            )));
-                                              } else {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ListChatScreen(
-                                                              id_event:
-                                                                  widget.id,
-                                                            )));
-                                              }
-                                            },
-                                          )
                                         ],
                                       );
                                     }
