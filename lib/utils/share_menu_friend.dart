@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ShareMenuFriend extends StatefulWidget {
   final String url;
@@ -21,11 +24,12 @@ class _ShareMenuState extends State<ShareMenuFriend> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            Text('Add your friend via',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.secondary)),
+            Text('Addyourfriendvia',
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary))
+                .tr(),
             const SizedBox(height: 20),
             QrImage(
               data: widget.url,
@@ -33,9 +37,10 @@ class _ShareMenuState extends State<ShareMenuFriend> {
               size: MediaQuery.of(context).size.height / 4.5,
             ),
             const SizedBox(height: 20),
-            Text('or',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+            Text('OR',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface))
+                .tr(),
             const SizedBox(height: 20),
             TextButton(
                 style: TextButton.styleFrom(
@@ -43,9 +48,11 @@ class _ShareMenuState extends State<ShareMenuFriend> {
                 onPressed: () {
                   SnackBar snackBar = SnackBar(
                     backgroundColor: Theme.of(context).colorScheme.secondary,
-                    content: Text('Copied link to clipboard!',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.background)),
+                    content: Text('Copiedlinktoclipboard',
+                            style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.background))
+                        .tr(),
                   );
                   Clipboard.setData(ClipboardData(
                     text: widget.url,
@@ -53,7 +60,7 @@ class _ShareMenuState extends State<ShareMenuFriend> {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   Navigator.pop(context);
                 },
-                child: const Text('COPY TO CLIPBOARD'))
+                child: Text('COPYTOCLIPBOARD').tr())
           ],
         ));
   }

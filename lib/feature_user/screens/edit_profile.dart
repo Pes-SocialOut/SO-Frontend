@@ -61,18 +61,15 @@ class _EditarProfileState extends State<EditarProfile> {
       idUsuar = user["id"];
     });
     getProfilePhoto(idUsuar);
-    print(json.decode(response.body));
   }
 
   Future<void> getProfilePhoto(String idUsuar) async {
     final response = await es.getAPhoto(idUsuar);
     if (response != 'Fail') {
-      print("ENTRO A FAIL");
       setState(() {
         urlProfilePhoto = response;
       });
     }
-    print(response);
   }
 
   @override
@@ -102,7 +99,13 @@ class _EditarProfileState extends State<EditarProfile> {
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'pleaseEnter'.tr() + labelText2;
+          if (labelText2 == "Username".tr()) {
+            return 'enterUsername'.tr();
+          } else if (labelText2 == "Description".tr()) {
+            return 'enterDescription'.tr();
+          } else if (labelText2 == "hobbies".tr()) {
+            return 'enterhobbie'.tr();
+          }
         }
         return null;
       },
@@ -280,7 +283,11 @@ class _EditarProfileState extends State<EditarProfile> {
             color: Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.arrow_back_ios_new_sharp),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfileScreen(id: idUsuar)),
+                  (route) => false);
             },
           ),
         ),

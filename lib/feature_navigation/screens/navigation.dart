@@ -4,12 +4,12 @@ import 'package:so_frontend/feature_event/screens/create_event.dart';
 import 'package:so_frontend/feature_explore/screens/home.dart';
 import 'package:so_frontend/feature_home/screens/home.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/feature_user/services/externalService.dart';
 import 'package:so_frontend/utils/go_to.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:async';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class NavigationBottomBar extends StatefulWidget {
@@ -30,9 +30,20 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
 
   APICalls ac = APICalls();
 
-
   String getCurrentUser() {
     return ac.getCurrentUser();
+  }
+
+  String urlProfilePhoto = "";
+  final ExternServicePhoto es = ExternServicePhoto();
+
+  Future<void> getProfilePhoto() async {
+    final response = await es.getAPhoto(getCurrentUser());
+    if (response != 'Fail') {
+      setState(() {
+        urlProfilePhoto = response;
+      });
+    }
   }
 
   StreamSubscription? _sub;
@@ -43,7 +54,7 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
     // Attach a listener to the stream
     _sub = linkStream.listen((String? link) async {
       // Parse the link and warn the user, if it is not correct
-      
+
       if (link != null) {
         // https://socialout-develop.herokuapp.com/v2/events/i
         // https://socialout-develop.herokuapp.com/v2/users/new_friend?code=xxx
@@ -56,37 +67,52 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
               APICalls().appLinkLoginRedirect(() {
                 // User is logged in, jump right into the action
                 Navigator.of(context).pushNamed('/home');
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen(id: id)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EventScreen(id: id)));
               }, () {
                 // User is not logged in.
                 Navigator.pushNamed(context, '/login', arguments: GoTo(() {
-                    Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventScreen(id: id)));
-                  }
-                ));
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/home', (route) => false);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventScreen(id: id)));
+                }));
               });
             }
             break;
           case "users":
-            var response = await APICalls().getCollection('/v2/users/new_friend', [], {"code": uri.queryParameters["code"]!});
+            var response = await APICalls().getCollection(
+                '/v2/users/new_friend',
+                [],
+                {"code": uri.queryParameters["code"]!});
             APICalls().appLinkLoginRedirect(() {
               // User is logged in, jump right into the action
               Navigator.of(context).pushNamed('/home');
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: json.decode(response.body)["id"])));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProfileScreen(id: json.decode(response.body)["id"])));
             }, () {
               // User is not logged in.
               Navigator.pushNamed(context, '/login', arguments: GoTo(() {
-                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: json.decode(response.body)["id"])));
-                }
-              ));
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/home', (route) => false);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                            id: json.decode(response.body)["id"])));
+              }));
             });
             break;
           default:
         }
-        
       }
-
     }, onError: (err) {
       // Handle exception by warning the user their action did not succeed
     });
@@ -104,6 +130,7 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
   void initState() {
     super.initState();
     initUniLinks();
+    getProfilePhoto();
   }
 
   @override
@@ -150,7 +177,9 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
                   height: 36,
                   child: ClipRRect(
                       child: FittedBox(
-                          child: Image.asset('assets/dog.jpg'),
+                          child: (urlProfilePhoto == "")
+                              ? Image.asset('assets/noProfileImage.png')
+                              : Image.network(urlProfilePhoto),
                           fit: BoxFit.fitHeight),
                       borderRadius: BorderRadius.circular(100)),
                 ),

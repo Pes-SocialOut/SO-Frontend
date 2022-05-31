@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_chat/screens/chat_screen.dart';
 import 'package:so_frontend/feature_chat/screens/listChat_screen.dart';
@@ -45,9 +46,10 @@ class _EventScreenState extends State<EventScreen> {
         appBar: AppBar(
             centerTitle: true,
             title: Text('Event',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.surface,
-                    fontSize: 16)),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.surface,
+                        fontSize: 16))
+                .tr(),
             backgroundColor: Theme.of(context).colorScheme.background,
             actions: <Widget>[
               IconButton(

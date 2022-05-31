@@ -29,15 +29,6 @@ class PolicyWidget extends StatelessWidget {
                       host: 'pages.flycricket.io',
                       path: 'socialout-0/terms');
                   await launchUrl(uri);
-                  //cant launch at the moment, because emualtor has no internet
-                  /*
-              if(await canLaunchUrl(url)){
-                await launchUrl(url);
-              }
-              else{
-                throw "cannot load Url";
-              }
-              */
                 }),
           TextSpan(
               style: TextStyle(
@@ -56,15 +47,6 @@ class PolicyWidget extends StatelessWidget {
                       host: 'pages.flycricket.io',
                       path: 'socialout/privacy');
                   await launchUrl(uri);
-                  //cant launch at the moment, because emualtor has no internet
-                  /*
-              if(await canLaunchUrl(url)){
-                await launchUrl(url);
-              }
-              else{
-                throw "cannot load Url";
-              }
-              */
                 }),
           TextSpan(
               style: TextStyle(
@@ -83,15 +65,6 @@ class PolicyWidget extends StatelessWidget {
                       host: 'pages.flycricket.io',
                       path: 'socialout/privacy');
                   await launchUrl(uri);
-                  //cant launch at the moment, because emualtor has no internet
-                  /*
-              if(await canLaunchUrl(url)){
-                await launchUrl(url);
-              }
-              else{
-                throw "cannot load Url";
-              }
-              */
                 }),
           TextSpan(
               style: TextStyle(
