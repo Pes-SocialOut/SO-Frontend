@@ -47,7 +47,7 @@
                 <!-- Accepts URIs that begin with https://YOUR_HOST -->
                 <data
                 android:scheme="https"
-                android:host="socialout-develop.herokuapp.com" />
+                android:host="socialout-production.herokuapp.com" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

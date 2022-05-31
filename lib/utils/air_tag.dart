@@ -25,7 +25,7 @@ class _AirTagState extends State<AirTag> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: http.get(Uri.parse(
-            'https://socialout-develop.herokuapp.com/v1/air/location?long=' +
+            'https://socialout-production.herokuapp.com/v1/air/location?long=' +
                 widget.longitud +
                 '&lat=' +
                 widget.latitude)),

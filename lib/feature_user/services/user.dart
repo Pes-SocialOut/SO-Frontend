@@ -29,7 +29,7 @@ class UserAPI {
   }*/
 }
 
-final String url = "https://socialout-develop.herokuapp.com/v1/users/";
+final String url = "https://socialout-production.herokuapp.com/v1/users/";
 
 //API_URL/v1/users/:id/pw
 Future<http.Response> putPassword(

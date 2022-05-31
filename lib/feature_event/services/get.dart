@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class GetEventsAPI {
-  final String url = 'https://socialout-develop.herokuapp.com/v2/events/';
+  final String url = 'https://socialout-production.herokuapp.com/v2/events/';
 
   Future<List> getEventById(String id) async {
     final response = await http.get(Uri.parse(url + id));

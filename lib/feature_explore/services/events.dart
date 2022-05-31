@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class EventsAPI {
 
-  final String url = "https://socialout-develop.herokuapp.com/v1/events/";
+  final String url = "https://socialout-production.herokuapp.com/v1/events/";
 
   Future<List> getBestEvents() async {
     

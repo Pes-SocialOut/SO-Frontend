@@ -122,7 +122,7 @@ class _RecommendedListState extends State<RecommendedList> {
                                           iconSize: 20,
                                           color: Theme.of(context).colorScheme.onSurface,
                                           icon: const Icon(Icons.share),
-                                          onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + _recommendations[index]["id"], context)
+                                          onPressed: () => showShareMenu('https://socialout-production.herokuapp.com/v3/events/' + _recommendations[index]["id"], context)
                                         ),
                                         const SizedBox(width: 10),
                                         LikeButton(id: _recommendations[index]["id"])

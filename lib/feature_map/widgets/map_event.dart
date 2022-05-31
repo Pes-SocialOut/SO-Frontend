@@ -131,7 +131,7 @@ class _EventWidgetState extends State<EventWidget> {
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           FutureBuilder(
               future: http.get(Uri.parse(
-                  'https://socialout-develop.herokuapp.com/v1/users/' +
+                  'https://socialout-production.herokuapp.com/v1/users/' +
                       widget.event["user_creator"])),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -170,7 +170,7 @@ class _EventWidgetState extends State<EventWidget> {
               icon: const Icon(Icons.share,
                   size: 30.0, color: Color.fromARGB(255, 110, 108, 108)),
               onPressed: () => showShareMenu(
-                  'https://socialout-develop.herokuapp.com/v3/events/' +
+                  'https://socialout-production.herokuapp.com/v3/events/' +
                       widget.event["id"],
                   context)),
           const Divider(endIndent: 30),

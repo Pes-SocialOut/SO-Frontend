@@ -20,7 +20,7 @@ class _StationWidgetState extends State<StationWidget> {
   
 
   final String url2 =
-      "https://socialout-develop.herokuapp.com/v1/air/stations/";
+      "https://socialout-production.herokuapp.com/v1/air/stations/";
 
   var eventStyle = const TextStyle(
       color: Colors.black,

@@ -147,7 +147,7 @@ class _LikedListState extends State<LikedList> {
                                           .onSurface,
                                       icon: const Icon(Icons.share),
                                       onPressed: () => showShareMenu(
-                                          'https://socialout-develop.herokuapp.com/v3/events/' +
+                                          'https://socialout-production.herokuapp.com/v3/events/' +
                                               _joined[index]["id"],
                                           context)),
                                   const SizedBox(width: 10),

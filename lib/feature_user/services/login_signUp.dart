@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/api_controller.dart';
 
 class userAPI {
-  final String basicUrl = "https://socialout-develop.herokuapp.com/v1/users/";
-  final String basicUrl2 = "https://socialout-develop.herokuapp.com/v2/users/";
+  final String basicUrl = "https://socialout-production.herokuapp.com/v1/users/";
+  final String basicUrl2 = "https://socialout-production.herokuapp.com/v2/users/";
 
   /* Comprobar que un email socialout existe o no en la BD */
   Future<Map<String, dynamic>> checkUserEmail(email) async {

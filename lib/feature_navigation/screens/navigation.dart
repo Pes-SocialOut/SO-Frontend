@@ -56,8 +56,8 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
       // Parse the link and warn the user, if it is not correct
 
       if (link != null) {
-        // https://socialout-develop.herokuapp.com/v2/events/i
-        // https://socialout-develop.herokuapp.com/v2/users/new_friend?code=xxx
+        // https://socialout-production.herokuapp.com/v2/events/i
+        // https://socialout-production.herokuapp.com/v2/users/new_friend?code=xxx
         var uri = Uri.parse(link);
         var type = uri.pathSegments[1];
         switch (type) {

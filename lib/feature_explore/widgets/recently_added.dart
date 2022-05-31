@@ -120,7 +120,7 @@ class _RecentlyAddedState extends State<RecentlyAdded> {
                                             iconSize: 20,
                                             color: Theme.of(context).colorScheme.onSurface,
                                             icon: const Icon(Icons.share),
-                                            onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + recommendations[index]["id"], context)
+                                            onPressed: () => showShareMenu('https://socialout-production.herokuapp.com/v3/events/' + recommendations[index]["id"], context)
                                           ),
                                           const SizedBox(width: 10),
                                           LikeButton(id: recommendations[index]["id"])

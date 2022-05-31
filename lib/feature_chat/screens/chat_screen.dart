@@ -89,7 +89,7 @@ class _ChatScreen extends State<ChatScreen> {
 
   Future<List> getUser() async {
     final response = await http
-        .get(Uri.parse("https://socialout-develop.herokuapp.com/v1/users/"));
+        .get(Uri.parse("https://socialout-production.herokuapp.com/v1/users/"));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     }
@@ -104,7 +104,7 @@ class _ChatScreen extends State<ChatScreen> {
 
   Future<List> getShownUsername() async {
     final response = await http
-        .get(Uri.parse("https://socialout-develop.herokuapp.com/v1/users/"));
+        .get(Uri.parse("https://socialout-production.herokuapp.com/v1/users/"));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     }

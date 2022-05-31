@@ -71,7 +71,7 @@ class _MapWidgetState extends State<MapWidget> {
         if (snapshot.connectionState == ConnectionState.done) {
           var events = json.decode(snapshot.data.body);
           return FutureBuilder(
-            future: http.get(Uri.parse("https://socialout-develop.herokuapp.com/v1/air/stations")),
+            future: http.get(Uri.parse("https://socialout-production.herokuapp.com/v1/air/stations")),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 var stations = json.decode(snapshot.data.body);
@@ -104,7 +104,7 @@ class _MapWidgetState extends State<MapWidget> {
                               height: 40.0,
                               point: LatLng(events[i]["latitude"], events[i]["longitud"]),
                               builder: (context) => FutureBuilder(
-                                future: http.get(Uri.parse("https://socialout-develop.herokuapp.com/v1/air/location?long=" + events[i]["longitud"].toString() + "&lat=" + events[i]["latitude"].toString())),
+                                future: http.get(Uri.parse("https://socialout-production.herokuapp.com/v1/air/location?long=" + events[i]["longitud"].toString() + "&lat=" + events[i]["latitude"].toString())),
                                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                                   if (snapshot.connectionState == ConnectionState.done) {
                                     var color = json.decode(snapshot.data.body);

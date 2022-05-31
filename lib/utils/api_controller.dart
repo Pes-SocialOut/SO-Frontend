@@ -15,7 +15,7 @@ class APICalls {
   // Seguramente se pueda usar patrón singleton.
   final String _REFRESH_TOKEN_PREFS = 'socialout_refresh_token';
 
-  final String API_URL = 'socialout-develop.herokuapp.com';
+  final String API_URL = 'socialout-production.herokuapp.com';
   final String _REFRESH_ENDPOINT = '/v1/users/refresh';
   final int _UNAUTHORIZED = 401;
 

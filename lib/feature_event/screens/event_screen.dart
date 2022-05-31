@@ -57,7 +57,7 @@ class _EventScreenState extends State<EventScreen> {
                   color: Theme.of(context).colorScheme.onSurface,
                   icon: const Icon(Icons.share),
                   onPressed: () => showShareMenu(
-                      'https://socialout-develop.herokuapp.com/v3/events/' +
+                      'https://socialout-production.herokuapp.com/v3/events/' +
                           widget.id,
                       context)),
               LikeButton(id: widget.id),
