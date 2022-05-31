@@ -196,5 +196,8 @@
     "Congratulations": "Congratulations!",
     "createdeventsuccessfully": "You created the event successfully",
     "Sharefriends": "Share it with your friends!",
-    "Event": "Event"
+    "Event": "Event",
+    "NameofEvent":"Name of Event",
+    "Members":"#Members",
+    "Writemessag":"Write message..."
 }

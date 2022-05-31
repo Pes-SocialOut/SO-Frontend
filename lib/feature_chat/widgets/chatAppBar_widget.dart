@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-class AppBarWidget extends StatelessWidget with PreferredSizeWidget{
-  const AppBarWidget({ Key? key }) : super(key: key);
+class AppBarWidget extends StatelessWidget with PreferredSizeWidget {
+  const AppBarWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,29 +16,52 @@ class AppBarWidget extends StatelessWidget with PreferredSizeWidget{
           child: Row(
             children: <Widget>[
               IconButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back,color: Theme.of(context).colorScheme.primary,),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
-              SizedBox(width: 2,),
+              SizedBox(
+                width: 2,
+              ),
               CircleAvatar(
                 //backgroundImage: NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
                 maxRadius: 20,
               ),
-              SizedBox(width: 12,),
+              SizedBox(
+                width: 12,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Name of Event",style: TextStyle( color: Theme.of(context).colorScheme.onBackground,fontSize: 16 ,fontWeight: FontWeight.w600),),
-                    SizedBox(height: 6,),
-                    Text("#Members",style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 13),),
+                    Text(
+                      "NameofEvent",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ).tr(),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      "Members",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontSize: 13),
+                    ).tr(),
                   ],
                 ),
               ),
-              Icon(Icons.more_vert,color: Theme.of(context).colorScheme.primary,),
+              Icon(
+                Icons.more_vert,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ],
           ),
         ),

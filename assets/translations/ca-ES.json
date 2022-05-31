@@ -196,5 +196,8 @@
     "Congratulations": "Felicitats!",
     "createdeventsuccessfully": "Heu creat l'esdeveniment correctament",
     "Sharefriends": "Comparteix-ho amb els teus amics!",
-    "Event": "Esdeveniment"
+    "Event": "Esdeveniment",
+    "NameofEvent":"Nom de l'esdeveniment",
+    "Members":"#Membres",
+    "Writemessag":"Escriu missatge..."
 }

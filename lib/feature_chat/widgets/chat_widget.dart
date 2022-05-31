@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -29,7 +32,7 @@ class SendWidget extends StatelessWidget {
               child: TextField(
                 controller: messageTextController,
                 decoration: InputDecoration(
-                    hintText: "Write message...",
+                    hintText: "Writemessag".tr(),
                     hintStyle: TextStyle(color: Colors.black54),
                     border: InputBorder.none),
               ),
