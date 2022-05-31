@@ -65,7 +65,6 @@ class _ListChatScreen extends State<ListChatScreen> {
                           color: Theme.of(context).colorScheme.surface,
                           fontSize: 16)),
                   backgroundColor: Theme.of(context).colorScheme.background,
-                  actions: <Widget>[],
                   leading: IconButton(
                     iconSize: 24,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -81,7 +80,7 @@ class _ListChatScreen extends State<ListChatScreen> {
                         reverse: true,
                         itemCount: listChats.length,
                         shrinkWrap: true,
-                        padding: EdgeInsets.only(top: 10, bottom: 70),
+                        padding: EdgeInsets.only(top: 10),
                         physics: AlwaysScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           //String uriPhoro = await espApi.getAPhoto(listChats[index].participant_id);
@@ -94,41 +93,43 @@ class _ListChatScreen extends State<ListChatScreen> {
                                     ConnectionState.done) {
                                   user = json.decode(snapshot.data.body);
                                   print("${user["username"]}");
-                                  return InkWell(
-                                      onTap: () async {
-                                        print("object");
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ChatScreen(
-                                                      eventId: widget.id_event,
-                                                      participanId:
-                                                          listChats[index]
-                                                              .participant_id,
-                                                    )));
-                                      },
-                                      /*
-                                        Response resp = await cAPI.createChat(
-                                            widget.id_event,
-                                            APICalls().getCurrentUser());
-                                            */
-                                      //print(api.getCurrentAccess());
-
-                                      child: Ink(
-                                          height: 50,
-                                          color: Colors.red,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          padding: EdgeInsets.only(right: 16),
-                                          child: Text(
-                                            "${user["username"]}",
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onBackground,
-                                                fontSize: 20),
-                                          )));
+                                  return Card(
+                                      clipBehavior: Clip.antiAlias,
+                                      child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                          onTap: () async {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatScreen(
+                                                          eventId:
+                                                              widget.id_event,
+                                                          participanId:
+                                                              listChats[index]
+                                                                  .participant_id,
+                                                        )));
+                                          },
+                                          child: Ink(
+                                              height: 50,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSecondary,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              padding: EdgeInsets.only(
+                                                  left: 16, top: 10),
+                                              child: Text(
+                                                "${user["username"]}",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                                    fontSize: 20),
+                                              ))));
                                 } else {
                                   return const Center(
                                     child: CircularProgressIndicator(),
@@ -139,9 +140,12 @@ class _ListChatScreen extends State<ListChatScreen> {
               ])),
             );
           } else {
-            return Container(
-              color: Colors.red,
-            );
+            return Center(
+                child: SizedBox(
+              child: CircularProgressIndicator(),
+              height: 30.0,
+              width: 30.0,
+            ));
           }
         });
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreen extends State<ChatScreen> {
+  late String _now;
+  late Timer _timer;
   final chatAPI cAPI = chatAPI();
   APICalls api = APICalls();
   DateTime _lastQuitTime = DateTime.now();
@@ -129,15 +132,43 @@ class _ChatScreen extends State<ChatScreen> {
     }
   }
 
+  Future<String> getAllMessages(String idEventCreator) async {
+    final response = await api.getItem("/v2/users/:0", [idEventCreator]);
+    String username = json.decode(response.body)["username"];
+
+    print(json.decode(response.body));
+    return username;
+  }
+
+  void initAllMessages() async {
+    String idEventCreator = await getEventCreator();
+    var pid = widget.participanId;
+    var acu = api.getCurrentUser();
+    bool test = acu.compareTo(pid) == 0;
+    if (acu.compareTo(idEventCreator) == 0) {
+      shownUsername = await getUsername(pid);
+    } else {
+      shownUsername = await getUsername(idEventCreator);
+    }
+    cAPI.openSession(widget.eventId, "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
+  }
+
   @override
   void initState() {
+    super.initState();
     //initUser();
     // TODO: implement initState
     initShownUsername();
     initEventName();
     initEventIcon();
     initEventCreador();
-
+    initAllMessages();
+    _now = DateTime.now().second.toString();
+    _timer = Timer.periodic(Duration(seconds: 30), (Timer t) {
+      setState(() {
+        _now = DateTime.now().second.toString();
+      });
+    });
     //getEventName().then((value) => print("value: " + value));
   }
 
@@ -169,21 +200,7 @@ class _ChatScreen extends State<ChatScreen> {
                       children: <Widget>[
                         IconButton(
                           onPressed: () async {
-                            final difference =
-                                DateTime.now().difference(_lastQuitTime);
-                            final isExitWarning =
-                                difference >= Duration(seconds: 2);
-
-                            _lastQuitTime = DateTime.now();
-
-                            if (isExitWarning) {
-                              final message = 'Press back again to quit chat';
-                              print('Press back again to exit');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(message)));
-                            } else {
-                              Navigator.pop(context);
-                            }
+                            Navigator.pop(context);
                           },
                           icon: Icon(
                             Icons.arrow_back,
@@ -243,17 +260,15 @@ class _ChatScreen extends State<ChatScreen> {
                                             fontSize: 13),
                                       );
                                     } else {
-                                      return const Center(
-                                        child: Text("hola"),
+                                      return SizedBox(
+                                        child: CircularProgressIndicator(),
+                                        height: 10.0,
+                                        width: 10.0,
                                       );
                                     }
                                   }),
                             ],
                           ),
-                        ),
-                        Icon(
-                          Icons.more_vert,
-                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -261,200 +276,185 @@ class _ChatScreen extends State<ChatScreen> {
                 ),
               ),
               body: Container(
-                child: WillPopScope(
-                    onWillPop: () async {
-                      final difference =
-                          DateTime.now().difference(_lastQuitTime);
-                      final isExitWarning = difference >= Duration(seconds: 2);
-
-                      _lastQuitTime = DateTime.now();
-
-                      if (isExitWarning) {
-                        final message = 'Press back again to quit chat';
-                        print('Press back again to exit');
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text(message)));
-                        return false;
-                      } else {
-                        return true;
-                      }
-                    },
-                    child: Stack(
-                      children: [
-                        Container(
-                          child: ListView.builder(
-                            reverse: true,
-                            itemCount: chatMessage.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.only(top: 10, bottom: 70),
-                            physics: AlwaysScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              //for each message
-                              double paddingSelf = 30;
-                              double paddingOther = 10;
-                              //hardcode
-                              bool messageMine = chatMessage[index].sender_id ==
-                                  api.getCurrentUser();
-                              return Container(
-                                //icon+message
-                                alignment: messageMine
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                padding: EdgeInsets.only(
-                                    left: messageMine
-                                        ? paddingSelf
-                                        : paddingOther,
-                                    right: messageMine
-                                        ? paddingOther
-                                        : paddingSelf,
-                                    top: 10,
-                                    bottom: 10),
-                                child: Align(
-                                    alignment: (messageMine
-                                        ? Alignment.topRight
-                                        : Alignment.topLeft),
-                                    child: Row(
-                                      mainAxisAlignment: messageMine
-                                          ? MainAxisAlignment.end
-                                          : MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        if (!messageMine)
-                                          CircleAvatar(
-                                            backgroundImage:
-                                                AssetImage('assets/gato.jpg')
-                                                    as ImageProvider,
-                                            //sender's icon
-                                            maxRadius: 20,
-                                          ),
-                                        Flexible(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: messageMine
-                                                      ? Radius.circular(20)
-                                                      : Radius.circular(0),
-                                                  topRight: messageMine
-                                                      ? Radius.circular(0)
-                                                      : Radius.circular(20),
-                                                  bottomLeft:
-                                                      Radius.circular(20),
-                                                  bottomRight: Radius.circular(
-                                                      20)), //BorderRadius.circular(20),
-                                              color: (messageMine
-                                                  //?Theme.of(context).colorScheme.secondary:Theme.of(context).colorScheme.onSecondary
-                                                  ? HexColor('80ED99')
-                                                  : Colors.white),
-                                            ),
-                                            padding: EdgeInsets.all(12),
-                                            child: Text(
-                                              chatMessage[index].text,
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                          ),
-                                        ),
-                                        if (messageMine)
-                                          CircleAvatar(
-                                            backgroundImage:
-                                                AssetImage('assets/dog.jpg')
-                                                    as ImageProvider,
-                                            //user's icon
-                                            //backgroundImage: NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
-                                            maxRadius: 20,
-                                          ),
-                                      ],
-                                    )),
-                              );
-                            },
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            padding:
-                                EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                            height: 60,
-                            width: double.infinity,
-                            color: Colors.white,
-                            child: Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: TextField(
-                                    controller: messageTextController,
-                                    decoration: InputDecoration(
-                                        hintText: "Write message...",
-                                        hintStyle:
-                                            TextStyle(color: Colors.black54),
-                                        border: InputBorder.none),
+                  child: Stack(
+                children: [
+                  Container(
+                    child: ListView.builder(
+                      reverse: true,
+                      itemCount: chatMessage.length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(top: 10, bottom: 70),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        //for each message
+                        double paddingSelf = 30;
+                        double paddingOther = 10;
+                        //hardcode
+                        bool messageMine = chatMessage[index].sender_id ==
+                            api.getCurrentUser();
+                        return Container(
+                          //icon+message
+                          alignment: messageMine
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          padding: EdgeInsets.only(
+                              left: messageMine ? paddingSelf : paddingOther,
+                              right: messageMine ? paddingOther : paddingSelf,
+                              top: 10,
+                              bottom: 10),
+                          child: Align(
+                              alignment: (messageMine
+                                  ? Alignment.topRight
+                                  : Alignment.topLeft),
+                              child: Row(
+                                mainAxisAlignment: messageMine
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
+                                children: <Widget>[
+                                  if (!messageMine)
+                                    CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage('assets/gato.jpg')
+                                              as ImageProvider,
+                                      //sender's icon
+                                      maxRadius: 20,
+                                    ),
+                                  Flexible(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: messageMine
+                                                ? Radius.circular(20)
+                                                : Radius.circular(0),
+                                            topRight: messageMine
+                                                ? Radius.circular(0)
+                                                : Radius.circular(20),
+                                            bottomLeft: Radius.circular(20),
+                                            bottomRight: Radius.circular(
+                                                20)), //BorderRadius.circular(20),
+                                        color: (messageMine
+                                            //?Theme.of(context).colorScheme.secondary:Theme.of(context).colorScheme.onSecondary
+                                            ? HexColor('80ED99')
+                                            : Colors.white),
+                                      ),
+                                      padding: EdgeInsets.all(12),
+                                      child: Text(
+                                        chatMessage[index].text,
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                FloatingActionButton(
-                                  onPressed: () async {
-                                    APICalls api = APICalls();
+                                  if (messageMine)
+                                    CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage('assets/dog.jpg')
+                                              as ImageProvider,
+                                      //user's icon
+                                      //backgroundImage: NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
+                                      maxRadius: 20,
+                                    ),
+                                ],
+                              )),
+                        );
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                      height: 60,
+                      width: double.infinity,
+                      color: Colors.white,
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: TextField(
+                              controller: messageTextController,
+                              decoration: InputDecoration(
+                                  hintText: "Write message...",
+                                  hintStyle: TextStyle(color: Colors.black54),
+                                  border: InputBorder.none),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          FloatingActionButton(
+                            onPressed: () async {
+                              APICalls api = APICalls();
 
-                                    String currentUserId =
-                                        APICalls().getCurrentUser();
-                                    String accessToken =
-                                        APICalls().getCurrentAccess();
-                                    cAPI.getEvents(currentUserId);
+                              String currentUserId =
+                                  APICalls().getCurrentUser();
+                              String accessToken =
+                                  APICalls().getCurrentAccess();
+                              cAPI.getEvents(currentUserId);
 
-                                    print("accessToken:" + accessToken);
-                                    print(messageTextController.text);
+                              print("accessToken:" + accessToken);
+                              print(messageTextController.text);
+                              print("currentUserId: " + currentUserId);
+                              print("widget.eventId: " + widget.eventId);
+                              print("messageTextController.text:" +
+                                  messageTextController.text);
+                              if (messageTextController.text.isNotEmpty) {
+                                Response resp = await cAPI.createMessage(
+                                    widget.participanId,
+                                    widget
+                                        .eventId, //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
+                                    messageTextController.text);
+                                messageTextController.clear();
 
-                                    Response resp = await cAPI.createMessage(
-                                        currentUserId,
-                                        widget
-                                            .eventId, //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
-                                        messageTextController.text);
-                                    messageTextController.clear();
-                                    setState(() {});
-                                    /*
+                                setState(() {});
+                              }
+
+                              /*
                 //ejecutar cuando unir un participante
                 Response resp = await cAPI.createChat(
                     "eventId", currentUserId);
           */
-                                    /*
+                              /*
                 cAPI.createMessage(
                     "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f",
                     eventId, //"23fa941a-9bee-4788-8b3d-3ebaa886bfe7",
                     "hola del f01e9aaa-f0a9-42f0-98f3-0011f2c07d74");
                     */
-                                    /*
+                              /*
                 cAPI.enterChat(eventId,
                     "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
                 */
-                                    /*
+                              /*
                 cAPI.openSession(eventId,
                     "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
                  */
-                                    /*
+                              /*
                 cAPI.getListChat("fee03319-2742-4ef5-8317-677cb6445eda");
                 */
-                                  },
-                                  child: Icon(
-                                    Icons.send,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    size: 18,
-                                  ),
-                                  backgroundColor: Colors.blue,
-                                  elevation: 0,
-                                ),
-                              ],
+                            },
+                            child: Icon(
+                              Icons.send,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 18,
                             ),
+                            backgroundColor: Colors.blue,
+                            elevation: 0,
                           ),
-                        )
-                      ],
-                    )),
-              ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              )),
             );
           } else {
-            return Container();
+            return Center(
+                child: SizedBox(
+              child: CircularProgressIndicator(),
+              height: 30.0,
+              width: 30.0,
+            ));
           }
         });
   }

@@ -8,6 +8,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
 import 'package:so_frontend/feature_user/screens/edit_profile.dart';
+import 'package:so_frontend/feature_user/screens/loading_page.dart';
 import 'package:so_frontend/feature_user/screens/login_screen.dart';
 import 'package:so_frontend/feature_user/screens/register_socialOut.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
@@ -78,9 +79,10 @@ class MyApp extends StatelessWidget {
             surface: Colors.black,
             onSurface: HexColor('767676'),
           )),
-      initialRoute: '/welcome',
+      initialRoute: '/loading_Page',
       home: const WelcomeScreen(),
       routes: {
+        '/loading_Page': (_) => const LoadingScreen(),
         '/welcome': (_) => const WelcomeScreen(),
         '/login': (_) => const LoginScreen(),
         '/signup': (_) => SignUpScreen(),

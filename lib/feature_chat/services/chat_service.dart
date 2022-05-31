@@ -79,7 +79,7 @@ class chatAPI {
       "event_id": eventId,
       "text": text,
     };
-
+    print("access token: " + APICalls().getCurrentAccess());
     final response =
         await http.post(Uri.parse(finalUri), body: jsonEncode(str), headers: {
       'Authorization': 'Bearer ' + APICalls().getCurrentAccess(),

@@ -280,13 +280,7 @@ class _EditarProfileState extends State<EditarProfile> {
             color: Theme.of(context).colorScheme.onSurface,
             icon: const Icon(Icons.arrow_back_ios_new_sharp),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
-                      id: idUsuar,
-                    ),
-                  ));
+              Navigator.pop(context);
             },
           ),
         ),
