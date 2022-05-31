@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/event_map.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
+import 'package:so_frontend/feature_user/services/externalService.dart';
 import 'package:so_frontend/utils/air_tag.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
@@ -19,8 +20,10 @@ class Event extends StatefulWidget {
 
 class _EventState extends State<Event> {
   APICalls api = APICalls();
-
+  final ExternServicePhoto es = ExternServicePhoto();
   bool found = false;
+  String urlProfilePhoto = "";
+  List attendesEvent = [];
 
   Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
     final response =
@@ -34,6 +37,35 @@ class _EventState extends State<Event> {
     return response;
   }
 
+  /* Future<void> getAllPhotosInEvent(String idEvent) async {
+    final response = await api
+        .getCollection('/v2/events/participants', [], {"eventid": idEvent});
+    var attendes = json.decode(response.body);
+    List aux = [];
+    for (var v in attendes) {
+      final response2 = await getProfilePhoto(v);
+      if (response2 != 'Fail') {
+        aux.add(response2);
+      } else {
+        aux.add(response2);
+      }
+    }
+    attendesEvent = aux;
+    print(attendes);
+    print(attendesEvent);
+  } */
+
+  Future<String> getProfilePhoto(String idUsuar) async {
+    final response = await es.getAPhoto(idUsuar);
+    if (response != 'Fail') {
+      setState(() {
+        urlProfilePhoto = response;
+      });
+      return "0";
+    }
+    return urlProfilePhoto;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -41,6 +73,7 @@ class _EventState extends State<Event> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var _event = [json.decode(snapshot.data.body)];
+          //getAllPhotosInEvent(_event[0]["id"]);
           return SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -309,15 +342,22 @@ class _EventState extends State<Event> {
                                                                           (BuildContext context,
                                                                               int index) {
                                                                         return InkWell(
-                                                                            onTap:
-                                                                                () {
-                                                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(id: attendees[index])));
-                                                                            },
-                                                                            child:
-                                                                                CircleAvatar(
-                                                                              radius: 40,
-                                                                              backgroundImage: NetworkImage(_event[0]['event_image_uri']),
-                                                                            ));
+                                                                          onTap:
+                                                                              () {
+                                                                            Navigator.push(context,
+                                                                                MaterialPageRoute(builder: (context) => ProfileScreen(id: attendees[index])));
+                                                                          },
+                                                                          child:
+                                                                              CircleAvatar(
+                                                                            radius:
+                                                                                40,
+                                                                            // ignore: unrelated_type_equality_checks
+                                                                            backgroundImage: /* (getProfilePhoto(attendees[index]) == "")
+                                                                                ?  */
+                                                                                AssetImage('assets/noProfileImage.png'),
+                                                                            /*  : NetworkImage(urlProfilePhoto) as ImageProvider, */
+                                                                          ),
+                                                                        );
                                                                       });
                                                             } else {
                                                               return ListView
