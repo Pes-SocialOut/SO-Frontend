@@ -288,9 +288,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                       text: "login".tr(),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.pushNamed(context, '/login', arguments: GoTo(
-                            () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
-                          ),);
+                          Navigator.pushNamed(
+                            context,
+                            '/login',
+                            arguments: GoTo(() => Navigator.of(context)
+                                .pushNamedAndRemoveUntil(
+                                    '/home', (route) => false)),
+                          );
                         },
                     ),
                   ],

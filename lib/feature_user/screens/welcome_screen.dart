@@ -54,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                         //final aux = uAPI.checkUserEmail("zjqtlwj@gmail.com");
                         //print(aux);
                         //String? key=await FlutterFacebookKeyhash.getFaceBookKeyHash ??
-                        'Unknown platform version';
+                        'Unknownplatformversion'.tr();
                         //print(key??"");
                         //FacebookSignInApi.logout2();
                         Navigator.of(context).pushNamed('/signup');
@@ -77,9 +77,10 @@ class WelcomeScreen extends StatelessWidget {
                                   BorderRadius.circular(borderradius)),
                           minimumSize: Size(widthButton, heightButton)),
                       onPressed: () async {
-                        Navigator.pushNamed(context, '/login', arguments: GoTo(
-                          () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
-                        ));
+                        Navigator.pushNamed(context, '/login',
+                            arguments: GoTo(() => Navigator.of(context)
+                                .pushNamedAndRemoveUntil(
+                                    '/home', (route) => false)));
                       },
                       child: const Text(
                         'login',

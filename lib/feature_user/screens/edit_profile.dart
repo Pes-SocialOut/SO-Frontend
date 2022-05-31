@@ -99,7 +99,13 @@ class _EditarProfileState extends State<EditarProfile> {
       ),
       validator: (value) {
         if (value!.isEmpty) {
-          return 'pleaseEnter'.tr() + labelText2;
+          if (labelText2 == "Username".tr()) {
+            return 'enterUsername'.tr();
+          } else if (labelText2 == "Description".tr()) {
+            return 'enterDescription'.tr();
+          } else if (labelText2 == "hobbies".tr()) {
+            return 'enterhobbie'.tr();
+          }
         }
         return null;
       },

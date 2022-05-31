@@ -11,6 +11,7 @@ class LanguagesOptionsState extends State<LanguagesOptions> {
   late bool english;
   late bool catalan;
   late bool spanish;
+  late bool chinese;
 
   SnackBar mensajeMuestra(String mensaje) {
     return SnackBar(
@@ -24,16 +25,25 @@ class LanguagesOptionsState extends State<LanguagesOptions> {
       english = true;
       catalan = false;
       spanish = false;
+      chinese = false;
     } else if (Localizations.localeOf(context).languageCode.toString() ==
         'ca') {
       english = false;
       catalan = true;
       spanish = false;
+      chinese = false;
     } else if (Localizations.localeOf(context).languageCode.toString() ==
         'es') {
       english = false;
       catalan = false;
       spanish = true;
+      chinese = false;
+    } else if (Localizations.localeOf(context).languageCode.toString() ==
+        'zh') {
+      english = false;
+      catalan = false;
+      spanish = false;
+      chinese = true;
     }
 
     return Scaffold(
@@ -140,13 +150,13 @@ class LanguagesOptionsState extends State<LanguagesOptions> {
           ListTile(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
-            textColor: catalan
+            textColor: chinese
                 ? Theme.of(context).colorScheme.onPrimary
                 : Colors.black26,
             tileColor:
-                catalan ? Theme.of(context).colorScheme.primary : Colors.white,
+                chinese ? Theme.of(context).colorScheme.primary : Colors.white,
             title: const Text(
-              'Chino',
+              'Chinese',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 30,

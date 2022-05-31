@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_user/services/externalService.dart';
 
@@ -30,27 +33,26 @@ class ImagePageState extends State<ImagePage> {
         Container(
           alignment: Alignment.bottomCenter,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).colorScheme.secondary,
-              onPrimary: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              minimumSize: const Size(250, 50),
-            ),
-            onPressed: () async {
-              var resposta = await es.postAPhoto(widget.idUser, widget.url);
-              if (resposta['resposta'] == 1) {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/edit_profile', (route) => false);
-                //Navigator.of(context).pushNamed('/edit_profile');
-              }
-            },
-            child: const Text(
-              "Select",
-              style: TextStyle(
-                  height: 1.0, fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).colorScheme.secondary,
+                onPrimary: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                minimumSize: const Size(250, 50),
+              ),
+              onPressed: () async {
+                var resposta = await es.postAPhoto(widget.idUser, widget.url);
+                if (resposta['resposta'] == 1) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/edit_profile', (route) => false);
+                  //Navigator.of(context).pushNamed('/edit_profile');
+                }
+              },
+              child: Text(
+                "Select",
+                style: TextStyle(
+                    height: 1.0, fontSize: 20, fontWeight: FontWeight.bold),
+              ).tr()),
         )
       ]),
     );

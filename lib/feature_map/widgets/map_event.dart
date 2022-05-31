@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:so_frontend/utils/air_tag.dart';
@@ -9,7 +12,8 @@ import 'package:so_frontend/utils/like_button.dart';
 class EventWidget extends StatefulWidget {
   final Map<String, dynamic> event;
   final double pollution;
-  const EventWidget({Key? key, required this.event, required this.pollution}) : super(key: key);
+  const EventWidget({Key? key, required this.event, required this.pollution})
+      : super(key: key);
 
   @override
   State<EventWidget> createState() => _EventWidgetState();
@@ -55,14 +59,14 @@ class _EventWidgetState extends State<EventWidget> {
   String creatorPhoto = 'assets/dog.jpg';
 
   Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
-
-    final response = await api.postItem('/v2/events/:0/:1', [widget.event["id"], 'join'], bodyData);
+    final response = await api.postItem(
+        '/v2/events/:0/:1', [widget.event["id"], 'join'], bodyData);
     return response;
   }
 
   Future<dynamic> leaveEvent(String id, Map<String, dynamic> bodyData) async {
-
-    final response = await api.postItem('/v2/events/:0/:1', [widget.event["id"], 'leave'], bodyData);
+    final response = await api.postItem(
+        '/v2/events/:0/:1', [widget.event["id"], 'leave'], bodyData);
     return response;
   }
 
@@ -87,7 +91,10 @@ class _EventWidgetState extends State<EventWidget> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(
-                  child: Text(widget.event["date_started"].substring(0, widget.event["date_started"].length - 7), style: dateStyle),
+                  child: Text(
+                      widget.event["date_started"].substring(
+                          0, widget.event["date_started"].length - 7),
+                      style: dateStyle),
                 ),
               ]),
               Row(children: [
@@ -96,43 +103,48 @@ class _EventWidgetState extends State<EventWidget> {
                       style: eventStyle, textAlign: TextAlign.left),
                 ),
               ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
-                  Widget>[
-                AirTag(longitud: widget.event["longitud"].toString(), latitude: widget.event["latitude"].toString(), id: widget.event["id"]),
-                Row(children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(children: [
-                      const Icon(
-                        Icons.person,
-                        color: Colors.green,
-                        size: 30.0,
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    AirTag(
+                        longitud: widget.event["longitud"].toString(),
+                        latitude: widget.event["latitude"].toString(),
+                        id: widget.event["id"]),
+                    Row(children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(children: [
+                          const Icon(
+                            Icons.person,
+                            color: Colors.green,
+                            size: 30.0,
+                          ),
+                          Text(widget.event["max_participants"].toString(),
+                              style: participantsStyle)
+                        ]),
                       ),
-                      Text(widget.event["max_participants"].toString(), style: participantsStyle)
                     ]),
-                  ),
-                ]),
-              ])
+                  ])
             ]),
           ),
         ]),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           FutureBuilder(
-            future: http.get(Uri.parse('https://socialout-develop.herokuapp.com/v1/users/' + widget.event["user_creator"])),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                var user = json.decode(snapshot.data.body);
-                return Text(
-                  'Created by: ' + user["username"] + '  ',
-                  style: creatorStyle,
-                  textAlign: TextAlign.center,
-                );
-              }
-              else {
-                return const CircularProgressIndicator();
-              }
-            } 
-          ),
+              future: http.get(Uri.parse(
+                  'https://socialout-develop.herokuapp.com/v1/users/' +
+                      widget.event["user_creator"])),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  var user = json.decode(snapshot.data.body);
+                  return Text(
+                    'Createdby'.tr() + user["username"] + '  ',
+                    style: creatorStyle,
+                    textAlign: TextAlign.center,
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              }),
           CircleAvatar(
             backgroundImage: AssetImage(creatorPhoto),
           )
@@ -157,37 +169,43 @@ class _EventWidgetState extends State<EventWidget> {
           IconButton(
               icon: const Icon(Icons.share,
                   size: 30.0, color: Color.fromARGB(255, 110, 108, 108)),
-              onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + widget.event["id"], context)),
+              onPressed: () => showShareMenu(
+                  'https://socialout-develop.herokuapp.com/v3/events/' +
+                      widget.event["id"],
+                  context)),
           const Divider(endIndent: 30),
           FutureBuilder(
-            future: api.getCollection('/v2/events/participants',[],{"eventid":widget.event["id"]}),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                var participants = json.decode(snapshot.data.body);
-                var found = false;
-                int i = 0;
-                while (!found && i < participants.length) {
-                  if (participants[i] == api.getCurrentUser()) {
-                    found = true;
+              future: api.getCollection('/v2/events/participants', [],
+                  {"eventid": widget.event["id"]}),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  var participants = json.decode(snapshot.data.body);
+                  var found = false;
+                  int i = 0;
+                  while (!found && i < participants.length) {
+                    if (participants[i] == api.getCurrentUser()) {
+                      found = true;
+                    }
+                    ++i;
                   }
-                  ++i;
-                }
-                if (!found) {
-                    
+                  if (!found) {
                     return InkWell(
                       onTap: () async {
                         final bodyData = {"user_id": api.getCurrentUser()};
-                        var response = await joinEvent(_event[0]["id"], bodyData);
+                        var response =
+                            await joinEvent(_event[0]["id"], bodyData);
                         SnackBar snackBar;
                         if (response.statusCode == 200) {
                           snackBar = SnackBar(
-                            backgroundColor: Theme.of(context).colorScheme.secondary,
-                            content: const Text('You are in!'),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            content: Text('Youarein'),
                           );
                         } else {
                           snackBar = SnackBar(
-                            backgroundColor: Theme.of(context).colorScheme.error,
-                            content: const Text('Something bad happened. Try again later...'),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            content: Text('Somethingbadhappened').tr(),
                           );
                         }
                         setState(() {
@@ -201,68 +219,88 @@ class _EventWidgetState extends State<EventWidget> {
                           color: Theme.of(context).colorScheme.secondary,
                           boxShadow: [
                             BoxShadow(
-                              color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .withOpacity(0.5),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset: const Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
                             ),
                           ],
                         ),
                         width: 150,
                         height: 40,
-                        child: Center(child: Text('JOIN NOW', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
+                        child: Center(
+                            child: Text('JOINNOW',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                        fontWeight: FontWeight.bold))
+                                .tr()),
                       ),
                     );
-                }
-                else {
-                  return InkWell(
-                    onTap: () async {
-                      final bodyData = {"user_id": api.getCurrentUser()};
-                      var response = await leaveEvent(_event[0]["id"], bodyData);
-                      setState(() {
-                        found = false;
-                      });
-                      SnackBar snackBar;
+                  } else {
+                    return InkWell(
+                      onTap: () async {
+                        final bodyData = {"user_id": api.getCurrentUser()};
+                        var response =
+                            await leaveEvent(_event[0]["id"], bodyData);
+                        setState(() {
+                          found = false;
+                        });
+                        SnackBar snackBar;
                         if (response.statusCode == 200) {
                           snackBar = SnackBar(
-                            backgroundColor: Theme.of(context).colorScheme.secondary,
-                            content: const Text('You left!'),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            content: Text('Youleft').tr(),
                           );
                         } else {
                           snackBar = SnackBar(
-                            backgroundColor: Theme.of(context).colorScheme.error,
-                            content: const Text('Something bad happened. Try again later...'),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            content: Text('Somethingbadhappened').tr(),
                           );
                         }
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Theme.of(context).colorScheme.error,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).colorScheme.error.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(0, 3), // changes position of shadow
-                          ),
-                        ],
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Theme.of(context).colorScheme.error,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .error
+                                  .withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        width: 150,
+                        height: 40,
+                        child: Center(
+                            child: Text('LEAVE',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                        fontWeight: FontWeight.bold))
+                                .tr()),
                       ),
-                      width: 150,
-                      height: 40,
-                      child: Center(child: Text('LEAVE', style: TextStyle(color: Theme.of(context).colorScheme.background, fontWeight: FontWeight.bold))),
-                      
-                    ),
-                  );
+                    );
+                  }
+                } else {
+                  return const CircularProgressIndicator();
                 }
-                
-              }
-              else {
-                return const CircularProgressIndicator();
-              }
-            }
-          ),
+              }),
           const Divider(indent: 30),
           LikeButton(id: widget.event["id"])
         ]),

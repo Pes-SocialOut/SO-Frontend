@@ -106,18 +106,10 @@ class SignUpScreen extends StatelessWidget {
                           text: "login".tr(),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pushReplacementNamed(context, '/new_route', arguments: GoTo(
-                                () => Navigator.pushNamed(context, '/home')
-                              ));
-                              //cant launch at the moment, because emualtor has no internet
-                              /*
-                          if(await canLaunchUrl(url)){
-                            await launchUrl(url);
-                          }
-                          else{
-                            throw "cannot load Url";
-                          }
-                          */
+                              Navigator.pushReplacementNamed(
+                                  context, '/new_route',
+                                  arguments: GoTo(() =>
+                                      Navigator.pushNamed(context, '/home')));
                             }),
                     ]),
                   ),
@@ -155,9 +147,9 @@ class SignUpScreen extends StatelessWidget {
             content: Text("wantLogin").tr(),
             actions: <Widget>[
               TextButton(
-                  onPressed: () => Navigator.pushNamed(context, '/login', arguments: GoTo(
-                    () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
-                  )),
+                  onPressed: () => Navigator.pushNamed(context, '/login',
+                      arguments: GoTo(() => Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/home', (route) => false))),
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -176,13 +168,13 @@ class SignUpScreen extends StatelessWidget {
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LinkScreen(
-                          "", "", "google", auxToken.toString())),
-                      (route) => false)
-                  },
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LinkScreen(
+                                    "", "", "google", auxToken.toString())),
+                            (route) => false)
+                      },
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -217,13 +209,13 @@ class SignUpScreen extends StatelessWidget {
             ],
           ),
         );
-        Navigator.pushNamed(context, '/login', arguments: GoTo(
-          () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
-        ));
+        Navigator.pushNamed(context, '/login',
+            arguments: GoTo(() => Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home', (route) => false)));
       } else if (errorMessage == "Google token was invalid") {
-        Navigator.pushNamed(context, '/login', arguments: GoTo(
-          () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
-        ));
+        Navigator.pushNamed(context, '/login',
+            arguments: GoTo(() => Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home', (route) => false)));
       }
     }
   }
@@ -250,9 +242,9 @@ class SignUpScreen extends StatelessWidget {
             content: Text("wantLogin").tr(),
             actions: <Widget>[
               TextButton(
-                  onPressed: () => Navigator.pushNamed(context, '/login', arguments: GoTo(
-                    () => Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false)
-                  )),
+                  onPressed: () => Navigator.pushNamed(context, '/login',
+                      arguments: GoTo(() => Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/home', (route) => false))),
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),

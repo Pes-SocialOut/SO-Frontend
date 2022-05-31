@@ -18,39 +18,22 @@ class _EventsTabMenuState extends State<EventsTabMenu> {
   Widget build(BuildContext context) {
     return Expanded(
       child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: DefaultTabController(
-          
-          length: 3,
-          child: Column(
-            children:  const [
-               TabBar(
-                tabs:  [
-                  Tab(
-                    text: 'JOINED'
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: DefaultTabController(
+              length: 3,
+              child: Column(children: [
+                TabBar(tabs: [
+                  Tab(text: 'Joined'.tr()),
+                  Tab(text: "Liked".tr()),
+                  Tab(text: 'PAST'.tr())
+                ]),
+                Expanded(
+                  child: TabBarView(
+                    children: [JoinedList(), LikedList(), PastEventsList()],
                   ),
-                  Tab(
-                    text: "LIKED"
-                  ),
-                  Tab(
-                    text: 'PAST'
-                  )
-                ]
-              ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    JoinedList(),
-                    LikedList(),
-                    PastEventsList()
-                  ],
-                ),
-              )
-            ]
-          )
-        )
-      ),
+                )
+              ]))),
     );
   }
 }

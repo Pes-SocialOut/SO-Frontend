@@ -10,7 +10,6 @@ import 'package:uni_links/uni_links.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:async';
 import 'package:so_frontend/feature_event/screens/event_screen.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class NavigationBottomBar extends StatefulWidget {

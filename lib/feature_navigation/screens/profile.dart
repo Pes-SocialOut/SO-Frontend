@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
@@ -52,8 +55,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text('Profile',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface, fontSize: 16)),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 16))
+              .tr(),
           backgroundColor: Theme.of(context).colorScheme.background,
           leading: IconButton(
             iconSize: 24,
@@ -277,10 +282,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'ACHIEVEMENTS',
+                              'Logros',
                               style: titleStyle,
                               textAlign: TextAlign.center,
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -294,10 +299,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.42,
                             child: Text(
-                              'FRIENDS',
+                              'Amigos',
                               style: titleStyle,
                               textAlign: TextAlign.center,
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -361,7 +366,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             ["description"]),
                                                     actions: [
                                                       TextButton(
-                                                        child: const Text('OK'),
+                                                        child: Text('Ok').tr(),
                                                         onPressed: () =>
                                                             Navigator.pop(
                                                                 context),
@@ -408,8 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           },
                                         )
                                     ])
-                                  : const Text(
-                                      'You can only see your own friends :C'),
+                                  : Text('onlyseeyourfriends').tr(),
                             ),
                           ],
                         )

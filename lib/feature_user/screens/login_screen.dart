@@ -402,7 +402,8 @@ class LoginScreenState extends State<LoginScreen> {
                           text: "signUp".tr(),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pushReplacementNamed(context, '/signup');
+                              Navigator.pushReplacementNamed(
+                                  context, '/signup');
                             }),
                     ]),
                   ),
@@ -456,25 +457,25 @@ class LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               TextButton(
                   onPressed: () => {
-                    if (type == "google")
-                      {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    LinkScreen("", "", "google", auxToken)),
-                            (route) => false),
-                      }
-                    else if (type == "facebook")
-                      {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LinkScreen(
-                                    "", "", "facebook", auxToken)),
-                            (route) => false),
-                      }
-                  },
+                        if (type == "google")
+                          {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        LinkScreen("", "", "google", auxToken)),
+                                (route) => false),
+                          }
+                        else if (type == "facebook")
+                          {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LinkScreen(
+                                        "", "", "facebook", auxToken)),
+                                (route) => false),
+                          }
+                      },
                   child: Text("Yes").tr()),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -482,12 +483,10 @@ class LoginScreenState extends State<LoginScreen> {
             ],
           ),
         );
-
       } else if (errorMessage == "Google token was invalid" ||
           errorMessage == "Facebook token was invalid") {
-        Navigator.pushNamed(context, '/login', arguments: GoTo(
-          () => goto.action()
-        ));
+        Navigator.pushNamed(context, '/login',
+            arguments: GoTo(() => goto.action()));
       }
     }
   }
@@ -533,8 +532,8 @@ class LoginScreenState extends State<LoginScreen> {
         final accessTokenFacebook = result.accessToken?.token.toString();
         Response response =
             await uapi.logInFacebook(accessTokenFacebook.toString());
-        _handleLogIn(
-            context, response, accessTokenFacebook.toString(), "facebook", goto);
+        _handleLogIn(context, response, accessTokenFacebook.toString(),
+            "facebook", goto);
         FacebookSignInApi.logout();
       } else {}
       FacebookSignInApi.logout();

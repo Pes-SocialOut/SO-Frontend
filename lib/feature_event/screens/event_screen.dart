@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_event/widgets/event.dart';
 import 'package:so_frontend/utils/api_controller.dart';
@@ -13,9 +14,6 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
-
-
-
   APICalls api = APICalls();
 
   @override
@@ -24,16 +22,20 @@ class _EventScreenState extends State<EventScreen> {
         appBar: AppBar(
             centerTitle: true,
             title: Text('Event',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.surface,
-                    fontSize: 16)),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.surface,
+                        fontSize: 16))
+                .tr(),
             backgroundColor: Theme.of(context).colorScheme.background,
             actions: <Widget>[
               IconButton(
                   iconSize: 24,
                   color: Theme.of(context).colorScheme.onSurface,
                   icon: const Icon(Icons.share),
-                  onPressed: () => showShareMenu('https://socialout-develop.herokuapp.com/v3/events/' + widget.id, context)),
+                  onPressed: () => showShareMenu(
+                      'https://socialout-develop.herokuapp.com/v3/events/' +
+                          widget.id,
+                      context)),
               LikeButton(id: widget.id)
             ],
             leading: IconButton(
@@ -44,6 +46,6 @@ class _EventScreenState extends State<EventScreen> {
                 Navigator.pop(context);
               },
             )),
-        body:  Center(child: Event(id: widget.id)));
+        body: Center(child: Event(id: widget.id)));
   }
 }
