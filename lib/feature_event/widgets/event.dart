@@ -37,34 +37,38 @@ class _EventState extends State<Event> {
     return response;
   }
 
-  /* Future<void> getAllPhotosInEvent(String idEvent) async {
+  Future<List<dynamic>> getAllPhotosInEvent(String idEvent) async {
     final response = await api
         .getCollection('/v2/events/participants', [], {"eventid": idEvent});
     var attendes = json.decode(response.body);
     List aux = [];
+   
     for (var v in attendes) {
-      final response2 = await getProfilePhoto(v);
+      final response2 = await es.getAPhoto(v);
       if (response2 != 'Fail') {
-        aux.add(response2);
+        aux.add({"user_id": v, "image": response2});
       } else {
-        aux.add(response2);
+        aux.add({"user_id": v, "image": ''});
       }
     }
-    attendesEvent = aux;
+    
     print(attendes);
     print(attendesEvent);
-  } */
+    return aux;
+  } 
 
-  Future<String> getProfilePhoto(String idUsuar) async {
-    final response = await es.getAPhoto(idUsuar);
-    if (response != 'Fail') {
-      setState(() {
-        urlProfilePhoto = response;
-      });
-      return "0";
-    }
-    return urlProfilePhoto;
-  }
+
+  // Future<String> getProfilePhoto(String idUsuar) async {
+  //   final response = await es.getAPhoto(idUsuar);
+  //   if (response != 'Fail') {
+  //     setState(() {
+  //       urlProfilePhoto = response;
+  //     });
+  //     return "0";
+  //   }
+  //   return urlProfilePhoto;
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -191,18 +195,37 @@ class _EventState extends State<Event> {
                                                   Navigator.of(context)
                                                       .pushNamed('/profile');
                                                 },
-                                                child: SizedBox(
-                                                  width: 36,
-                                                  height: 36,
-                                                  child: ClipRRect(
-                                                      child: FittedBox(
-                                                          child: Image.asset(
-                                                              'assets/dog.jpg'),
-                                                          fit:
-                                                              BoxFit.fitHeight),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100)),
+                                                child: FutureBuilder(
+                                                  future: es.getAPhoto(_event[0]["user_creator"]),
+                                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                                    if (snapshot.connectionState == ConnectionState.done) {
+                                                      var photoUrl = snapshot.data;
+                                                      return SizedBox(
+                                                        width: 36,
+                                                        height: 36,
+                                                        child: ClipRRect(
+                                                            child: FittedBox(
+                                                                child: photoUrl != '' ? Image.network(photoUrl) : Image.asset(
+                                                                    'assets/noProfileImage.jpg'),
+                                                                fit:
+                                                                    BoxFit.fitHeight),
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    100)),
+                                                      );
+                                                    }
+                                                    else {
+                                                      return const Center(
+                                                        child: SkeletonItem(
+                                                            child: SkeletonAvatar(
+                                                          style: SkeletonAvatarStyle(
+                                                              shape: BoxShape.circle,
+                                                              width: 80,
+                                                              height: 80),
+                                                        )),
+                                                      );
+                                                    }
+                                                  } 
                                                 ),
                                               ),
                                             ],
@@ -301,28 +324,11 @@ class _EventState extends State<Event> {
                                                               .size
                                                               .width,
                                                       child: FutureBuilder(
-                                                          future: api.getCollection(
-                                                              '/v3/events/participants',
-                                                              [],
-                                                              {
-                                                                "eventid":
-                                                                    _event[0]
-                                                                        ["id"]
-                                                              }),
-                                                          builder: (BuildContext
-                                                                  context,
-                                                              AsyncSnapshot
-                                                                  snapshot) {
-                                                            if (snapshot
-                                                                    .connectionState ==
-                                                                ConnectionState
-                                                                    .done) {
-                                                              var attendees =
-                                                                  json.decode(
-                                                                      snapshot
-                                                                          .data
-                                                                          .body);
-                                                              //print(attendees);
+                                                          future: getAllPhotosInEvent(widget.id),
+                                                          builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                                            if (snapshot.connectionState == ConnectionState.done) {
+                                                              var attendees = snapshot.data;
+                                                              print(attendees);
                                                               return ListView
                                                                   .separated(
                                                                       shrinkWrap:
@@ -345,17 +351,17 @@ class _EventState extends State<Event> {
                                                                           onTap:
                                                                               () {
                                                                             Navigator.push(context,
-                                                                                MaterialPageRoute(builder: (context) => ProfileScreen(id: attendees[index])));
+                                                                                MaterialPageRoute(builder: (context) => ProfileScreen(id: attendees[index]["user_id"])));
                                                                           },
                                                                           child:
                                                                               CircleAvatar(
                                                                             radius:
                                                                                 40,
                                                                             // ignore: unrelated_type_equality_checks
-                                                                            backgroundImage: /* (getProfilePhoto(attendees[index]) == "")
-                                                                                ?  */
-                                                                                AssetImage('assets/noProfileImage.png'),
-                                                                            /*  : NetworkImage(urlProfilePhoto) as ImageProvider, */
+                                                                            backgroundImage:  attendees[index]["image"] == ''
+                                                                                ?  
+                                                                                AssetImage('assets/noProfileImage.png')
+                                                                              : NetworkImage(attendees[index]["image"]) as ImageProvider, 
                                                                           ),
                                                                         );
                                                                       });
