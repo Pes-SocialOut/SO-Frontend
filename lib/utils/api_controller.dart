@@ -25,6 +25,7 @@ class APICalls {
   String _REFRESH_TOKEN = '';
 
   String getCurrentUser() {
+    //print("userID: "+_USER_ID);
     return _USER_ID;
   }
 

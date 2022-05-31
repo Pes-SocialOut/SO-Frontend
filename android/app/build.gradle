@@ -71,10 +71,10 @@ android {
     //forma release
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('socialout-key.jks')
+            storePassword 'android'
         }
     }
     buildTypes {
@@ -83,7 +83,7 @@ android {
         }
     }
     //modifica si quieres de forma debug
-    /*
+    
     buildTypes {
         debug {
             // TODO: Add your own signing config for the release build.
@@ -91,7 +91,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    */
+    
 }
 
 flutter {

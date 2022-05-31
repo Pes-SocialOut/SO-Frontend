@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_chat/screens/chat_screen.dart';
+import 'package:so_frontend/feature_chat/screens/listChat_screen.dart';
 import 'package:so_frontend/feature_map/screens/map.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/feature_navigation/screens/profile.dart';
 import 'package:so_frontend/feature_user/screens/edit_profile.dart';
+import 'package:so_frontend/feature_user/screens/loading_page.dart';
 import 'package:so_frontend/feature_user/screens/login_screen.dart';
 import 'package:so_frontend/feature_user/screens/register_socialOut.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
@@ -40,7 +43,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     APICalls().tryInitializeFromPreferences();
     
     return MaterialApp(
@@ -78,9 +82,10 @@ class MyApp extends StatelessWidget {
             surface: Colors.black,
             onSurface: HexColor('767676'),
           )),
-      initialRoute: '/welcome',
+      initialRoute: '/loading_Page',
       home: const WelcomeScreen(),
       routes: {
+        '/loading_Page': (_) => const LoadingScreen(),
         '/welcome': (_) => const WelcomeScreen(),
         '/login': (_) => const LoginScreen(),
         '/signup': (_) => SignUpScreen(),
