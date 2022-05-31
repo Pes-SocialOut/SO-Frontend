@@ -91,7 +91,6 @@ class MyApp extends StatelessWidget {
         '/edit_profile': (_) => const EditarProfile(),
         '/change_password': (_) => const ChangePassword(),
         '/languages': (_) => const LanguagesOptions(),
-        '/list_chat': (_) => const ListChatScreen(),
       },
     );
   }

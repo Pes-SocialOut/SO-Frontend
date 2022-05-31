@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_chat/screens/listChat_screen.dart';
 import 'package:so_frontend/feature_event/widgets/event_map.dart';
 import 'package:so_frontend/utils/air_tag.dart';
 import 'package:so_frontend/utils/api_controller.dart';
@@ -403,7 +404,12 @@ class _UserEventState extends State<UserEvent> {
                               SizedBox(width: 40),
                               FloatingActionButton(
                                 onPressed: () async {
-                                  setState(() {});
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ListChatScreen(
+                                                id_event: widget.id,
+                                              )));
                                 },
                                 child: Icon(
                                   Icons.notifications,

@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart';
-import 'package:so_frontend/feature_chat/data_local/data.dart';
-import 'package:so_frontend/feature_chat/models/chatMessage.dart';
+import 'package:so_frontend/feature_chat/models/message_model.dart';
 import 'package:so_frontend/feature_chat/services/chat_service.dart';
 import 'package:so_frontend/feature_chat/widgets/chat_widget.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
@@ -13,7 +12,8 @@ import 'package:so_frontend/utils/api_controller.dart';
 class ChatScreen extends StatefulWidget {
   final String eventId;
   final String participanId;
-  ChatScreen({Key? key, required this.eventId, required this.participanId})
+  const ChatScreen(
+      {Key? key, required this.eventId, required this.participanId})
       : super(key: key);
   @override
   State<ChatScreen> createState() => _ChatScreen();
@@ -27,6 +27,7 @@ class _ChatScreen extends State<ChatScreen> {
   String eventsName = "";
   String linkImageEvent = "";
   String user_creator = "";
+  String shownUsername = "";
   Map user = {};
   Future<http.Response> getEventItem(
       String endpoint, List<String> pathParams) async {
@@ -90,25 +91,66 @@ class _ChatScreen extends State<ChatScreen> {
     await getUser();
   }
 
+  Future<List> getShownUsername() async {
+    final response = await http
+        .get(Uri.parse("https://socialout-develop.herokuapp.com/v1/users/"));
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+
+    return [];
+  }
+
+  Future<String> getUsername(String idEventCreator) async {
+    final response = await api.getItem("/v2/users/:0", [idEventCreator]);
+    String username = json.decode(response.body)["username"];
+
+    print(json.decode(response.body));
+    return username;
+  }
+
+  void initShownUsername() async {
+    String idEventCreator = await getEventCreator();
+    var pid = widget.participanId;
+    var acu = api.getCurrentUser();
+    //print("widget.participanId: " + pid);
+    //print("api.getCurrentUser(): " + acu);
+    bool test = acu.compareTo(pid) == 0;
+    //print("bool:" + test.toString());
+    if (acu.compareTo(idEventCreator) == 0) {
+      //muestra creador del evento
+      //print("object1");
+      //print("igual:" + shownUsername);
+      shownUsername = await getUsername(pid);
+      //print("igual:" + shownUsername);
+    } else {
+      shownUsername = await getUsername(idEventCreator);
+      //print("no igual:" + shownUsername);
+    }
+  }
+
   @override
   void initState() {
     //initUser();
     // TODO: implement initState
+    initShownUsername();
     initEventName();
     initEventIcon();
     initEventCreador();
+
     //getEventName().then((value) => print("value: " + value));
   }
 
   @override
   Widget build(BuildContext context) {
-    print("eventname:" + eventsName);
+    //print("eventname:" + eventsName);
     return FutureBuilder(
         //future: api.getItem('/v2/events/:0', [eventId]),
         future: cAPI.openSession(widget.eventId, widget.participanId),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var msg = json.decode(snapshot.data.body);
+
             //List<Message> message = json.decode(snapshot.data.body);
             List<Message> chatMessage =
                 List<Message>.from(msg.map((data) => Message.fromJson(data)));
@@ -153,9 +195,15 @@ class _ChatScreen extends State<ChatScreen> {
                         ),
                         ClipOval(
                           child: SizedBox.fromSize(
-                            size: Size.fromRadius(25), // Image radius
-                            child: Image.network(linkImageEvent,
-                                fit: BoxFit.cover),
+                            size: Size.fromRadius(20), // Image radius
+                            /*child: Image.network(linkImageEvent,
+                                fit: BoxFit.cover),*/
+                            child: CircleAvatar(
+                              backgroundImage: AssetImage('assets/gato.jpg')
+                                  as ImageProvider,
+                              //sender's icon
+                              maxRadius: 20,
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -187,7 +235,7 @@ class _ChatScreen extends State<ChatScreen> {
                                         ConnectionState.done) {
                                       user = json.decode(snapshot.data.body);
                                       return Text(
-                                        "${user["username"]}",
+                                        shownUsername,
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -196,7 +244,7 @@ class _ChatScreen extends State<ChatScreen> {
                                       );
                                     } else {
                                       return const Center(
-                                        child: CircularProgressIndicator(),
+                                        child: Text("hola"),
                                       );
                                     }
                                   }),

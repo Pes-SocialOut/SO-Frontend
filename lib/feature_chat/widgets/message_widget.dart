@@ -1,6 +1,7 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:so_frontend/feature_chat/models/chatMessage.dart';
+import 'package:so_frontend/feature_chat/models/message_model.dart';
 
 class MessageCard extends StatelessWidget {
   const MessageCard(
@@ -82,3 +83,4 @@ class MessageCard extends StatelessWidget {
     );
   }
 }
+*/
