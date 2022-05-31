@@ -107,6 +107,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Text("${user["username"]}",
                                         style: creatorStyle),
                                     const Divider(indent: 5, endIndent: 5),
+                                    
+                                  ],
+                                ),
+                                const Divider(),
+                                Row(
+                                  children: [
                                     Container(
                                         height: 23.0,
                                         width: 25.0,
@@ -193,9 +199,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                                     .color)),
                                               )
                                             : null),
-                                  ],
+                                  ]
                                 ),
-                                const Divider(indent: 50, endIndent: 50),
+                                const Divider(indent: 5, endIndent: 5),
                                 Row(children: [
                                   Container(
                                     height: 23.0,
