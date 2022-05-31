@@ -33,7 +33,7 @@ class _AirTagState extends State<AirTag> {
           if (snapshot.connectionState == ConnectionState.done) {
             var _airQuality = [json.decode(snapshot.data.body)];
             return InkWell(
-              onTap: () => showMLPredictions(context, widget.id),
+              onTap: () => showMLPredictions(context, widget.id, widget.longitud, widget.latitude),
               child: Container(
                 decoration: BoxDecoration(
                     color: _airQuality[0]["pollution"] < 0.15

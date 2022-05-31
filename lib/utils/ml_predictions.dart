@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:so_frontend/utils/air_prediction.dart';
 
-showMLPredictions(BuildContext context, String id) {
+showMLPredictions(BuildContext context, String id, String longitude, String latitude) {
   showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -12,6 +12,6 @@ showMLPredictions(BuildContext context, String id) {
                     fontSize: 20,
                     fontWeight: FontWeight.bold))
             .tr(),
-        content: AirPrediction(id: id)),
+        content: AirPrediction(id: id, latitude: latitude, longitud: longitude)),
   );
 }
