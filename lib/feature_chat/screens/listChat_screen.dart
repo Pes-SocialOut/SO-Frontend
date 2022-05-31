@@ -57,6 +57,9 @@ class _ListChatScreen extends State<ListChatScreen> {
                 .where((element) =>
                     element.participant_id != APICalls().getCurrentUser())
                 .toList();
+            listChats = listChats
+                .where((element) => element.event_id == widget.id_event)
+                .toList();
             return Scaffold(
               appBar: AppBar(
                   centerTitle: true,
