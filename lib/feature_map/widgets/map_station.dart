@@ -1,4 +1,5 @@
 // ignore_for_file: must_be_immutable
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:so_frontend/feature_map/services/stations.dart';
@@ -18,7 +19,8 @@ class _StationWidgetState extends State<StationWidget> {
   List pollutants = [];
   double cont = 3;
 
-  final String url2 = "https://socialout-develop.herokuapp.com/v1/air/stations/";
+  final String url2 =
+      "https://socialout-develop.herokuapp.com/v1/air/stations/";
 
   var eventStyle = const TextStyle(
       color: Colors.black,
@@ -48,94 +50,96 @@ class _StationWidgetState extends State<StationWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: http.get(Uri.parse(url2 + widget.id)),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          var station = json.decode(snapshot.data.body);
-          return Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: Column(children: [
-                Row(children: [
-                  Expanded(
-                    child: Text(
-                      "${station["name"]} station",
-                      style: eventStyle,
-                      textAlign: TextAlign.center,
+        future: http.get(Uri.parse(url2 + widget.id)),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var station = json.decode(snapshot.data.body);
+            return Padding(
+              padding:
+                  const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Column(children: [
+                  Row(children: [
+                    Expanded(
+                      child: Text(
+                        "${station["name"]}" + "station".tr(),
+                        style: eventStyle,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                ]),
-                const Divider(
-                    color: Color.fromARGB(255, 53, 52, 52),
-                    height: 30,
-                    indent: 30,
-                    endIndent: 30),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                  Expanded(
-                    child: Text(
-                      "Here you have all the information related to the station:",
-                      style: explainStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ]),
-                const Divider(indent: 50, endIndent: 50),
-                Row(children: [
-                  Expanded(
-                      child: (cont < 0.15)
-                          ? Text(
-                              "Contamination: LOW",
-                              style: explainStyle,
-                              textAlign: TextAlign.left,
-                            )
-                          : (cont > 0.3)
-                              ? Text(
-                                  "Contamination: HIGH",
-                                  style: explainStyle,
-                                  textAlign: TextAlign.left,
-                                )
-                              : Text(
-                                  "Contamination: MODERATE",
-                                  style: explainStyle,
-                                  textAlign: TextAlign.left,
-                                ))
-                ]),
-                const Divider(indent: 50, endIndent: 50),
-                SingleChildScrollView(
-                  child: Row(children: [
-                    Text(
-                      "Pollutants: ",
-                      style: explainStyle,
-                      textAlign: TextAlign.left,
-                    ),
-                    for (var i = 0; i < pollutants.length; i++)
+                  ]),
+                  const Divider(
+                      color: Color.fromARGB(255, 53, 52, 52),
+                      height: 30,
+                      indent: 30,
+                      endIndent: 30),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "Hereinfostation",
+                            style: explainStyle,
+                            textAlign: TextAlign.center,
+                          ).tr(),
+                        )
+                      ]),
+                  const Divider(indent: 50, endIndent: 50),
+                  Row(children: [
+                    Expanded(
+                        child: (cont < 0.15)
+                            ? Text(
+                                "ContLOW",
+                                style: explainStyle,
+                                textAlign: TextAlign.left,
+                              ).tr()
+                            : (cont > 0.3)
+                                ? Text(
+                                    "ContHIGH",
+                                    style: explainStyle,
+                                    textAlign: TextAlign.left,
+                                  ).tr()
+                                : Text(
+                                    "ContMODERATE",
+                                    style: explainStyle,
+                                    textAlign: TextAlign.left,
+                                  ).tr())
+                  ]),
+                  const Divider(indent: 50, endIndent: 50),
+                  SingleChildScrollView(
+                    child: Row(children: [
                       Text(
-                        "${pollutants[i]["pollutant_composition"]} ",
+                        "Pollutants",
                         style: explainStyle,
                         textAlign: TextAlign.left,
-                      )
+                      ).tr(),
+                      for (var i = 0; i < pollutants.length; i++)
+                        Text(
+                          "${pollutants[i]["pollutant_composition"]} ",
+                          style: explainStyle,
+                          textAlign: TextAlign.left,
+                        )
+                    ]),
+                  ),
+                  const Divider(indent: 50, endIndent: 50),
+                  Row(children: [
+                    Expanded(
+                      child: Text(
+                        "Calculatedat".tr() +
+                            "${station["last_calculated_at"]}",
+                        style: explainStyle,
+                        textAlign: TextAlign.left,
+                      ),
+                    )
                   ]),
-                ),
-                const Divider(indent: 50, endIndent: 50),
-                Row(children: [
-                  Expanded(
-                    child: Text(
-                      "Calculated at: ${station["last_calculated_at"]}",
-                      style: explainStyle,
-                      textAlign: TextAlign.left,
-                    ),
-                  )
                 ]),
-              ]),
-            ),
-          );
-        }
-        else {
-          return const SizedBox();
-        }
-      } 
-    );
+              ),
+            );
+          } else {
+            return const SizedBox();
+          }
+        });
   }
 }

@@ -11,6 +11,7 @@ class LanguagesOptionsState extends State<LanguagesOptions> {
   late bool english;
   late bool catalan;
   late bool spanish;
+  late bool chinese;
 
   SnackBar mensajeMuestra(String mensaje) {
     return SnackBar(
@@ -24,16 +25,25 @@ class LanguagesOptionsState extends State<LanguagesOptions> {
       english = true;
       catalan = false;
       spanish = false;
+      chinese = false;
     } else if (Localizations.localeOf(context).languageCode.toString() ==
         'ca') {
       english = false;
       catalan = true;
       spanish = false;
+      chinese = false;
     } else if (Localizations.localeOf(context).languageCode.toString() ==
         'es') {
       english = false;
       catalan = false;
       spanish = true;
+      chinese = false;
+    } else if (Localizations.localeOf(context).languageCode.toString() ==
+        'zh') {
+      english = false;
+      catalan = false;
+      spanish = false;
+      chinese = true;
     }
 
     return Scaffold(
@@ -130,6 +140,31 @@ class LanguagesOptionsState extends State<LanguagesOptions> {
             ).tr(),
             onTap: () => {
               context.setLocale(const Locale('ca', 'ES')),
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(mensajeMuestra("updatedlanguage".tr())),
+            },
+            enabled: true,
+            dense: true,
+            selected: false,
+          ),
+          ListTile(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            textColor: chinese
+                ? Theme.of(context).colorScheme.onPrimary
+                : Colors.black26,
+            tileColor:
+                chinese ? Theme.of(context).colorScheme.primary : Colors.white,
+            title: const Text(
+              'Chinese',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ).tr(),
+            onTap: () => {
+              context.setLocale(const Locale('zh', 'CN')),
               ScaffoldMessenger.of(context)
                   .showSnackBar(mensajeMuestra("updatedlanguage".tr())),
             },

@@ -21,7 +21,6 @@ class userAPI {
   Future<Map<String, dynamic>> checkEmailForNewPassword(email) async {
     String _path = 'forgot_pw?email=';
     String finalUri = basicUrl2 + _path + email;
-    print("final_uri: " + finalUri);
     final response = await http.get(Uri.parse(finalUri));
     return json.decode(response.body);
   }

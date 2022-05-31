@@ -21,13 +21,17 @@ class PerfilImageState extends State<PerfilImage> {
     final response = await es.getAllPhotos();
     final data = json.decode(response.body);
     List aux = [];
-    data.forEach((map) => print(map['nom'].toString()));
-    data.forEach((map) => aux.add(map['foto']));
-    print(data);
+    //print(data);
+    for (var v in data) {
+      if (v != null) {
+        aux.add(v['url']);
+      }
+    }
+    //data.forEach((map) => aux.add(map['foto']));
     setState(() {
       Imagenes = aux;
     });
-    print(Imagenes);
+    //print(Imagenes);
   }
 
   @override
@@ -38,9 +42,6 @@ class PerfilImageState extends State<PerfilImage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.idUser);
-    print(Imagenes);
-    print("CANTIDAD DE IMAGENES: " + Imagenes.length.toString());
     if (Imagenes.isEmpty) {
       return const Scaffold(
         body: Center(
@@ -51,9 +52,11 @@ class PerfilImageState extends State<PerfilImage> {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Profile Image',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface, fontSize: 16)),
+          title: Text('ProfileImage',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 16))
+              .tr(),
           backgroundColor: Theme.of(context).colorScheme.background,
           leading: IconButton(
             iconSize: 24,

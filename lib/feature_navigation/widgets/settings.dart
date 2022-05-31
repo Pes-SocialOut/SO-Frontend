@@ -55,7 +55,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   ListTile(
                     leading: const Icon(Icons.share),
-                    title: Text('Add friend'),
+                    title: Text('Addfriend').tr(),
                     onTap: () async {
                       final response =
                           await ac.getItem('v2/users/friend_link', []);
@@ -90,15 +90,20 @@ class _SettingsState extends State<Settings> {
                           },
                         ),
                   ListTile(
+                    leading: const Icon(Icons.language),
+                    title: Text('Languages').tr(),
+                    onTap: () =>
+                        {Navigator.of(context).pushNamed('/languages')},
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.exit_to_app),
                     title: Text('Logout').tr(),
                     onTap: () => {
                       showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                  title: const Text('Log out'),
-                                  content: const Text(
-                                      'Are you sure you want to log out?'),
+                                  title: Text('Logout').tr(),
+                                  content: Text('sureout').tr(),
                                   actions: [
                                     TextButton(
                                       child: Text('Cancel').tr(),
