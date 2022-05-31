@@ -60,13 +60,13 @@ class _EventWidgetState extends State<EventWidget> {
 
   Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
     final response = await api.postItem(
-        '/v2/events/:0/:1', [widget.event["id"], 'join'], bodyData);
+        '/v3/events/:0/:1', [widget.event["id"], 'join'], bodyData);
     return response;
   }
 
   Future<dynamic> leaveEvent(String id, Map<String, dynamic> bodyData) async {
     final response = await api.postItem(
-        '/v2/events/:0/:1', [widget.event["id"], 'leave'], bodyData);
+        '/v3/events/:0/:1', [widget.event["id"], 'leave'], bodyData);
     return response;
   }
 

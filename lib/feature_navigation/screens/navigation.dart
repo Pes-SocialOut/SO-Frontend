@@ -64,24 +64,11 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
           case "events":
             var id = uri.pathSegments[2];
             if (id != '') {
-              APICalls().appLinkLoginRedirect(() {
-                // User is logged in, jump right into the action
-                Navigator.of(context).pushNamed('/home');
+              Navigator.of(context).pushNamed('/home');
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => EventScreen(id: id)));
-              }, () {
-                // User is not logged in.
-                Navigator.pushNamed(context, '/login', arguments: GoTo(() {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/home', (route) => false);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EventScreen(id: id)));
-                }));
-              });
             }
             break;
           case "users":
@@ -89,26 +76,12 @@ class _NavigationBottomBarState extends State<NavigationBottomBar> {
                 '/v2/users/new_friend',
                 [],
                 {"code": uri.queryParameters["code"]!});
-            APICalls().appLinkLoginRedirect(() {
-              // User is logged in, jump right into the action
-              Navigator.of(context).pushNamed('/home');
+            Navigator.of(context).pushNamed('/home');
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           ProfileScreen(id: json.decode(response.body)["id"])));
-            }, () {
-              // User is not logged in.
-              Navigator.pushNamed(context, '/login', arguments: GoTo(() {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/home', (route) => false);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProfileScreen(
-                            id: json.decode(response.body)["id"])));
-              }));
-            });
             break;
           default:
         }

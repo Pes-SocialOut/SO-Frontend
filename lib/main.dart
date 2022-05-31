@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
             surface: Colors.black,
             onSurface: HexColor('767676'),
           )),
-      initialRoute: '/loading_Page',
+      initialRoute: '/welcome',
       home: const WelcomeScreen(),
       routes: {
         '/loading_Page': (_) => const LoadingScreen(),

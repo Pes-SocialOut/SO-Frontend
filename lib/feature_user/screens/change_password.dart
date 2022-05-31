@@ -29,7 +29,7 @@ class _ChangePassword extends State<ChangePassword> {
   }
 
   Future<bool> postPassword(String idProfile) async {
-    final response = await ac.postItem("/v1/users/:0/pw", [
+    final response = await ac.postItem("/v2/users/:0/pw", [
       idProfile
     ], {
       "old": oldPasswordController.text,

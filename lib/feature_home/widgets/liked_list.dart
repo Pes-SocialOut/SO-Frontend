@@ -80,7 +80,7 @@ class _LikedListState extends State<LikedList> {
                                 Row(children: [
                                   FutureBuilder(
                                       future: api.getCollection(
-                                          '/v2/events/participants',
+                                          '/v3/events/participants',
                                           [],
                                           {"eventid": _joined[index]["id"]}),
                                       builder: (BuildContext context,
