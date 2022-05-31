@@ -199,5 +199,6 @@
     "Event": "Esdeveniment",
     "NameofEvent":"Nom de l'esdeveniment",
     "Members":"#Membres",
-    "Writemessag":"Escriu missatge..."
+    "Writemessag":"Escriu missatge...",
+    "airDescription": "Aquí tens les prediccions de la qualitat de l'aire per als propers 2 dies"
 }

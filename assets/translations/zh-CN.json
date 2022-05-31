@@ -199,5 +199,6 @@
     "Event": "活动",
     "NameofEvent":"活动名称",
     "Members":"#成员",
-    "Writemessag":"写信息..."
+    "Writemessag":"写信息...",
+    "airDescription": "在这里 我们对空气质量的预测是以2天为单位的。"
 }

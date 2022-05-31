@@ -199,5 +199,6 @@
     "Event": "Event",
     "NameofEvent":"Name of Event",
     "Members":"#Members",
-    "Writemessag":"Write message..."
+    "Writemessag":"Write message...",
+    "airDescription": "Here you have the air quality prediction for the next 2 days."
 }

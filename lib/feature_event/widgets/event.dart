@@ -220,8 +220,8 @@ class _EventState extends State<Event> {
                                                             child: SkeletonAvatar(
                                                           style: SkeletonAvatarStyle(
                                                               shape: BoxShape.circle,
-                                                              width: 80,
-                                                              height: 80),
+                                                              width: 36,
+                                                              height: 36),
                                                         )),
                                                       );
                                                     }
