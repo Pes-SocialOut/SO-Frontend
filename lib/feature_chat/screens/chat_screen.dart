@@ -9,6 +9,7 @@ import 'package:so_frontend/feature_chat/services/chat_service.dart';
 import 'package:so_frontend/feature_chat/widgets/chat_widget.dart';
 import 'package:so_frontend/feature_user/services/login_signUp.dart';
 import 'package:so_frontend/utils/api_controller.dart';
+import 'package:so_frontend/feature_user/services/externalService.dart';
 
 class ChatScreen extends StatefulWidget {
   final String eventId;
@@ -31,7 +32,13 @@ class _ChatScreen extends State<ChatScreen> {
   String linkImageEvent = "";
   String user_creator = "";
   String shownUsername = "";
+  String otherId = "";
   Map user = {};
+
+  String urlPhotoMine = "";
+  String urlPhotoOther = "";
+  final ExternServicePhoto es = ExternServicePhoto();
+
   Future<http.Response> getEventItem(
       String endpoint, List<String> pathParams) async {
     final uri = api.buildUri(endpoint, pathParams, null);
@@ -124,11 +131,28 @@ class _ChatScreen extends State<ChatScreen> {
       //muestra creador del evento
       //print("object1");
       //print("igual:" + shownUsername);
-      shownUsername = await getUsername(pid);
+
+      otherId = widget.participanId;
+      print("object1: " + otherId);
+      shownUsername = await getUsername(otherId);
       //print("igual:" + shownUsername);
     } else {
-      shownUsername = await getUsername(idEventCreator);
+      otherId = idEventCreator;
+      print("object2: " + otherId);
+      shownUsername = await getUsername(otherId);
       //print("no igual:" + shownUsername);
+    }
+  }
+
+  Future<String> getOtherId() async {
+    String idEventCreator = await getEventCreator();
+    var pid = widget.participanId;
+    var acu = api.getCurrentUser();
+    bool test = acu.compareTo(pid) == 0;
+    if (acu.compareTo(idEventCreator) == 0) {
+      return (widget.participanId);
+    } else {
+      return (idEventCreator);
     }
   }
 
@@ -153,6 +177,26 @@ class _ChatScreen extends State<ChatScreen> {
     cAPI.openSession(widget.eventId, "b4fa64c9-cfda-4c92-91d0-ac5dad48a83f");
   }
 
+  Future<void> getProfilePhotoMine() async {
+    final response = await es.getAPhoto(APICalls().getCurrentUser());
+
+    if (response != 'Fail') {
+      urlPhotoMine = response;
+    }
+  }
+
+  Future<void> getProfilePhotoOther() async {
+    print("otherId: " + otherId);
+    String other = await getOtherId();
+    print("other: " + other);
+    final response = await es.getAPhoto(other);
+    print("response1: " + response);
+    if (response != 'Fail') {
+      print("responseURI: " + response);
+      urlPhotoOther = response;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -169,6 +213,9 @@ class _ChatScreen extends State<ChatScreen> {
         _now = DateTime.now().second.toString();
       });
     });
+    getProfilePhotoMine();
+    print("aqui");
+    getProfilePhotoOther();
     //getEventName().then((value) => print("value: " + value));
   }
 
@@ -211,16 +258,17 @@ class _ChatScreen extends State<ChatScreen> {
                           width: 2,
                         ),
                         ClipOval(
-                          child: SizedBox.fromSize(
-                            size: Size.fromRadius(20), // Image radius
-                            /*child: Image.network(linkImageEvent,
-                                fit: BoxFit.cover),*/
-                            child: CircleAvatar(
-                              backgroundImage: AssetImage('assets/gato.jpg')
-                                  as ImageProvider,
-                              //sender's icon
-                              maxRadius: 20,
-                            ),
+                          child: SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: ClipRRect(
+                                child: FittedBox(
+                                    child: (urlPhotoOther == "")
+                                        ? Image.asset(
+                                            'assets/noProfileImage.png')
+                                        : Image.network(urlPhotoOther),
+                                    fit: BoxFit.fitHeight),
+                                borderRadius: BorderRadius.circular(100)),
                           ),
                         ),
                         SizedBox(
@@ -312,12 +360,19 @@ class _ChatScreen extends State<ChatScreen> {
                                     : MainAxisAlignment.start,
                                 children: <Widget>[
                                   if (!messageMine)
-                                    CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage('assets/gato.jpg')
-                                              as ImageProvider,
-                                      //sender's icon
-                                      maxRadius: 20,
+                                    SizedBox(
+                                      width: 36,
+                                      height: 36,
+                                      child: ClipRRect(
+                                          child: FittedBox(
+                                              child: (urlPhotoOther == "")
+                                                  ? Image.asset(
+                                                      'assets/noProfileImage.png')
+                                                  : Image.network(
+                                                      urlPhotoOther),
+                                              fit: BoxFit.fitHeight),
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
                                     ),
                                   Flexible(
                                     child: Container(
@@ -345,13 +400,18 @@ class _ChatScreen extends State<ChatScreen> {
                                     ),
                                   ),
                                   if (messageMine)
-                                    CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage('assets/dog.jpg')
-                                              as ImageProvider,
-                                      //user's icon
-                                      //backgroundImage: NetworkImage("<https://randomuser.me/api/portraits/men/5.jpg>"),
-                                      maxRadius: 20,
+                                    SizedBox(
+                                      width: 36,
+                                      height: 36,
+                                      child: ClipRRect(
+                                          child: FittedBox(
+                                              child: (urlPhotoMine == "")
+                                                  ? Image.asset(
+                                                      'assets/noProfileImage.png')
+                                                  : Image.network(urlPhotoMine),
+                                              fit: BoxFit.fitHeight),
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
                                     ),
                                 ],
                               )),
