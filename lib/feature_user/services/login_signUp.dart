@@ -28,8 +28,9 @@ class userAPI {
   /* Comprobar que un Google socialout existe o no en la BD */
   Future<http.Response> checkUserGoogle(gtoken) async {
     String _path = 'register/check?type=google&token=';
-
+    print(gtoken);
     final response = await http.get(Uri.parse(basicUrl + _path + gtoken));
+
     if (response.statusCode != 200) {
       // return error
     }

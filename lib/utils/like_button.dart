@@ -20,7 +20,7 @@ class _LikeButtonState extends State<LikeButton> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getItem('/v2/events/:0/:1/:2', [api.getCurrentUser(), 'like', widget.id]),
+      future: api.getItem('/v3/events/:0/:1/:2', [api.getCurrentUser(), 'like', widget.id]),
       builder:(BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var response = [json.decode(snapshot.data.body)];

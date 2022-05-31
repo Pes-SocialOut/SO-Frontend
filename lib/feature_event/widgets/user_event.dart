@@ -271,7 +271,7 @@ class _UserEventState extends State<UserEvent> {
                                                         child: FutureBuilder(
                                                             future: api
                                                                 .getCollection(
-                                                                    '/v2/events/participants',
+                                                                    '/v3/events/participants',
                                                                     [],
                                                                     {
                                                                   "eventid":

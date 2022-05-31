@@ -27,13 +27,13 @@ class _EventState extends State<Event> {
 
   Future<dynamic> joinEvent(String id, Map<String, dynamic> bodyData) async {
     final response =
-        await api.postItem('/v2/events/:0/:1', [widget.id, 'join'], bodyData);
+        await api.postItem('/v3/events/:0/:1', [widget.id, 'join'], bodyData);
     return response;
   }
 
   Future<dynamic> leaveEvent(String id, Map<String, dynamic> bodyData) async {
     final response =
-        await api.postItem('/v2/events/:0/:1', [widget.id, 'leave'], bodyData);
+        await api.postItem('/v3/events/:0/:1', [widget.id, 'leave'], bodyData);
     return response;
   }
 
@@ -69,7 +69,7 @@ class _EventState extends State<Event> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: api.getItem('/v2/events/:0', [widget.id]),
+      future: api.getItem('/v3/events/:0', [widget.id]),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var _event = [json.decode(snapshot.data.body)];
@@ -302,7 +302,7 @@ class _EventState extends State<Event> {
                                                               .width,
                                                       child: FutureBuilder(
                                                           future: api.getCollection(
-                                                              '/v2/events/participants',
+                                                              '/v3/events/participants',
                                                               [],
                                                               {
                                                                 "eventid":
@@ -444,7 +444,7 @@ class _EventState extends State<Event> {
                                 onPressed: () {}),
                             FutureBuilder(
                                 future: api.getCollection(
-                                    '/v2/events/participants',
+                                    '/v3/events/participants',
                                     [],
                                     {"eventid": _event[0]["id"]}),
                                 builder: (BuildContext context,
@@ -480,7 +480,7 @@ class _EventState extends State<Event> {
                             const SizedBox(width: 30),
                             FutureBuilder(
                                 future: api.getCollection(
-                                    '/v2/events/participants',
+                                    '/v3/events/participants',
                                     [],
                                     {"eventid": _event[0]["id"]}),
                                 builder: (BuildContext context,

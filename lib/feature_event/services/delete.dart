@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class DeleteEventAPI {
 
-  final String url = 'https://socialout-develop.herokuapp.com/v2/events/';
+  final String url = 'https://socialout-develop.herokuapp.com/v3/events/';
 
   Future<List> deleteEventById(String eventId) async {
 

@@ -79,7 +79,7 @@ class _MapWidgetState extends State<MapWidget> {
                   options: MapOptions(
                     
                     center: LatLng(widget.lat, widget.long),
-                    zoom: 15,
+                    zoom: 3,
                   ),
                   layers: [
                     TileLayerOptions(

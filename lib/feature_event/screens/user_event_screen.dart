@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:so_frontend/feature_chat/screens/listChat_screen.dart';
 import 'package:so_frontend/feature_event/widgets/user_event.dart';
 import 'package:so_frontend/feature_event/screens/edit_event_screen.dart';
 
@@ -9,6 +10,7 @@ class UserEventScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(id);
     return Scaffold(
         appBar: AppBar(
             centerTitle: true,
@@ -29,6 +31,21 @@ class UserEventScreen extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => EditEventScreen(id: id)));
                   }),
+              IconButton(
+                iconSize: 24,
+                color: Theme.of(context).colorScheme.onSurface,
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ListChatScreen(
+                                id_event: id,
+                              )));
+                },
+                icon: const Icon(
+                  Icons.message,
+                ),
+              ),
             ],
             leading: IconButton(
               iconSize: 24,

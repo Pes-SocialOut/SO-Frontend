@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:so_frontend/feature_navigation/screens/navigation.dart';
 import 'package:so_frontend/feature_user/screens/welcome_screen.dart';
 import 'package:so_frontend/main.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class APICalls {
   static final APICalls _instance = APICalls._internal();
@@ -25,6 +24,7 @@ class APICalls {
   String _REFRESH_TOKEN = '';
 
   String getCurrentUser() {
+    //print("userID: "+_USER_ID);
     return _USER_ID;
   }
 
@@ -53,8 +53,6 @@ class APICalls {
     // Leer las preferences, buscar "socialout_refresh". Si no existe redirecciona a la screen de logIn
     final bool couldReadRefreshFromPreferences = await getRefreshFromPreferences();
     if (couldReadRefreshFromPreferences) {
-      WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   
       _refresh(() => _redirectToHomeScreen(), () => _redirectToLogin());
     } else {
@@ -200,14 +198,12 @@ class APICalls {
     // ignore: todo
     // TODO: Navegar a la login screen
     navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const WelcomeScreen()), (route) => false);
-    FlutterNativeSplash.remove();
   }
 
   void _redirectToHomeScreen() {
     // ignore: todo
     // TODO: Navegar a la home screen
     navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationBottomBar()), (route) => false);
-    FlutterNativeSplash.remove();
   }
 
   factory APICalls() {
