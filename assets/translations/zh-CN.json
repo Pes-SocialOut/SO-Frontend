@@ -197,7 +197,7 @@
     "createdeventsuccessfully": "您成功创建了活动",
     "Sharefriends": "向您的朋友分享吧!",
     "Event": "活动",
-    "NameofEvent":"Name of Event",
-    "Members":"#Members",
-    "Writemessag":"Write message..."
+    "NameofEvent":"活动名称",
+    "Members":"#成员",
+    "Writemessag":"写信息..."
 }

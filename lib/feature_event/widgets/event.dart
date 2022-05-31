@@ -37,7 +37,7 @@ class _EventState extends State<Event> {
     return response;
   }
 
-  /* Future<void> getAllPhotosInEvent(String idEvent) async {
+  Future<void> getAllPhotosInEvent(String idEvent) async {
     final response = await api
         .getCollection('/v2/events/participants', [], {"eventid": idEvent});
     var attendes = json.decode(response.body);
@@ -53,7 +53,7 @@ class _EventState extends State<Event> {
     attendesEvent = aux;
     print(attendes);
     print(attendesEvent);
-  } */
+  }
 
   Future<String> getProfilePhoto(String idUsuar) async {
     final response = await es.getAPhoto(idUsuar);
