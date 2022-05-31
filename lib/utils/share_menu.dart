@@ -59,7 +59,7 @@ class _ShareMenuState extends State<ShareMenu> {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 Navigator.pop(context);
               },
-              child: Text('COPYTOCLIPBOARD'),
+              child: Text('COPYTOCLIPBOARD').tr(),
             )
           ],
         ));
