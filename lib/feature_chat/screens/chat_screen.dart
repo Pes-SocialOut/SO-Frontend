@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -506,7 +507,7 @@ class _ChatScreen extends State<ChatScreen> {
                                     child: TextField(
                                       controller: messageTextController,
                                       decoration: InputDecoration(
-                                          hintText: "Write message...",
+                                          hintText: "Writemessag".tr(),
                                           hintStyle:
                                               TextStyle(color: Colors.black54),
                                           border: InputBorder.none),

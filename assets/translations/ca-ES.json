@@ -196,5 +196,9 @@
     "Congratulations": "Felicitats!",
     "createdeventsuccessfully": "Heu creat l'esdeveniment correctament",
     "Sharefriends": "Comparteix-ho amb els teus amics!",
-    "Event": "Esdeveniment"
+    "Event": "Esdeveniment",
+    "NameofEvent":"Nom de l'esdeveniment",
+    "Members":"#Membres",
+    "Writemessag":"Escriu missatge...",
+    "airDescription": "Aquí tens les prediccions de la qualitat de l'aire per als propers 2 dies"
 }

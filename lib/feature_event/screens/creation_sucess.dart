@@ -24,7 +24,8 @@ class CreationSucess extends StatelessWidget {
               color: Theme.of(context).colorScheme.onSurface,
               icon: const Icon(Icons.arrow_back_ios_new_sharp),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/home', (route) => false);
               },
             )),
         body: ConfirmationMessage(image: image));

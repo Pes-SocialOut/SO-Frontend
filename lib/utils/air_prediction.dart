@@ -53,7 +53,7 @@ class _AirPredictionState extends State<AirPrediction> {
         height: MediaQuery.of(context).size.height / 2,
         margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Here you have the air quality prediction for the next 2 days.'),
+          const Text('airDescription').tr(),
           const SizedBox(height: 10),
           const Divider(),
           const SizedBox(height: 10),
