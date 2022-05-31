@@ -29,7 +29,7 @@
     "FailLogin": "登录失败",
     "Accountdoesnotexist": "账号不存在",
     "Ok": "好",
-    "Forgetpassword": "忘记密码——",
+    "Forgetpassword": "忘记密码?",
     "sendcode": "我们已经向您的邮箱发送了验证码",
     "NewPassword": "新密码",
     "VerificationCode": "验证码",
