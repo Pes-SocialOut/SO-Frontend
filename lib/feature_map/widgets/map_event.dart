@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:so_frontend/feature_user/services/externalService.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +8,7 @@ import 'package:so_frontend/utils/api_controller.dart';
 import 'dart:convert';
 import 'package:so_frontend/utils/share.dart';
 import 'package:so_frontend/utils/like_button.dart';
+import 'package:skeletons/skeletons.dart';
 
 class EventWidget extends StatefulWidget {
   final Map<String, dynamic> event;
@@ -69,6 +70,8 @@ class _EventWidgetState extends State<EventWidget> {
         '/v3/events/:0/:1', [widget.event["id"], 'leave'], bodyData);
     return response;
   }
+
+  final ExternServicePhoto es = ExternServicePhoto();
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +148,27 @@ class _EventWidgetState extends State<EventWidget> {
                   return const CircularProgressIndicator();
                 }
               }),
-          CircleAvatar(
-            backgroundImage: AssetImage(creatorPhoto),
+          FutureBuilder(
+            future: es.getAPhoto(widget.event["user_creator"]),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                var photoUrl = snapshot.data;
+                return CircleAvatar(
+                  backgroundImage: photoUrl != '' ? NetworkImage(photoUrl) as ImageProvider : AssetImage('assets/noProfileImage.jpg'),
+                );
+              }
+              else {
+                return const Center(
+                  child: SkeletonItem(
+                      child: SkeletonAvatar(
+                    style: SkeletonAvatarStyle(
+                        shape: BoxShape.circle,
+                        width: 36,
+                        height: 36),
+                  )),
+                );
+              }
+            } 
           )
         ]),
         const Divider(
