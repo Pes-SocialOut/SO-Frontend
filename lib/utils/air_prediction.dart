@@ -33,10 +33,10 @@ class _AirPredictionState extends State<AirPrediction> {
     //https://socialout-production.herokuapp.com/v1/air/ml?codi_eoi1=43013002&contaminante1=7&dia=11&mes=2&year=2019&hora=12&codi_eoi2=43004005&contaminante2=4&codi_eoi3=43148022&contaminante3=8&longitud=0.2884&latitud=40.64299
     var predictionResponse;
     if (stations.length == 2) {
-      predictionResponse = await http.get(Uri.parse("https://socialout-production.herokuapp.com/v1/air/ml?codi_eoi1=" + stations[0] + "&contaminante1=" + pollutants[0].toString() + "&dia=" +  day + "&mes="+ month + "&year=" + year +"&hora=" + hour + "&codi_eoi2=" + stations[1] + "&contaminante2=" + pollutants[1].toString() + "&longitud=" + longitud + "&latitud=" + latitude));
+      predictionResponse = await http.get(Uri.parse("https://socialout-develop.herokuapp.com/v1/air/ml?codi_eoi1=" + stations[0] + "&contaminante1=" + pollutants[0].toString() + "&dia=" +  day + "&mes="+ month + "&year=" + year +"&hora=" + hour + "&codi_eoi2=" + stations[1] + "&contaminante2=" + pollutants[1].toString() + "&longitud=" + longitud + "&latitud=" + latitude));
     }
     else {
-      predictionResponse = await http.get(Uri.parse("https://socialout-production.herokuapp.com/v1/air/ml?codi_eoi1=" + stations[0] + "&contaminante1=" + pollutants[0].toString() + "&dia=" +  day + "&mes="+ month + "&year=" + year +"&hora=" + hour + "&codi_eoi2=" + stations[1] + "&contaminante2=" + pollutants[1].toString() + "&codi_eoi3=" + stations[2] +"&contaminante3=" + pollutants[2].toString() +"&longitud=" + longitud + "&latitud=" + latitude));
+      predictionResponse = await http.get(Uri.parse("https://socialout-develop.herokuapp.com/v1/air/ml?codi_eoi1=" + stations[0] + "&contaminante1=" + pollutants[0].toString() + "&dia=" +  day + "&mes="+ month + "&year=" + year +"&hora=" + hour + "&codi_eoi2=" + stations[1] + "&contaminante2=" + pollutants[1].toString() + "&codi_eoi3=" + stations[2] +"&contaminante3=" + pollutants[2].toString() +"&longitud=" + longitud + "&latitud=" + latitude));
     }
     return predictionResponse;
   }
